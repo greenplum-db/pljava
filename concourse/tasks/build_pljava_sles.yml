@@ -1,0 +1,21 @@
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: pivotaldata/sles-gpdb-dev
+    tag: '11-beta'
+
+inputs:
+  - name: bin_gpdb
+  - name: pljava_src
+  - name: jre
+
+outputs:
+  - name: pljava_gppkg
+
+run:
+  path: pljava_src/concourse/scripts/build_pljava.sh
+params:
+  OSVER:
+  PL_GP_VERSION:

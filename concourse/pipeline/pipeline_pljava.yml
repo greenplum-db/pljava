@@ -77,12 +77,6 @@ resources:
     secret_access_key: {{bucket-secret-access-key}}
     versioned_file: jre/jre-1.6.0_32.tgz
 
-- name: pljava_sles11_img
-  type: docker-image
-  source:
-    repository: pivotaldata/sles-gpdb-dev
-    tag: '11-beta'
-
 - name: pljava_centos5_img
   type: docker-image
   source:
@@ -158,12 +152,10 @@ jobs:
     - get: bin_gpdb
       trigger: true
       resource: bin_gpdb4_sles11
-    - get: pljava_sles11_img
     - get: jre
   - aggregate:
     - task: pljava_gpdb_build
-      file: pljava_src/concourse/tasks/build_pljava.yml
-      image: pljava_sles11_img
+      file: pljava_src/concourse/tasks/build_pljava_sles.yml
       params:
         OSVER: suse11
         PL_GP_VERSION: "4.3"
@@ -205,12 +197,10 @@ jobs:
     - get: bin_gpdb
       trigger: true
       resource: bin_gpdb4_sles11
-    - get: pljava_sles11_img
     - get: gpdb_src
   - aggregate:
     - task: test_pljava
-      file: pljava_src/concourse/tasks/test_pljava.yml
-      image: pljava_sles11_img
+      file: pljava_src/concourse/tasks/test_pljava_sles.yml
       params:
         OSVER: suse11
 
@@ -242,11 +232,9 @@ jobs:
       resource: pljava_gpdb4_sles11_build
     - get: release_src
       trigger: true
-    - get: pljava_sles11_img
   - aggregate:
     - task: release_pljava
-      file: pljava_src/concourse/tasks/release_pljava.yml
-      image: pljava_sles11_img
+      file: pljava_src/concourse/tasks/release_pljava_sles.yml
       params:
         OSVER: suse11
   - aggregate:
