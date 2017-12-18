@@ -1,0 +1,342 @@
+
+## ======================================================================
+## Pipeline for GPDB5 PL/JAVA GPPKG
+## ======================================================================
+
+groups:
+- name: All
+  jobs:
+    - pljava_centos7_build
+    - pljava_centos6_build
+    - pljava_sles11_build
+    - pljava_centos7_test
+    - pljava_centos6_test
+    - pljava_sles11_test
+    - pljava_centos7_release
+    - pljava_centos6_release
+    - pljava_sles11_release
+
+- name: GPDB5
+  jobs:
+    - pljava_centos7_build
+    - pljava_centos6_build
+    - pljava_sles11_build
+    - pljava_centos7_test
+    - pljava_centos6_test
+    - pljava_sles11_test
+
+- name: RELEASE
+  jobs:
+    - pljava_centos7_release
+    - pljava_centos6_release
+    - pljava_sles11_release
+
+## ======================================================================
+## resources
+## ======================================================================
+resources:
+
+## GPDB5 resource
+##
+- name: bin_gpdb_centos6
+  type: s3
+  source:
+    access_key_id: {{bucket-access-key-id}}
+    bucket: {{bucket-name}}
+    region_name: {{aws-region}}
+    secret_access_key: {{bucket-secret-access-key}}
+    versioned_file: {{bin_gpdb_centos_versioned_file}}
+
+- name: bin_gpdb_centos7
+  type: s3
+  source:
+    access_key_id: {{bucket-access-key-id}}
+    bucket: {{bucket-name}}
+    region_name: {{aws-region}}
+    secret_access_key: {{bucket-secret-access-key}}
+    versioned_file: {{bin_gpdb_centos7_versioned_file}}
+
+- name: bin_gpdb_sles11
+  type: s3
+  source:
+    access_key_id: {{bucket-access-key-id}}
+    bucket: {{bucket-name}}
+    region_name: {{aws-region}}
+    secret_access_key: {{bucket-secret-access-key}}
+    versioned_file: {{bin_gpdb_sles11_versioned_file}}
+
+
+- name: pljava_centos6_img
+  type: docker-image
+  source:
+    repository: pivotaldata/centos-gpdb-dev
+    tag: '6-gcc6.2-llvm3.7'
+
+- name: pljava_centos7_img
+  type: docker-image
+  source:
+    repository: pivotaldata/centos-gpdb-dev
+    tag: '7-gcc6.2-llvm3.7'
+
+- name: pljava_src
+  type: git
+  source:
+    branch: gpdb5_release
+    uri: https://github.com/greenplum-db/pljava.git
+
+- name: gpdb_src
+  type: git
+  source:
+    branch: {{gpdb-git-branch}}
+    uri: https://github.com/greenplum-db/gpdb.git
+
+- name: release_trigger
+  type: git
+  source:
+    branch: gpdb5_release
+    uri: https://github.com/greenplum-db/pljava.git
+    tag_filter: 1.*
+
+- name: pljava_gpdb_centos6_build
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    versioned_file: build/gpdb5/pljava/centos6/pljava-centos.gppkg
+
+- name: pljava_gpdb_centos7_build
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    versioned_file: build/gpdb5/pljava/centos7/pljava-centos.gppkg
+
+- name: pljava_gpdb_sles11_build
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    versioned_file: build/gpdb5/pljava/sles11/pljava-sles.gppkg
+
+- name: pljava_gpdb_centos6_release
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    regexp: release/gpdb5/pljava/pljava-(.*).gppkg
+
+- name: pljava_gpdb_centos7_release
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    regexp: release/gpdb5/pljava/pljava-(.*).gppkg
+
+- name: pljava_gpdb_sles11_release
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    regexp: release/gpdb5/pljava/pljava-(.*).gppkg
+
+
+jobs:
+## GPDB5 PL/Java Jobs
+##
+- name: pljava_centos7_build
+  plan:
+  - aggregate:
+    - get: pljava_src
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb_centos7
+    - get: pljava_centos7_img
+    - get: gpdb_src
+      trigger: true
+  - aggregate:
+    - task: pljava_gpdb_build
+      file: pljava_src/concourse/tasks/build_pljava.yml
+      image: pljava_centos7_img
+      params:
+        OSVER: centos7
+        PL_GP_VERSION: "5.0"
+  - aggregate:
+    - put: pljava_gpdb_centos7_build
+      params:
+        file: pljava_gppkg/pljava-*.gppkg
+
+- name: pljava_centos6_build
+  plan:
+  - aggregate:
+    - get: pljava_src
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb_centos6
+    - get: pljava_centos6_img
+    - get: gpdb_src
+      trigger: true
+  - aggregate:
+    - task: pljava_gpdb_build
+      file: pljava_src/concourse/tasks/build_pljava.yml
+      image: pljava_centos6_img
+      params:
+        OSVER: centos6
+        PL_GP_VERSION: "5.0"
+  - aggregate:
+    - put: pljava_gpdb_centos6_build
+      params:
+        file: pljava_gppkg/pljava-*.gppkg
+
+- name: pljava_sles11_build
+  plan:
+  - aggregate:
+    - get: pljava_src
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb_sles11
+    - get: gpdb_src
+      trigger: true
+  - aggregate:
+    - task: pljava_gpdb_build
+      file: pljava_src/concourse/tasks/build_pljava_sles.yml
+      params:
+        OSVER: suse11
+        PL_GP_VERSION: "5.0"
+  - aggregate:
+    - put: pljava_gpdb_sles11_build
+      params:
+        file: pljava_gppkg/pljava-*.gppkg
+
+- name: pljava_centos7_test
+  plan:
+  - aggregate:
+    - get: pljava_src
+      passed: [pljava_centos7_build]
+      trigger: true
+    - get: pljava_bin
+      resource: pljava_gpdb_centos7_build
+    - get: bin_gpdb
+      resource: bin_gpdb_centos7
+    - get: pljava_centos7_img
+    - get: gpdb_src
+      trigger: true
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_centos7_img
+      params:
+        OSVER: centos7
+        PL_GP_VERSION: "5.0"
+
+- name: pljava_centos6_test
+  plan:
+  - aggregate:
+    - get: pljava_src
+      passed: [pljava_centos6_build]
+      trigger: true
+    - get: pljava_bin
+      resource: pljava_gpdb_centos6_build
+    - get: bin_gpdb
+      resource: bin_gpdb_centos6
+    - get: pljava_centos6_img
+    - get: gpdb_src
+      trigger: true
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_centos6_img
+      params:
+        OSVER: centos6
+        PL_GP_VERSION: "5.0"
+
+- name: pljava_sles11_test
+  plan:
+  - aggregate:
+    - get: pljava_src
+      passed: [pljava_sles11_build]
+      trigger: true
+    - get: pljava_bin
+      resource: pljava_gpdb_sles11_build
+    - get: bin_gpdb
+      resource: bin_gpdb_sles11
+    - get: gpdb_src
+      trigger: true
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava_sles.yml
+      params:
+        OSVER: suse11
+        PL_GP_VERSION: "5.0"
+
+- name: pljava_centos7_release
+  plan:
+  - aggregate:
+    - get: pljava_src
+    - get: release_trigger
+      trigger: true
+    - get: pljava_bin
+      resource: pljava_gpdb_centos7_build
+    - get: pljava_centos7_img
+  - aggregate:
+    - task: release_pljava
+      file: pljava_src/concourse/tasks/release_pljava.yml
+      image: pljava_centos7_img
+      params:
+        OSVER: centos7
+        PL_GP_VERSION: "5.0"
+  - aggregate:
+    - put: pljava_gpdb_centos7_release
+      params:
+        file: pljava_gppkg/pljava-*.gppkg
+
+- name: pljava_centos6_release
+  plan:
+  - aggregate:
+    - get: pljava_src
+    - get: release_trigger
+      trigger: true
+    - get: pljava_bin
+      resource: pljava_gpdb_centos6_build
+    - get: pljava_centos6_img
+  - aggregate:
+    - task: release_pljava
+      file: pljava_src/concourse/tasks/release_pljava.yml
+      image: pljava_centos6_img
+      params:
+        OSVER: centos6
+        PL_GP_VERSION: "5.0"
+  - aggregate:
+    - put: pljava_gpdb_centos6_release
+      params:
+        file: pljava_gppkg/pljava-*.gppkg
+
+- name: pljava_sles11_release
+  plan:
+  - aggregate:
+    - get: pljava_src
+    - get: release_trigger
+      trigger: true
+    - get: pljava_bin
+      resource: pljava_gpdb_sles11_build
+  - aggregate:
+    - task: release_pljava
+      file: pljava_src/concourse/tasks/release_pljava_sles.yml
+      params:
+        OSVER: suse11
+        PL_GP_VERSION: "5.0"
+  - aggregate:
+    - put: pljava_gpdb_sles11_release
+      params:
+        file: pljava_gppkg/pljava-*.gppkg

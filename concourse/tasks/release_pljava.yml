@@ -4,15 +4,14 @@ image_resource:
   type: docker-image
 
 inputs:
-  - name: bin_gpdb
+  - name: pljava_bin
   - name: pljava_src
-  - name: gpdb_src
 
 outputs:
   - name: pljava_gppkg
 
 run:
-  path: pljava_src/concourse/scripts/build_pljava.sh
-params:
+  path: pljava_src/concourse/scripts/release_pljava.sh
+
+params: 
   OSVER:
-  PL_GP_VERSION:

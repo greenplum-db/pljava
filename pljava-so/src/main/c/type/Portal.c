@@ -337,7 +337,8 @@ Java_org_postgresql_pljava_internal_Portal__1isPosOverflow(JNIEnv* env, jclass c
 	{
 		Ptr2Long p2l;
 		p2l.longVal = _this;
-		result = (jboolean)((Portal)p2l.ptrVal)->posOverflow;
+		/* should not overflow as the pos is int64 */
+		result = JNI_FALSE;
 	}
 	return result;
 }

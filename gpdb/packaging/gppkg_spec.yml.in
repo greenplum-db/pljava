@@ -5,5 +5,6 @@ Version: #gppkgver
 GPDBVersion: #gpver
 Description: Provides a procedural language implementation of Java for the Greenplum Database. 
 PostInstall:
-- Master:  "echo 'Please source your $GPHOME/greenplum_path.sh file and restart the database.';
+- Master:  "echo 'Please SET JAVA_HOME firstly.';
+            echo 'Please source your $GPHOME/greenplum_path.sh file and restart the database.';
             echo 'You can enable pljava by running psql -d mydatabase -f $GPHOME/share/postgresql/pljava/install.sql.' ;"
