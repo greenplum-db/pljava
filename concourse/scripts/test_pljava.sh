@@ -6,6 +6,12 @@ CWDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOP_DIR=${CWDIR}/../../../
 source "${TOP_DIR}/gpdb_src/concourse/scripts/common.bash"
 
+function expand_glob_ensure_exists() {
+    local -a glob=($*)
+    [ -e "${glob[0]}" ]
+    echo "${glob[0]}"
+}
+
 function install_openssl(){
     pushd /opt
     wget --no-check-certificate https://www.openssl.org/source/openssl-1.0.2l.tar.gz
@@ -91,6 +97,8 @@ function prepare_test(){
         source /usr/local/greenplum-db-devel/greenplum_path.sh
         if [ "$OSVER" == "suse11" ]; then
             export JAVA_HOME=/usr/java/jdk1.7.0_67
+            echo "JAVA_HOME=$JAVA_HOME" >> /usr/local/greenplum-db-devel/greenplum_path.sh
+            echo "export JAVA_HOME" >> /usr/local/greenplum-db-devel/greenplum_path.sh
         fi
 		gppkg -i pljava_bin/pljava-*.gppkg
         source /usr/local/greenplum-db-devel/greenplum_path.sh
@@ -133,12 +141,12 @@ function setup_gpadmin_user() {
 }
 
 function _main() {
-	time install_gpdb
-	time setup_gpadmin_user
+    time install_gpdb
+    time setup_gpadmin_user
 
-	time make_cluster
+    time make_cluster
     time prep_env
-	time prepare_test
+    time prepare_test
     time test
 
 }
