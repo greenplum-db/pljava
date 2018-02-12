@@ -54,7 +54,7 @@ SELECT * FROM javatest.print('12:34:56-00'::time);
 SELECT javatest.print('2016-02-14 08:09:10'::timestamp);
                   print                   
 ------------------------------------------
- Sunday, February 14, 2016 8:09:10 AM UTC 
+ Sunday, February 14, 2016 8:09:10 AM UTC
 (1 row)
 
 SELECT javatest.print('2016-02-14 08:09:10'::timestamp) FROM javatest.test;
@@ -88,21 +88,21 @@ SELECT * FROM javatest.print('varchar'::varchar);
  varchar
 (1 row)
 
-SELECT javatest.print('bytea'::bytea);
- print 
--------
+SELECT encode(javatest.print('bytea'::bytea), 'escape');
+ encode 
+--------
  bytea
 (1 row)
 
-SELECT javatest.print('bytea'::bytea) FROM javatest.test;
- print 
--------
+SELECT encode(javatest.print('bytea'::bytea), 'escape') FROM javatest.test;
+ encode 
+--------
  bytea
 (1 row)
 
-SELECT * FROM javatest.print('bytea'::bytea);
- print 
--------
+SELECT * FROM encode(javatest.print('bytea'::bytea), 'escape');
+ encode 
+--------
  bytea
 (1 row)
 
@@ -605,9 +605,9 @@ select javatest.loganyelement('a'::varchar);
  a
 (1 row)
 
-select javatest.loganyelement('b'::bytea);
- loganyelement 
----------------
+select encode(javatest.loganyelement('b'::bytea), 'escape');
+ encode 
+--------
  b
 (1 row)
 

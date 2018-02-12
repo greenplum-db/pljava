@@ -24,9 +24,9 @@ SELECT javatest.print('varchar'::varchar);
 SELECT javatest.print('varchar'::varchar) FROM javatest.test;
 SELECT * FROM javatest.print('varchar'::varchar);
 
-SELECT javatest.print('bytea'::bytea);
-SELECT javatest.print('bytea'::bytea) FROM javatest.test;
-SELECT * FROM javatest.print('bytea'::bytea);
+SELECT encode(javatest.print('bytea'::bytea), 'escape');
+SELECT encode(javatest.print('bytea'::bytea), 'escape') FROM javatest.test;
+SELECT * FROM encode(javatest.print('bytea'::bytea), 'escape');
 
 SELECT javatest.print(1::int2);
 SELECT javatest.print(2::int2) FROM javatest.test;
@@ -179,7 +179,7 @@ select * from javatest.executeSelectToRecords('select id, ''test'' || id as id2 
 
 select javatest.loganyelement(1::int);
 select javatest.loganyelement('a'::varchar);
-select javatest.loganyelement('b'::bytea);
+select encode(javatest.loganyelement('b'::bytea), 'escape');
 
 select javatest.makearray(1::int);
 select javatest.makearray('a'::varchar);
