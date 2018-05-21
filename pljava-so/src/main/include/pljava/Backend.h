@@ -31,8 +31,12 @@ int Backend_setJavaLogLevel(int logLevel);
 #error The macro PG_GETCONFIGOPTION needs to be renamed.
 #endif
 
-/* PG_VERSION_NUM >= 80400 is for GPDB compatible*/
-#if PG_VERSION_NUM >= 90100
+/* 
+ * PG_VERSION_NUM >= 80400 is for GPDB5 compatible
+ * Change PG_VERSION_NUM >= 90200 (from 90100) for master
+ * branch compatible
+ */
+#if PG_VERSION_NUM >= 90200
 #define PG_GETCONFIGOPTION(key) GetConfigOption(key, false, true)
 #elif PG_VERSION_NUM >= 90000
 #define PG_GETCONFIGOPTION(key) GetConfigOption(key, true)
