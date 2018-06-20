@@ -16,7 +16,7 @@ function expand_glob_ensure_exists() {
 function prep_env() {
   case "$OSVER" in
     suse11)
-      export JAVA_HOME=$(expand_glob_ensure_exists /usr/java/jdk1.7*)
+      export JAVA_HOME=$(expand_glob_ensure_exists /usr/java/jdk1.8*)
       export PATH=${JAVA_HOME}/bin:${PATH}
       source /opt/gcc_env.sh
       ;;
@@ -48,10 +48,13 @@ function prep_env() {
 
 function _main() {
 	if [ "$OSVER" == "suse11" ]; then
-    # install dependencies
+      # install dependencies
       zypper addrepo http://download.opensuse.org/distribution/11.4/repo/oss/ oss
       zypper --no-gpg-checks -n install readline-devel zlib-devel curl-devel libbz2-devel python-devel libopenssl1_0_0 libopenssl-devel htop libffi45 libffi45-devel krb5-devel make python-xml
-      zypper --no-gpg-checks -n install openssh unzip less glibc-locale gmp-devel mpfr-devel 
+      zypper --no-gpg-checks -n install openssh unzip less glibc-locale gmp-devel mpfr-devel
+	  # install new JAVA
+	  wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie"  http://download.oracle.com/otn-pub/java/jdk/8u172-b11/a58eab1ec242421181065cdc37240b08/jdk-8u172-linux-x64.rpm -O java8.rpm
+	  rpm -ivh java8.rpm
     else
       yum install -y wget
     fi
