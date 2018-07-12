@@ -75,7 +75,7 @@ resources:
     region_name: {{aws-region}}
     access_key_id: {{bucket-access-key-id}}
     secret_access_key: {{bucket-secret-access-key}}
-    versioned_file: jre/jre-1.6.0_32.tgz
+    versioned_file: jre/jre-8u172-linux-x64.tar.gz
 
 - name: pljava_centos5_img
   type: docker-image
