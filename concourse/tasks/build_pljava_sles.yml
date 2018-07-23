@@ -9,7 +9,7 @@ inputs:
   - name: bin_gpdb
   - name: pljava_src
   - name: gpdb_src
-
+  - name: jdk
 outputs:
   - name: pljava_gppkg
 
