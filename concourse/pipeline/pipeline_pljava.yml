@@ -11,6 +11,8 @@ groups:
     - pljava_gpdb4_sles11_test
     - pljava_gpdb4_centos5_release
     - pljava_gpdb4_sles11_release
+    - pljava_gpdb4_centos5_release_test
+    - pljava_gpdb4_sles11_release_test
 
 - name: GPDB4
   jobs:
@@ -23,6 +25,8 @@ groups:
   jobs:
     - pljava_gpdb4_centos5_release
     - pljava_gpdb4_sles11_release
+    - pljava_gpdb4_centos5_release_test
+    - pljava_gpdb4_sles11_release_test
 
 ## ======================================================================
 ## resources
@@ -66,7 +70,7 @@ resources:
   source:
     branch: gpdb4_release
     uri: https://github.com/greenplum-db/pljava.git
-    tag_filter: 1.*
+    tag_filter: 1.3.*
 
 - name: jre
   type: s3
@@ -169,12 +173,11 @@ jobs:
   - aggregate:
     - get: pljava_src
       passed: [pljava_gpdb4_centos5_build]
-      trigger: true
     - get: pljava_bin
       resource: pljava_gpdb4_centos5_build
       passed: [pljava_gpdb4_centos5_build]
-    - get: bin_gpdb
       trigger: true
+    - get: bin_gpdb
       resource: bin_gpdb4_centos5
     - get: pljava_centos5_img
     - get: gpdb_src
@@ -190,12 +193,11 @@ jobs:
   - aggregate:
     - get: pljava_src
       passed: [pljava_gpdb4_sles11_build]
-      trigger: true
     - get: pljava_bin
       resource: pljava_gpdb4_sles11_build
       passed: [pljava_gpdb4_sles11_build]
-    - get: bin_gpdb
       trigger: true
+    - get: bin_gpdb
       resource: bin_gpdb4_sles11
     - get: gpdb_src
   - aggregate:
@@ -207,10 +209,10 @@ jobs:
 - name: pljava_gpdb4_centos5_release
   plan:
   - aggregate:
-    - get: pljava_src
     - get: pljava_bin
       resource: pljava_gpdb4_centos5_build
-    - get: release_src
+    - get: pljava_src
+      resource: release_src
       trigger: true
     - get: pljava_centos5_img
   - aggregate:
@@ -227,10 +229,10 @@ jobs:
 - name: pljava_gpdb4_sles11_release
   plan:
   - aggregate:
-    - get: pljava_src
     - get: pljava_bin
       resource: pljava_gpdb4_sles11_build
-    - get: release_src
+    - get: pljava_src
+      resource: release_src
       trigger: true
   - aggregate:
     - task: release_pljava
@@ -241,3 +243,46 @@ jobs:
     - put: pljava_gpdb4_sles11_release
       params:
         file: pljava_gppkg/pljava-*.gppkg
+
+- name: pljava_gpdb4_centos5_release_test
+  plan:
+  - aggregate:
+    - get: pljava_src
+      resource: release_src
+      passed: [pljava_gpdb4_centos5_release]
+    - get: pljava_bin
+      resource: pljava_gpdb4_centos5_release
+      passed: [pljava_gpdb4_centos5_release]
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb4_centos5
+      trigger: true
+    - get: pljava_centos5_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_centos5_img
+      params:
+        OSVER: centos5
+
+- name: pljava_gpdb4_sles11_release_test
+  plan:
+  - aggregate:
+    - get: pljava_src
+      resource: release_src
+      passed: [pljava_gpdb4_sles11_release]
+    - get: pljava_bin
+      resource: pljava_gpdb4_sles11_release
+      passed: [pljava_gpdb4_sles11_release]
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb4_sles11
+      trigger: true
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava_sles.yml
+      params:
+        OSVER: suse11
+
