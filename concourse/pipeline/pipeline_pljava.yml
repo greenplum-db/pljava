@@ -176,9 +176,9 @@ jobs:
       trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos7
+      trigger: true
     - get: pljava_centos7_img
     - get: gpdb_src
-      trigger: true
     - get: jdk
   - aggregate:
     - task: pljava_gpdb_build
@@ -199,9 +199,9 @@ jobs:
       trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos6
+      trigger: true
     - get: pljava_centos6_img
     - get: gpdb_src
-      trigger: true
     - get: jdk
   - aggregate:
     - task: pljava_gpdb_build
@@ -222,8 +222,8 @@ jobs:
       trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_sles11
-    - get: gpdb_src
       trigger: true
+    - get: gpdb_src
     - get: jdk
   - aggregate:
     - task: pljava_gpdb_build
@@ -241,14 +241,13 @@ jobs:
   - aggregate:
     - get: pljava_src
       passed: [pljava_centos7_build]
-      trigger: true
     - get: pljava_bin
       resource: pljava_gpdb_centos7_build
+      trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos7
     - get: pljava_centos7_img
     - get: gpdb_src
-      trigger: true
   - aggregate:
     - task: test_pljava
       file: pljava_src/concourse/tasks/test_pljava.yml
@@ -262,14 +261,13 @@ jobs:
   - aggregate:
     - get: pljava_src
       passed: [pljava_centos6_build]
-      trigger: true
     - get: pljava_bin
       resource: pljava_gpdb_centos6_build
+      trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos6
     - get: pljava_centos6_img
     - get: gpdb_src
-      trigger: true
   - aggregate:
     - task: test_pljava
       file: pljava_src/concourse/tasks/test_pljava.yml
@@ -283,13 +281,12 @@ jobs:
   - aggregate:
     - get: pljava_src
       passed: [pljava_sles11_build]
-      trigger: true
     - get: pljava_bin
       resource: pljava_gpdb_sles11_build
+      trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_sles11
     - get: gpdb_src
-      trigger: true
   - aggregate:
     - task: test_pljava
       file: pljava_src/concourse/tasks/test_pljava_sles.yml
@@ -302,15 +299,15 @@ jobs:
   - aggregate:
     - get: pljava_src
       passed: [pljava_centos7_release]
-      trigger: true
     - get: pljava_bin
       passed: [pljava_centos7_release]
       resource: pljava_gpdb_centos7_release
+      trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos7
+      trigger: true
     - get: pljava_centos7_img
     - get: gpdb_src
-      trigger: true
   - aggregate:
     - task: test_pljava
       file: pljava_src/concourse/tasks/test_pljava.yml
@@ -324,15 +321,15 @@ jobs:
   - aggregate:
     - get: pljava_src
       passed: [pljava_centos6_release]
-      trigger: true
     - get: pljava_bin
       passed: [pljava_centos6_release]
       resource: pljava_gpdb_centos6_release
+      trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos6
+      trigger: true
     - get: pljava_centos6_img
     - get: gpdb_src
-      trigger: true
   - aggregate:
     - task: test_pljava
       file: pljava_src/concourse/tasks/test_pljava.yml
@@ -346,14 +343,14 @@ jobs:
   - aggregate:
     - get: pljava_src
       passed: [pljava_sles11_release]
-      trigger: true
     - get: pljava_bin
       passed: [pljava_sles11_release]
       resource: pljava_gpdb_sles11_release
+      trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_sles11
-    - get: gpdb_src
       trigger: true
+    - get: gpdb_src
   - aggregate:
     - task: test_pljava
       file: pljava_src/concourse/tasks/test_pljava_sles.yml
