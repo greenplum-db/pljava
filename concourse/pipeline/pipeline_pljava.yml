@@ -136,7 +136,7 @@ resources:
     region_name: {{aws-region}}
     access_key_id: {{bucket-access-key-id}}
     secret_access_key: {{bucket-secret-access-key}}
-    regexp: release/gpdb5/pljava/pljava-(.*).gppkg
+    regexp: release/gpdb5/pljava/pljava-(.*)-rhel6-x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release
   type: s3
@@ -145,7 +145,7 @@ resources:
     region_name: {{aws-region}}
     access_key_id: {{bucket-access-key-id}}
     secret_access_key: {{bucket-secret-access-key}}
-    regexp: release/gpdb5/pljava/pljava-(.*).gppkg
+    regexp: release/gpdb5/pljava/pljava-(.*)-rhel7-x86_64.gppkg
 
 - name: pljava_gpdb_sles11_release
   type: s3
@@ -154,8 +154,34 @@ resources:
     region_name: {{aws-region}}
     access_key_id: {{bucket-access-key-id}}
     secret_access_key: {{bucket-secret-access-key}}
-    regexp: release/gpdb5/pljava/pljava-(.*).gppkg
+    regexp: release/gpdb5/pljava/pljava-(.*)-sles11-x86_64.gppkg
 
+- name: pljava_gpdb_centos6_release_candidate
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    regexp: release_candidate/gpdb5/pljava/pljava-(.*)-rhel6-x86_64.gppkg
+
+- name: pljava_gpdb_centos7_release_candidate
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    regexp: release_candidate/gpdb5/pljava/pljava-(.*)-rhel7-x86_64.gppkg
+
+- name: pljava_gpdb_sles11_release_candidate
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    regexp: release_candidate/gpdb5/pljava/pljava-(.*)-sles11-x86_64.gppkg
 
 - name: jdk
   type: s3
@@ -298,11 +324,8 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
-      passed: [pljava_centos7_release]
     - get: pljava_bin
-      passed: [pljava_centos7_release]
       resource: pljava_gpdb_centos7_release
-      trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos7
       trigger: true
@@ -320,11 +343,8 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
-      passed: [pljava_centos6_release]
     - get: pljava_bin
-      passed: [pljava_centos6_release]
       resource: pljava_gpdb_centos6_release
-      trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos6
       trigger: true
@@ -342,11 +362,8 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
-      passed: [pljava_sles11_release]
     - get: pljava_bin
-      passed: [pljava_sles11_release]
       resource: pljava_gpdb_sles11_release
-      trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_sles11
       trigger: true
@@ -375,7 +392,7 @@ jobs:
         OSVER: centos7
         PL_GP_VERSION: "5.0"
   - aggregate:
-    - put: pljava_gpdb_centos7_release
+    - put: pljava_gpdb_centos7_release_candidate
       params:
         file: pljava_gppkg/pljava-*.gppkg
 
@@ -396,7 +413,7 @@ jobs:
         OSVER: centos6
         PL_GP_VERSION: "5.0"
   - aggregate:
-    - put: pljava_gpdb_centos6_release
+    - put: pljava_gpdb_centos6_release_candidate
       params:
         file: pljava_gppkg/pljava-*.gppkg
 
@@ -415,6 +432,6 @@ jobs:
         OSVER: suse11
         PL_GP_VERSION: "5.0"
   - aggregate:
-    - put: pljava_gpdb_sles11_release
+    - put: pljava_gpdb_sles11_release_candidate
       params:
         file: pljava_gppkg/pljava-*.gppkg
