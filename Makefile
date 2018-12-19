@@ -80,4 +80,4 @@ installcheck: localconfig test
 targetcheck: targetconfig test
 
 release:
-	$(MAKE) -C gpdb/packaging
+	$(MAKE) -C gpdb/packaging mkrelease

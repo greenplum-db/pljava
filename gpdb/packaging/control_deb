@@ -1,0 +1,8 @@
+Package: pljava
+Version: #version
+Section: base
+Priority: optional
+Architecture: #arch
+Maintainer: Hao Wu <hawu@pivotal.io>
+Description: PL/Java
+  The PL/Java package provides Procedural language implementation of Java for Greenplum Database.
