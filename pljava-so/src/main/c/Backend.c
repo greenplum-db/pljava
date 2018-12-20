@@ -101,12 +101,8 @@ static JavaVM* s_javaVM = 0;
 static jclass  s_Backend_class;
 static jmethodID s_setTrusted;
 static char* libjvmlocation;
-static char* vmoptions;
-static char* classpath;
-static char* implementors;
 static int   statementCacheSize;
 static bool  pljavaReleaseLingeringSavepoints;
-static bool  pljavaEnabled;
 static bool  s_currentTrust;
 static int   s_javaLogLevel;
 
