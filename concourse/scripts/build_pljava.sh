@@ -16,6 +16,7 @@ function expand_glob_ensure_exists() {
 function prep_env() {
   case "$OSVER" in
     suse11)
+      export BLDARCH=sles11_x86_64
       export JAVA_HOME=$(expand_glob_ensure_exists /usr/java/jdk1.8*)
       export PATH=${JAVA_HOME}/bin:${PATH}
       source /opt/gcc_env.sh
