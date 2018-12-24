@@ -334,7 +334,7 @@ jobs:
   - aggregate:
     - task: pljava_gpdb_build
       file: pljava_src/concourse/tasks/build_pljava.yml
-      image: pljava_ubuntu_img
+      image: pljava_ubuntu16_img
       params:
         OSVER: ubuntu16
         PL_GP_VERSION: "6.0"

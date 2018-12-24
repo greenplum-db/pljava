@@ -21,18 +21,19 @@ function prep_env() {
       source /opt/gcc_env.sh
       ;;
     ubuntu16)
-      BLDARCH=ubuntu16_amd64
-
+      export BLDARCH=ubuntu16_amd64
+      apt install -y openjdk-8-jdk
+      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
       ;;
 
     centos6)
-      BLDARCH=rhel6_x86_64
+      export BLDARCH=rhel6_x86_64
       export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk.x86_64
       source /opt/gcc_env.sh
       ;;
 
     centos7)
-      BLDARCH=rhel7_x86_64
+      export BLDARCH=rhel7_x86_64
       echo "Detecting java7 path ..."
       java7_packages=$(rpm -qa | grep -F java-1.7)
       java7_bin="$(rpm -ql $java7_packages | grep /jre/bin/java$)"
@@ -51,22 +52,30 @@ function prep_env() {
 }
 
 function _main() {
-	if [ "$OSVER" == "suse11" ]; then
+local gphome=/usr/local/greenplum-db-devel
+  case "$OSVER" in
+    suse11)
       # install dependencies
       zypper addrepo http://download.opensuse.org/distribution/11.4/repo/oss/ oss
       zypper --no-gpg-checks -n install readline-devel zlib-devel curl-devel libbz2-devel python-devel libopenssl1_0_0 libopenssl-devel htop libffi45 libffi45-devel krb5-devel make python-xml
       zypper --no-gpg-checks -n install openssh unzip less glibc-locale gmp-devel mpfr-devel
       # install JAVA8 on sles
       rpm -ivh jdk/jdk-8u181-linux-x64.rpm
-    else
+      ;;
+  case ubuntu*)
+      apt install -y wget
+      gphome=/usr/local/gpdb
+      ;;
+  case centos*)
       yum install -y wget
-    fi
+      ;;
+  esac
 
     prep_env
 
-    mkdir /usr/local/greenplum-db-devel
-    tar zxf bin_gpdb/bin_gpdb.tar.gz -C /usr/local/greenplum-db-devel
-    source /usr/local/greenplum-db-devel/greenplum_path.sh
+    mkdir $gphome
+    tar zxf bin_gpdb/*.tar.gz -C $gphome
+    source $gphome/greenplum_path.sh
 
     wget http://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
     tar xvf apache-maven-3.5.4-bin.tar.gz
