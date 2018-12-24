@@ -62,11 +62,12 @@ local gphome=/usr/local/greenplum-db-devel
       # install JAVA8 on sles
       rpm -ivh jdk/jdk-8u181-linux-x64.rpm
       ;;
-  case ubuntu*)
+  ubuntu*)
+      apt update
       apt install -y wget
       gphome=/usr/local/gpdb
       ;;
-  case centos*)
+  centos*)
       yum install -y wget
       ;;
   esac
