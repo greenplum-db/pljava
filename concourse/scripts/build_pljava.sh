@@ -20,6 +20,10 @@ function prep_env() {
       export PATH=${JAVA_HOME}/bin:${PATH}
       source /opt/gcc_env.sh
       ;;
+    ubuntu16)
+      BLDARCH=ubuntu16_amd64
+
+      ;;
 
     centos6)
       BLDARCH=rhel6_x86_64

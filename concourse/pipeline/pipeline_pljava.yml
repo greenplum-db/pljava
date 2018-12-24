@@ -8,33 +8,41 @@ groups:
   jobs:
     - pljava_centos7_build
     - pljava_centos6_build
+    - pljava_ubuntu16_build
     - pljava_sles11_build
     - pljava_centos7_test
     - pljava_centos6_test
+    - pljava_ubuntu16_test
     - pljava_sles11_test
     - pljava_centos7_release
     - pljava_centos6_release
+    - pljava_ubuntu16_release
     - pljava_sles11_release
     - pljava_centos7_test_release
     - pljava_centos6_test_release
+    - pljava_ubuntu16_test_release
     - pljava_sles11_test_release
 
 - name: GPDB6
   jobs:
     - pljava_centos7_build
     - pljava_centos6_build
+    - pljava_ubuntu16_build
     - pljava_sles11_build
     - pljava_centos7_test
     - pljava_centos6_test
+    - pljava_ubuntu16_test
     - pljava_sles11_test
 
 - name: RELEASE
   jobs:
     - pljava_centos7_release
     - pljava_centos6_release
+    - pljava_ubuntu16_release
     - pljava_sles11_release
     - pljava_centos7_test_release
     - pljava_centos6_test_release
+    - pljava_ubuntu16_test_release
     - pljava_sles11_test_release
 ## ======================================================================
 ## resources
@@ -70,6 +78,15 @@ resources:
     secret_access_key: {{bucket-secret-access-key}}
     versioned_file: {{bin_gpdb_sles11_versioned_file}}
 
+- name: bin_gpdb_ubuntu16
+  type: s3
+  source:
+    access_key_id: {{bucket-access-key-id}}
+    bucket: {{bucket-name}}
+    region_name: {{aws-region}}
+    secret_access_key: {{bucket-secret-access-key}}
+    versioned_file: {{compiled_bits_ubuntu16_versioned_file}}
+
 
 - name: pljava_centos6_img
   type: docker-image
@@ -89,11 +106,17 @@ resources:
     repository: pivotaldata/sles-gpdb-dev
     tag: '11-beta'
 
+- name: pljava_ubuntu16_img
+  type: docker-image
+  source:
+    repository: pivotaldata/ubuntu-gpdb-debian-dev
+    tag: '16.04'
+
 - name: pljava_src
   type: git
   source:
-    branch: gpdb6_release
-    uri: https://github.com/greenplum-db/pljava.git
+    branch: gpdb6_release_tmp
+    uri: https://github.com/gfphoenix78/pljava.git
 
 - name: gpdb_src
   type: git
@@ -104,8 +127,8 @@ resources:
 - name: release_trigger
   type: git
   source:
-    branch: gpdb6_release
-    uri: https://github.com/greenplum-db/pljava.git
+    branch: gpdb6_release_tmp
+    uri: https://github.com/gfphoenix78/pljava.git
     tag_filter: 2.*
 
 - name: pljava_gpdb_centos6_build
@@ -135,6 +158,15 @@ resources:
     secret_access_key: {{bucket-secret-access-key}}
     versioned_file: build/gpdb6/pljava/sles11/pljava-sles.gppkg
 
+- name: pljava_gpdb_ubuntu16_build
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    versioned_file: build/gpdb6/pljava/ubuntu16/pljava-ubuntu.gppkg
+
 - name: pljava_gpdb_centos6_release
   type: s3
   source:
@@ -162,6 +194,15 @@ resources:
     secret_access_key: {{bucket-secret-access-key}}
     regexp: release/gpdb6/pljava/pljava-(.*)-sles11-x86_64.gppkg
 
+- name: pljava_gpdb_ubuntu16_release
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    regexp: release/gpdb6/pljava/pljava-(.*)-ubuntu16-x86_64.gppkg
+
 - name: pljava_gpdb_centos6_release_candidate
   type: s3
   source:
@@ -188,6 +229,15 @@ resources:
     access_key_id: {{bucket-access-key-id}}
     secret_access_key: {{bucket-secret-access-key}}
     regexp: release_candidate/gpdb6/pljava/pljava-(.*)-sles11-x86_64.gppkg
+
+- name: pljava_gpdb_ubuntu16_release_candidate
+  type: s3
+  source:
+    bucket: {{pl-bucket-name}}
+    region_name: {{aws-region}}
+    access_key_id: {{bucket-access-key-id}}
+    secret_access_key: {{bucket-secret-access-key}}
+    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-ubuntu16-x86_64.gppkg
 
 - name: jdk
   type: s3
@@ -270,6 +320,29 @@ jobs:
       params:
         file: pljava_gppkg/pljava-*.gppkg
 
+- name: pljava_ubuntu16_build
+  plan:
+  - aggregate:
+    - get: pljava_src
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb_ubuntu16
+      trigger: true
+    - get: pljava_ubuntu16_img
+    - get: gpdb_src
+    - get: jdk
+  - aggregate:
+    - task: pljava_gpdb_build
+      file: pljava_src/concourse/tasks/build_pljava.yml
+      image: pljava_ubuntu_img
+      params:
+        OSVER: ubuntu16
+        PL_GP_VERSION: "6.0"
+  - aggregate:
+    - put: pljava_gpdb_ubuntu16_build
+      params:
+        file: pljava_gppkg/pljava-*.gppkg
+
 - name: pljava_centos7_test
   plan:
   - aggregate:
@@ -330,6 +403,26 @@ jobs:
         OSVER: suse11
         PL_GP_VERSION: "6.0"
 
+- name: pljava_ubuntu16_test
+  plan:
+  - aggregate:
+    - get: pljava_src
+      passed: [pljava_ubuntu16_build]
+    - get: pljava_bin
+      resource: pljava_gpdb_ubuntu16_build
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb_ubuntu16
+    - get: pljava_ubuntu16_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_ubuntu16_img
+      params:
+        OSVER: ubuntu16
+        PL_GP_VERSION: "6.0"
+
 - name: pljava_centos7_test_release
   plan:
   - aggregate:
@@ -385,6 +478,25 @@ jobs:
       image: pljava_sles11_img
       params:
         OSVER: suse11
+        PL_GP_VERSION: "6.0"
+
+- name: pljava_ubuntu16_test_release
+  plan:
+  - aggregate:
+    - get: pljava_src
+    - get: pljava_bin
+      resource: pljava_gpdb_ubuntu16_release
+    - get: bin_gpdb
+      resource: bin_gpdb_ubuntu16
+      trigger: true
+    - get: pljava_ubuntu16_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_ubuntu16_img
+      params:
+        OSVER: ubuntu16
         PL_GP_VERSION: "6.0"
 
 - name: pljava_centos7_release
@@ -449,3 +561,25 @@ jobs:
     - put: pljava_gpdb_sles11_release_candidate
       params:
         file: pljava_gppkg/pljava-*.gppkg
+
+- name: pljava_ubuntu16_release
+  plan:
+  - aggregate:
+    - get: pljava_src
+    - get: release_trigger
+      trigger: true
+    - get: pljava_bin
+      resource: pljava_gpdb_ubuntu16_build
+    - get: pljava_ubuntu16_img
+  - aggregate:
+    - task: release_pljava
+      file: pljava_src/concourse/tasks/release_pljava.yml
+      image: pljava_ubuntu16_img
+      params:
+        OSVER: ubuntu16
+        PL_GP_VERSION: "6.0"
+  - aggregate:
+    - put: pljava_gpdb_ubuntu16_release_candidate
+      params:
+        file: pljava_gppkg/pljava-*.gppkg
+
