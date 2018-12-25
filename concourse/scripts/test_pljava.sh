@@ -67,7 +67,6 @@ function prep_env() {
       ;;
     ubuntu16)
       export BLDARCH=ubuntu16_amd64
-      gphome=/usr/local/gpdb
       apt update
       apt install -y openjdk-8-jdk
       export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64

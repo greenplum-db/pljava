@@ -66,7 +66,6 @@ local gphome=/usr/local/greenplum-db-devel
   ubuntu*)
       apt update
       apt install -y wget
-      gphome=/usr/local/gpdb
       ;;
   centos*)
       yum install -y wget

@@ -85,7 +85,7 @@ resources:
     bucket: {{bucket-name}}
     region_name: {{aws-region}}
     secret_access_key: {{bucket-secret-access-key}}
-    versioned_file: {{compiled_bits_ubuntu16_versioned_file}}
+    versioned_file: {{bin_gpdb_ubuntu16_versioned_file}}
 
 
 - name: pljava_centos6_img
