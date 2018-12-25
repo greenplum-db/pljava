@@ -109,7 +109,7 @@ resources:
 - name: pljava_ubuntu16_img
   type: docker-image
   source:
-    repository: pivotaldata/ubuntu-gpdb-debian-dev
+    repository: pivotaldata/ubuntu-gpdb-dev
     tag: '16.04'
 
 - name: pljava_src
