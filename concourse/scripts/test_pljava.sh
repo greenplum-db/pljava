@@ -5,6 +5,9 @@ set -exo pipefail
 CWDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOP_DIR=${CWDIR}/../../../
 source "${TOP_DIR}/gpdb_src/concourse/scripts/common.bash"
+# for centos and suse, the compiled GPHOME is /usr/local/greenplum-db-devel
+# but for compiled ubuntu16, it is /usr/local/gpdb. ;-(
+gphome=/usr/local/greenplum-db-devel
 
 function expand_glob_ensure_exists() {
     local -a glob=($*)
@@ -58,17 +61,25 @@ function install_openssl(){
 function prep_env() {
   case "$OSVER" in
     suse11)
+      export BLDARCH=sles11_x86_64
       export JAVA_HOME=$(expand_glob_ensure_exists /usr/java/jdk1.7*)
       export PATH=${JAVA_HOME}/bin:${PATH}
       ;;
+    ubuntu16)
+      export BLDARCH=ubuntu16_amd64
+      gphome=/usr/local/gpdb
+      apt update
+      apt install -y openjdk-8-jdk
+      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+      ;;
 
     centos6)
-      BLDARCH=rhel6_x86_64
+      export BLDARCH=rhel6_x86_64
       export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk.x86_64
       ;;
 
     centos7)
-      BLDARCH=rhel7_x86_64
+      export BLDARCH=rhel7_x86_64
       echo "Detecting java7 path ..."
       java7_packages=$(rpm -qa | grep -F java-1.7)
       java7_bin="$(rpm -ql $java7_packages | grep /jre/bin/java$)"
@@ -94,14 +105,14 @@ function prepare_test(){
         fi
 
         source ${TOP_DIR}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
-        source /usr/local/greenplum-db-devel/greenplum_path.sh
+        source $gphome/greenplum_path.sh
         if [ "$OSVER" == "suse11" ]; then
             export JAVA_HOME=/usr/java/jdk1.7.0_67
-            echo "JAVA_HOME=$JAVA_HOME" >> /usr/local/greenplum-db-devel/greenplum_path.sh
-            echo "export JAVA_HOME" >> /usr/local/greenplum-db-devel/greenplum_path.sh
+            echo "JAVA_HOME=$JAVA_HOME" >> $gphome/greenplum_path.sh
+            echo "export JAVA_HOME" >> $gphome/greenplum_path.sh
         fi
 		gppkg -i pljava_bin/pljava-*.gppkg
-        source /usr/local/greenplum-db-devel/greenplum_path.sh
+        source $gphome/greenplum_path.sh
         gpstop -arf
 
         pushd pljava_src
@@ -135,6 +146,9 @@ function setup_gpadmin_user() {
         ;;
         centos*)
         ${TOP_DIR}/gpdb_src/concourse/scripts/setup_gpadmin_user.bash "centos"
+        ;;
+        ubuntu*)
+        ${TOP_DIR}/gpdb_src/concourse/scripts/setup_gpadmin_user.bash "ubuntu"
         ;;
         *) echo "Unknown OS: $OSVER"; exit 1 ;;
     esac
