@@ -115,7 +115,7 @@ resources:
 - name: pljava_src
   type: git
   source:
-    branch: gpdb6_release_tmp
+    branch: gpdb6_release
     uri: https://github.com/gfphoenix78/pljava.git
 
 - name: gpdb_src
@@ -127,7 +127,7 @@ resources:
 - name: release_trigger
   type: git
   source:
-    branch: gpdb6_release_tmp
+    branch: gpdb6_release
     uri: https://github.com/gfphoenix78/pljava.git
     tag_filter: 2.*
 
