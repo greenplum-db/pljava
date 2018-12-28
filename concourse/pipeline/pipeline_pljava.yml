@@ -237,7 +237,7 @@ resources:
     region_name: {{aws-region}}
     access_key_id: {{bucket-access-key-id}}
     secret_access_key: {{bucket-secret-access-key}}
-    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-ubuntu16-x86_64.gppkg
+    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-ubuntu16-amd64.gppkg
 
 - name: jdk
   type: s3
