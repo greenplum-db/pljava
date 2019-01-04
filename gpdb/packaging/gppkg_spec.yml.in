@@ -8,3 +8,10 @@ PostInstall:
 - Master:  "echo 'Please SET JAVA_HOME firstly.';
             echo 'Please source your $GPHOME/greenplum_path.sh file and restart the database.';
             echo 'You can enable pljava by running psql -d mydatabase -f $GPHOME/share/postgresql/pljava/install.sql.' ;"
+- All: "echo '#BEGIN EXTENSION PLJAVA' >> $GPHOME/greenplum_path.sh ;
+        echo 'JAVA_HOME=$JAVA_HOME' >> $GPHOME/greenplum_path.sh ;
+        echo 'export JAVA_HOME' >> $GPHOME/greenplum_path.sh ;
+        echo 'export LD_LIBRARY_PATH=\$JAVA_HOME/jre/lib/amd64/server:\$LD_LIBRARY_PATH' >> $GPHOME/greenplum_path.sh ;
+        echo '#END EXTENSION PLJAVA' >> $GPHOME/greenplum_path.sh ;"
+PostUninstall:
+- All: "sed -i '/#BEGIN PLJAVA/,/#END PLJAVA/d' $GPHOME/greenplum_path.sh ; "
