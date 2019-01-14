@@ -64,7 +64,8 @@ function install_openssl(){
 }
 
 function install_gpdb() {
-tar -xzf bin_gpdb/*.tar.gz -C $gphome
+    [ ! -d "$gphome" ] && mkdir "$gphome"
+    tar -xzf bin_gpdb/*.tar.gz -C $gphome
 }
 function prep_env() {
   case "$OSVER" in
