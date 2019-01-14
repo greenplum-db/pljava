@@ -64,6 +64,7 @@ local gphome=/usr/local/greenplum-db-devel
       rpm -ivh jdk/jdk-8u181-linux-x64.rpm
       ;;
   ubuntu*)
+      gphome=/usr/local/gpdb
       apt update
       apt install -y wget
       ;;
