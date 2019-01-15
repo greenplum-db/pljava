@@ -5,6 +5,7 @@ set -exo pipefail
 CWDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOP_DIR=${CWDIR}/../../../
 source "${TOP_DIR}/gpdb_src/concourse/scripts/common.bash"
+source "${TOP_DIR}/pljava_src/concourse/scripts/common.bash"
 # for centos and suse, the compiled GPHOME is /usr/local/greenplum-db-devel
 # but for compiled ubuntu16, it is /usr/local/gpdb. ;-(
 gphome=/usr/local/greenplum-db-devel
@@ -13,12 +14,6 @@ ubuntu*)
 	gphome=/usr/local/gpdb
 	;;
 esac
-
-function expand_glob_ensure_exists() {
-    local -a glob=($*)
-    [ -e "${glob[0]}" ]
-    echo "${glob[0]}"
-}
 
 function install_openssl(){
     pushd /opt
@@ -67,40 +62,6 @@ function install_gpdb() {
     [ ! -d "$gphome" ] && mkdir "$gphome"
     tar -xzf bin_gpdb/*.tar.gz -C $gphome
 }
-function prep_env() {
-  case "$OSVER" in
-    suse11)
-      export BLDARCH=sles11_x86_64
-      export JAVA_HOME=$(expand_glob_ensure_exists /usr/java/jdk1.7*)
-      export PATH=${JAVA_HOME}/bin:${PATH}
-      ;;
-    ubuntu16)
-      export BLDARCH=ubuntu16_amd64
-      apt update
-      apt install -y openjdk-8-jdk
-      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-      ;;
-
-    centos6)
-      export BLDARCH=rhel6_x86_64
-      export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk.x86_64
-      ;;
-
-    centos7)
-      export BLDARCH=rhel7_x86_64
-      echo "Detecting java7 path ..."
-      java7_packages=$(rpm -qa | grep -F java-1.7)
-      java7_bin="$(rpm -ql $java7_packages | grep /jre/bin/java$)"
-      alternatives --set java "$java7_bin"
-      export JAVA_HOME="${java7_bin/jre\/bin\/java/}"
-      ;;
-
-    *)
-    echo "TARGET_OS_VERSION not set or recognized for Centos/RHEL"
-    exit 1
-    ;;
-  esac
-}
 
 function prepare_test(){
 
@@ -115,7 +76,6 @@ function prepare_test(){
         source ${TOP_DIR}/gpdb_src/gpAux/gpdemo/gpdemo-env.sh
         source $gphome/greenplum_path.sh
         if [ "$OSVER" == "suse11" ]; then
-            export JAVA_HOME=/usr/java/jdk1.7.0_67
             echo "JAVA_HOME=$JAVA_HOME" >> $gphome/greenplum_path.sh
             echo "export JAVA_HOME" >> $gphome/greenplum_path.sh
         fi

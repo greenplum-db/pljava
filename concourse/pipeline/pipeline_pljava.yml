@@ -239,14 +239,14 @@ resources:
     secret_access_key: {{bucket-secret-access-key}}
     regexp: release_candidate/gpdb6/pljava/pljava-(.*)-ubuntu16-amd64.gppkg
 
-- name: jdk
+- name: jdk_bin
   type: s3
   source:
     bucket: {{pl-bucket-name}}
     region_name: {{aws-region}}
     access_key_id: {{bucket-access-key-id}}
     secret_access_key: {{bucket-secret-access-key}}
-    regexp: dependancy/jdk-8(.*).rpm
+    regexp: dependancy/{{jdk-tgz}}
 
 jobs:
 ## GPDB6 PL/Java Jobs
@@ -261,7 +261,7 @@ jobs:
       trigger: true
     - get: pljava_centos7_img
     - get: gpdb_src
-    - get: jdk
+    - get: jdk_bin
   - aggregate:
     - task: pljava_gpdb_build
       file: pljava_src/concourse/tasks/build_pljava.yml
@@ -284,7 +284,7 @@ jobs:
       trigger: true
     - get: pljava_centos6_img
     - get: gpdb_src
-    - get: jdk
+    - get: jdk_bin
   - aggregate:
     - task: pljava_gpdb_build
       file: pljava_src/concourse/tasks/build_pljava.yml
@@ -307,7 +307,7 @@ jobs:
       trigger: true
     - get: pljava_sles11_img
     - get: gpdb_src
-    - get: jdk
+    - get: jdk_bin
   - aggregate:
     - task: pljava_gpdb_build
       file: pljava_src/concourse/tasks/build_pljava.yml
@@ -330,7 +330,7 @@ jobs:
       trigger: true
     - get: pljava_ubuntu16_img
     - get: gpdb_src
-    - get: jdk
+    - get: jdk_bin
   - aggregate:
     - task: pljava_gpdb_build
       file: pljava_src/concourse/tasks/build_pljava.yml
@@ -351,6 +351,7 @@ jobs:
     - get: pljava_bin
       resource: pljava_gpdb_centos7_build
       trigger: true
+    - get: jdk_bin
     - get: bin_gpdb
       resource: bin_gpdb_centos7
     - get: pljava_centos7_img
@@ -371,6 +372,7 @@ jobs:
     - get: pljava_bin
       resource: pljava_gpdb_centos6_build
       trigger: true
+    - get: jdk_bin
     - get: bin_gpdb
       resource: bin_gpdb_centos6
     - get: pljava_centos6_img
@@ -391,6 +393,7 @@ jobs:
     - get: pljava_bin
       resource: pljava_gpdb_sles11_build
       trigger: true
+    - get: jdk_bin
     - get: bin_gpdb
       resource: bin_gpdb_sles11
     - get: pljava_sles11_img
@@ -411,6 +414,7 @@ jobs:
     - get: pljava_bin
       resource: pljava_gpdb_ubuntu16_build
       trigger: true
+    - get: jdk_bin
     - get: bin_gpdb
       resource: bin_gpdb_ubuntu16
     - get: pljava_ubuntu16_img
@@ -429,6 +433,7 @@ jobs:
     - get: pljava_src
     - get: pljava_bin
       resource: pljava_gpdb_centos7_release
+    - get: jdk_bin
     - get: bin_gpdb
       resource: bin_gpdb_centos7
       trigger: true
@@ -448,6 +453,7 @@ jobs:
     - get: pljava_src
     - get: pljava_bin
       resource: pljava_gpdb_centos6_release
+    - get: jdk_bin
     - get: bin_gpdb
       resource: bin_gpdb_centos6
       trigger: true
@@ -467,6 +473,7 @@ jobs:
     - get: pljava_src
     - get: pljava_bin
       resource: pljava_gpdb_sles11_release
+    - get: jdk_bin
     - get: bin_gpdb
       resource: bin_gpdb_sles11
       trigger: true
@@ -486,6 +493,7 @@ jobs:
     - get: pljava_src
     - get: pljava_bin
       resource: pljava_gpdb_ubuntu16_release
+    - get: jdk_bin
     - get: bin_gpdb
       resource: bin_gpdb_ubuntu16
       trigger: true

@@ -6,51 +6,7 @@ CWDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOP_DIR=${CWDIR}/../../../
 
 source "${TOP_DIR}/gpdb_src/concourse/scripts/common.bash"
-
-function expand_glob_ensure_exists() {
-  local -a glob=($*)
-  [ -e "${glob[0]}" ]
-  echo "${glob[0]}"
-}
-
-function prep_env() {
-  case "$OSVER" in
-    suse11)
-      export BLDARCH=sles11_x86_64
-      export JAVA_HOME=$(expand_glob_ensure_exists /usr/java/jdk1.8*)
-      export PATH=${JAVA_HOME}/bin:${PATH}
-      source /opt/gcc_env.sh
-      ;;
-    ubuntu16)
-      export BLDARCH=ubuntu16_amd64
-      apt install -y openjdk-8-jdk
-      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-      ;;
-
-    centos6)
-      export BLDARCH=rhel6_x86_64
-      export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk.x86_64
-      source /opt/gcc_env.sh
-      ;;
-
-    centos7)
-      export BLDARCH=rhel7_x86_64
-      echo "Detecting java7 path ..."
-      java7_packages=$(rpm -qa | grep -F java-1.7)
-      java7_bin="$(rpm -ql $java7_packages | grep /jre/bin/java$)"
-      alternatives --set java "$java7_bin"
-      export JAVA_HOME="${java7_bin/jre\/bin\/java/}"
-      ln -sf /usr/bin/xsubpp /usr/share/perl5/ExtUtils/xsubpp
-      source /opt/gcc_env.sh
-      ;;
-
-    *)
-    echo "TARGET_OS_VERSION not set or recognized for Centos/RHEL"
-    exit 1
-    ;;
-  esac
-  export PATH=${JAVA_HOME}/bin:${PATH}
-}
+source "${TOP_DIR}/pljava_src/concourse/scripts/common.bash"
 
 function _main() {
 local gphome=/usr/local/greenplum-db-devel
@@ -61,7 +17,7 @@ local gphome=/usr/local/greenplum-db-devel
       zypper --no-gpg-checks -n install readline-devel zlib-devel curl-devel libbz2-devel python-devel libopenssl1_0_0 libopenssl-devel htop libffi45 libffi45-devel krb5-devel make python-xml
       zypper --no-gpg-checks -n install openssh unzip less glibc-locale gmp-devel mpfr-devel
       # install JAVA8 on sles
-      rpm -ivh jdk/jdk-8u181-linux-x64.rpm
+      #rpm -ivh jdk/jdk-8u181-linux-x64.rpm
       ;;
   ubuntu*)
       gphome=/usr/local/gpdb
