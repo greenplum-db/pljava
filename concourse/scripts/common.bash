@@ -10,9 +10,10 @@ function expand_glob_ensure_exists() {
 
 function prep_jdk() {
     echo "installing jdk ${TOP_DIR}/jdk_tgz/jdk*.tar.gz"
+    unset JRE_HOME
     [ ! -d /opt/java ] && mkdir /opt/java
-    tar xzf "${TOP_DIR}/jdk_tgz/jdk*.tar.gz" -C /opt/java
-    export JAVA_HOME=`ls -d /opt/jdk*`
+    tar xzf ${TOP_DIR}/jdk_tgz/jdk*.tar.gz -C /opt/java
+    export JAVA_HOME=`ls -d /opt/java/jdk*`
     export PATH=$JAVA_HOME/bin:$PATH
     echo "installed jdk, JAVA_HOME=$JAVA_HOME"
     java -version
