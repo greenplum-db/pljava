@@ -8,6 +8,7 @@ inputs:
   - name: pljava_src
   - name: pljava_bin
   - name: gpdb_src
+  - name: jdk_bin
 
 run:
   path: pljava_src/concourse/scripts/test_pljava.sh
