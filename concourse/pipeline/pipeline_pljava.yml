@@ -246,7 +246,7 @@ resources:
     region_name: {{aws-region}}
     access_key_id: {{bucket-access-key-id}}
     secret_access_key: {{bucket-secret-access-key}}
-    regexp: dependancy/{{jdk-tgz}}
+    versioned_file: {{jdk-tgz}}
 
 jobs:
 ## GPDB6 PL/Java Jobs
