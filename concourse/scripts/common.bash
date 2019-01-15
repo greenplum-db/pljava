@@ -43,6 +43,8 @@ function prep_env() {
     ;;
   esac
   prep_jdk
-  source /opt/gcc_env.sh
+  if [ -f '/opt/gcc_env.sh' ]; then
+    source /opt/gcc_env.sh
+  fi
 }
 
