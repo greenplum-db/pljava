@@ -44,7 +44,7 @@ function prep_jdk_install() {
 	  centos6)
 	    case "$JDK_VERSION" in
 		  8)
-		    yum install -y java-1.8.0-openjdk
+		    yum install -y java-1.8.0-openjdk-devel
 			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-1.8*"`
 		    ;;
 		  11)
@@ -62,11 +62,11 @@ function prep_jdk_install() {
 	  centos7)
 	    case "$JDK_VERSION" in
 		  8)
-		    yum install -y java-1.8.0-openjdk
+		    yum install -y java-1.8.0-openjdk-devel
 			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-1.8*"`
 		    ;;
 		  11)
-		    yum install -y java-11-openjdk
+		    yum install -y java-11-openjdk-devel
 			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-11*"`
 			;;
 		  *)
