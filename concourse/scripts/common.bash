@@ -12,14 +12,14 @@ function prep_jdk() {
     echo "installing jdk ${TOP_DIR}/jdk_tgz/jdk*.tar.gz"
     unset JRE_HOME
     [ ! -d /opt/java ] && mkdir /opt/java
-    tar xzf ${TOP_DIR}/jdk_bin/jdk*.tar.gz -C /opt/java
+    tar xzf ${TOP_DIR}/jdk_bin/*.tar.gz -C /opt/java
     export JAVA_HOME=`ls -d /opt/java/jdk*`
-    export PATH=$JAVA_HOME/bin:$PATH
-    echo "installed jdk, JAVA_HOME=$JAVA_HOME"
-    java -version
+    #echo "installed jdk, JAVA_HOME=$JAVA_HOME"
+    #java -version
 }
 # receive JDK_VERSION
 function prep_jdk_install() {
+    echo "installing jdk $JDK_VERSION"
 	case "$OSVER" in
 	  suse11)
 	  ;;
@@ -48,8 +48,10 @@ function prep_jdk_install() {
 			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-1.8*"`
 		    ;;
 		  11)
-		    yum install -y java-11-openjdk
-			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-11*"`
+			wget https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz
+			[ ! -d /opt/java ] && mkdir /opt/java
+			tar xzf openjdk-11*.tar.gz -C /opt/java
+			export JAVA_HOME=`ls -d /opt/java/jdk*`
 			;;
 		  *)
 		    echo "invalid JDK_VERSION '$JDK_VERSION'"
