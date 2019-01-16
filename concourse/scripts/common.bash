@@ -18,6 +18,71 @@ function prep_jdk() {
     echo "installed jdk, JAVA_HOME=$JAVA_HOME"
     java -version
 }
+# receive JDK_VERSION
+function prep_jdk_install() {
+	case "$OSVER" in
+	  suse11)
+	  ;;
+	  ubuntu16)
+	    case "$JDK_VERSION" in
+		  8)
+		    apt install -y openjdk-8-jdk
+			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-8*"`
+		    ;;
+		  11)
+		    add-apt-repository ppa:openjdk-r/ppa
+		    apt update -q
+		    apt install -y openjdk-11-jdk
+			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "jdk-11*"`
+			;;
+		  *)
+		    echo "invalid JDK_VERSION '$JDK_VERSION'"
+		    exit 1
+		    ;;
+		esac
+	    ;;
+	  centos6)
+	    case "$JDK_VERSION" in
+		  8)
+		    yum install -y java-1.8.0-openjdk
+			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-1.8*"`
+		    ;;
+		  11)
+		    yum install -y java-11-openjdk
+			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-11*"`
+			;;
+		  *)
+		    echo "invalid JDK_VERSION '$JDK_VERSION'"
+		    exit 1
+		    ;;
+		esac
+	    ;;
+	  centos7)
+	    case "$JDK_VERSION" in
+		  8)
+		    yum install -y java-1.8.0-openjdk
+			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-1.8*"`
+		    ;;
+		  11)
+		    yum install -y java-11-openjdk
+			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-11*"`
+			;;
+		  *)
+		    echo "invalid JDK_VERSION '$JDK_VERSION'"
+		    exit 1
+		    ;;
+		esac
+	    ;;
+	  *)
+	    echo "TARGET_OS_VERSION not set or recognized '$OSVER'"
+	    exit 1
+	    ;;
+	esac
+
+    export PATH=$JAVA_HOME/bin:$PATH
+    echo "installed jdk, JAVA_HOME=$JAVA_HOME"
+    java -version
+}
 
 function prep_env() {
   case "$OSVER" in
@@ -42,7 +107,7 @@ function prep_env() {
     exit 1
     ;;
   esac
-  prep_jdk
+  prep_jdk_install
   if [ -f '/opt/gcc_env.sh' ]; then
     source /opt/gcc_env.sh
   fi

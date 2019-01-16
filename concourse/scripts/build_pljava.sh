@@ -1,6 +1,10 @@
 #!/bin/bash -l
 
 set -exo pipefail
+# reset PATH to erase side effect of some pre-set paths
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
+# docker image of centos will pre-install jdk 7 and set this var
+unset JRE_HOME
 
 CWDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOP_DIR=${CWDIR}/../../../

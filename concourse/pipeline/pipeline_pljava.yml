@@ -269,6 +269,7 @@ jobs:
       params:
         OSVER: centos7
         PL_GP_VERSION: "6.0"
+        JDK_VERSION: {{jdk_version}}
   - aggregate:
     - put: pljava_gpdb_centos7_build
       params:
