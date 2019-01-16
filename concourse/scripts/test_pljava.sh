@@ -123,11 +123,11 @@ function setup_gpadmin_user() {
 }
 
 function _main() {
+    time prep_env
     time install_gpdb
     time setup_gpadmin_user
 
     time make_cluster
-    time prep_env
     time prepare_test
     time test
 
