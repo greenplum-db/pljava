@@ -12,6 +12,7 @@ gphome=/usr/local/greenplum-db-devel
 case "$OSVER" in
 ubuntu*)
 	gphome=/usr/local/gpdb
+	ln -sf /usr/local/gpdb /usr/local/greenplum-db-devel
 	;;
 esac
 
