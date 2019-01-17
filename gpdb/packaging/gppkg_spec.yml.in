@@ -10,7 +10,12 @@ PostInstall:
             echo 'You can enable pljava by running psql -d mydatabase -f $GPHOME/share/postgresql/pljava/install.sql.' ;"
 - All: "echo '#BEGIN EXTENSION PLJAVA' >> $GPHOME/greenplum_path.sh ;
         echo export JAVA_HOME=$JAVA_HOME >> $GPHOME/greenplum_path.sh ;
-        echo 'export LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH' >> $GPHOME/greenplum_path.sh ;
+        echo '# for jdk 8' >> $GPHOME/greenplum_path.sh ;
+        echo 'LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH' >> $GPHOME/greenplum_path.sh ;
+        echo '# for jdk 11' >> $GPHOME/greenplum_path.sh ;
+        echo 'LD_LIBRARY_PATH=$JAVA_HOME/lib/server:$LD_LIBRARY_PATH' >> $GPHOME/greenplum_path.sh ;
+        echo 'export LD_LIBRARY_PATH' >> $GPHOME/greenplum_path.sh ;
+        echo 'export PATH=$JAVA_HOME/bin:$PATH' >> $GPHOME/greenplum_path.sh ;
         echo '#END EXTENSION PLJAVA' >> $GPHOME/greenplum_path.sh ;"
 PostUninstall:
 - All: "sed -i '/#BEGIN EXTENSION PLJAVA/,/#END EXTENSION PLJAVA/d' $GPHOME/greenplum_path.sh ; "
