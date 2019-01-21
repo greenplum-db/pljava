@@ -1,0 +1,689 @@
+\c pljava_test pljava_test
+set TIMEZONE=UTC;
+set search_path = javatest, public;
+set client_min_messages = "info";
+-- org.postgresql.pljava.example.Parameters
+select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamp()))::int) <= 2;
+ ?column? 
+----------
+ t
+(1 row)
+
+select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamptz()))::int) <= 2;
+ ?column? 
+----------
+ t
+(1 row)
+
+SELECT javatest.print('2016-01-01'::date);
+          print          
+-------------------------
+ Friday, January 1, 2016
+(1 row)
+
+SELECT javatest.print('2016-01-01'::date) FROM javatest.test;
+          print          
+-------------------------
+ Friday, January 1, 2016
+(1 row)
+
+SELECT * FROM javatest.print('2016-01-01'::date);
+          print          
+-------------------------
+ Friday, January 1, 2016
+(1 row)
+
+SELECT javatest.print('12:34:56-00'::time);
+       print        
+--------------------
+ 12:34:56 UTC +0000
+(1 row)
+
+SELECT javatest.print('12:34:56-00'::time) FROM javatest.test;
+       print        
+--------------------
+ 12:34:56 UTC +0000
+(1 row)
+
+SELECT * FROM javatest.print('12:34:56-00'::time);
+       print        
+--------------------
+ 12:34:56 UTC +0000
+(1 row)
+
+SELECT javatest.print('2016-02-14 08:09:10'::timestamp);
+                               print                                
+--------------------------------------------------------------------
+ Sunday, February 14, 2016 at 8:09:10 AM Coordinated Universal Time
+(1 row)
+
+SELECT javatest.print('2016-02-14 08:09:10'::timestamp) FROM javatest.test;
+                               print                                
+--------------------------------------------------------------------
+ Sunday, February 14, 2016 at 8:09:10 AM Coordinated Universal Time
+(1 row)
+
+SELECT * FROM javatest.print('2016-02-14 08:09:10'::timestamp);
+                               print                                
+--------------------------------------------------------------------
+ Sunday, February 14, 2016 at 8:09:10 AM Coordinated Universal Time
+(1 row)
+
+ 
+SELECT javatest.print('varchar'::varchar);
+  print  
+---------
+ varchar
+(1 row)
+
+SELECT javatest.print('varchar'::varchar) FROM javatest.test;
+  print  
+---------
+ varchar
+(1 row)
+
+SELECT * FROM javatest.print('varchar'::varchar);
+  print  
+---------
+ varchar
+(1 row)
+
+SELECT encode(javatest.print('bytea'::bytea), 'escape');
+ encode 
+--------
+ bytea
+(1 row)
+
+SELECT encode(javatest.print('bytea'::bytea), 'escape') FROM javatest.test;
+ encode 
+--------
+ bytea
+(1 row)
+
+SELECT * FROM encode(javatest.print('bytea'::bytea), 'escape');
+ encode 
+--------
+ bytea
+(1 row)
+
+SELECT javatest.print(1::int2);
+ print 
+-------
+     1
+(1 row)
+
+SELECT javatest.print(2::int2) FROM javatest.test;
+ print 
+-------
+     2
+(1 row)
+
+SELECT * FROM javatest.print(3::int2);
+ print 
+-------
+     3
+(1 row)
+
+SELECT javatest.print('{1,2,3}'::int2[]);
+  print  
+---------
+ {1,2,3}
+(1 row)
+
+SELECT javatest.print('{2,3,4}'::int2[]) FROM javatest.test;
+  print  
+---------
+ {2,3,4}
+(1 row)
+
+SELECT * FROM javatest.print('{3,4,5}'::int2[]);
+  print  
+---------
+ {3,4,5}
+(1 row)
+
+SELECT javatest.print(4::int4);
+ print 
+-------
+     4
+(1 row)
+
+SELECT javatest.print(5::int4) FROM javatest.test;
+ print 
+-------
+     5
+(1 row)
+
+SELECT * FROM javatest.print(6::int4);
+ print 
+-------
+     6
+(1 row)
+
+SELECT javatest.print('{4,5,6}'::int4[]);
+  print  
+---------
+ {4,5,6}
+(1 row)
+
+SELECT javatest.print('{5,6,7}'::int4[]) FROM javatest.test;
+  print  
+---------
+ {5,6,7}
+(1 row)
+
+SELECT * FROM javatest.print('{6,7,8}'::int4[]);
+  print  
+---------
+ {6,7,8}
+(1 row)
+
+SELECT javatest.print(8::int8);
+ print 
+-------
+     8
+(1 row)
+
+SELECT javatest.print(9::int8) FROM javatest.test;
+ print 
+-------
+     9
+(1 row)
+
+SELECT * FROM javatest.print(10::int8);
+ print 
+-------
+    10
+(1 row)
+
+SELECT javatest.print('{8,9,10}'::int8[]);
+  print   
+----------
+ {8,9,10}
+(1 row)
+
+SELECT javatest.print('{9,10,11}'::int8[]) FROM javatest.test;
+   print   
+-----------
+ {9,10,11}
+(1 row)
+
+SELECT * FROM javatest.print('{10,11,12}'::int8[]);
+   print    
+------------
+ {10,11,12}
+(1 row)
+
+SELECT javatest.print(11.12::float4);
+ print 
+-------
+ 11.12
+(1 row)
+
+SELECT javatest.print(12.13::float4) FROM javatest.test;
+ print 
+-------
+ 12.13
+(1 row)
+
+SELECT * FROM javatest.print(13.14::float4);
+ print 
+-------
+ 13.14
+(1 row)
+
+SELECT javatest.print('{11.1,12.2,13.3}'::float4[]);
+      print       
+------------------
+ {11.1,12.2,13.3}
+(1 row)
+
+SELECT javatest.print('{12.2,13.3,14.4}'::float4[]) FROM javatest.test;
+      print       
+------------------
+ {12.2,13.3,14.4}
+(1 row)
+
+SELECT * FROM javatest.print('{13.4,14.4,15.5}'::float4[]);
+      print       
+------------------
+ {13.4,14.4,15.5}
+(1 row)
+
+SELECT javatest.print(15.5::float8);
+ print 
+-------
+  15.5
+(1 row)
+
+SELECT javatest.print(16.6::float8) FROM javatest.test;
+ print 
+-------
+  16.6
+(1 row)
+
+SELECT * FROM javatest.print(17.7::float8);
+ print 
+-------
+  17.7
+(1 row)
+
+SELECT javatest.print('{15.5,16.6,17.7}'::float8[]);
+      print       
+------------------
+ {15.5,16.6,17.7}
+(1 row)
+
+SELECT javatest.print('{16.6,17.7,18.8}'::float8[]) FROM javatest.test;
+      print       
+------------------
+ {16.6,17.7,18.8}
+(1 row)
+
+SELECT * FROM javatest.print('{17.7,18.8,19.9}'::float8[]);
+      print       
+------------------
+ {17.7,18.8,19.9}
+(1 row)
+
+SELECT javatest.printObj('{17,18,19}'::int[]);
+  printobj  
+------------
+ {17,18,19}
+(1 row)
+
+SELECT javatest.printObj('{18,19,null,20}'::int[]) FROM javatest.test;
+    printobj     
+-----------------
+ {18,19,NULL,20}
+(1 row)
+
+SELECT * FROM javatest.printObj('{19,null,20,21}'::int[]);
+    printobj     
+-----------------
+ {19,NULL,20,21}
+(1 row)
+
+SELECT javatest.java_addOne(20);
+ java_addone 
+-------------
+          21
+(1 row)
+
+SELECT javatest.java_addOne(21) FROM javatest.test;
+ java_addone 
+-------------
+          22
+(1 row)
+
+SELECT * FROM javatest.java_addOne(22);
+ java_addone 
+-------------
+          23
+(1 row)
+
+SELECT javatest.nullOnEven(23);
+ nulloneven 
+------------
+         23
+(1 row)
+
+SELECT javatest.nullOnEven(24);
+ nulloneven 
+------------
+           
+(1 row)
+
+SELECT javatest.nullOnEven(25) FROM javatest.test;
+ nulloneven 
+------------
+         25
+(1 row)
+
+SELECT javatest.nullOnEven(26) FROM javatest.test;
+ nulloneven 
+------------
+           
+(1 row)
+
+SELECT * FROM javatest.nullOnEven(27);
+ nulloneven 
+------------
+         27
+(1 row)
+
+SELECT * FROM javatest.nullOnEven(28);
+ nulloneven 
+------------
+           
+(1 row)
+
+SELECT javatest.addNumbers(1::int2,2::int4,3::int8,4::numeric,5::numeric,6::float4,7::float8);
+ addnumbers 
+------------
+         28
+(1 row)
+
+SELECT javatest.addNumbers(2::int2,2::int4,3::int8,4::numeric,5::numeric,6::float4,7::float8) FROM javatest.test;
+ addnumbers 
+------------
+         29
+(1 row)
+
+select javatest.countnulls('{1,2,null,3,4}'::int[]);
+ countnulls 
+------------
+          1
+(1 row)
+
+select javatest.countnulls('{1,2,null,3,null,4}'::int[]) FROM javatest.test;
+ countnulls 
+------------
+          2
+(1 row)
+
+-- Functions over system calls
+SELECT javatest.java_getSystemProperty('user.language');
+ java_getsystemproperty 
+------------------------
+ en
+(1 row)
+
+-- org.postgresql.pljava.example.Security
+-- start_matchsubs
+-- m/ERROR\:.* \(JNICalls\.c:\d+\)/
+-- s/\(JNICalls\.c:\d+\)//
+-- end_matchsubs
+/*
+ * This function should fail since file system access is
+ * prohibited when the language is trusted.
+ */
+SELECT javatest.create_temp_file_trusted();
+ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:76)
+SELECT javatest.create_temp_file_trusted() FROM javatest.test;
+ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:76)  (seg0 slice1 pljava.pivotal.io:40000 pid=14850) (cdbdisp.c:215)
+SELECT * FROM javatest.create_temp_file_trusted();
+ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:76)
+-- org.postgresql.pljava.example.TupleReturn
+select base, incbase from javatest.tupleReturnExample(2,4);
+ base | incbase 
+------+---------
+    2 |       6
+(1 row)
+
+select base, incbase from javatest.tupleReturnExample2(3,5);
+ base | incbase 
+------+---------
+    3 |       8
+(1 row)
+
+select split_part(javatest.tupleReturnToString(javatest.tupleReturnExample(4,6)), ',', 1);
+ split_part 
+------------
+ Base = "4"
+(1 row)
+
+select split_part(javatest.tupleReturnToString(javatest.tupleReturnExample(5,7)), ',', 2);
+   split_part    
+-----------------
+  incbase = "12"
+(1 row)
+
+select base, incbase from javatest.setReturnExample(6,8);
+ base | incbase 
+------+---------
+    6 |       6
+    6 |      14
+    6 |      22
+    6 |      30
+    6 |      38
+    6 |      46
+    6 |      54
+    6 |      62
+    6 |      70
+    6 |      78
+    6 |      86
+    6 |      94
+(12 rows)
+
+-- org.postgresql.pljava.example.HugeResultSet
+select sum(base), count(*) from javatest.hugeResult(10000);
+   sum    | count 
+----------+-------
+ 49995000 | 10000
+(1 row)
+
+select sum(base), count(*) from javatest.hugeNonImmutableResult(10000);
+   sum    | count 
+----------+-------
+ 49995000 | 10000
+(1 row)
+
+-- org.postgresql.pljava.example.Users
+select count(*) > 0 from javatest.listSupers();
+ ?column? 
+----------
+ t
+(1 row)
+
+select count(*) > 0 from javatest.listNonSupers();
+ ?column? 
+----------
+ t
+(1 row)
+
+select usename, usesuper from javatest.listNonSupers() where usename = 'pljava_test';
+   usename   | usesuper 
+-------------+----------
+ pljava_test | f
+(1 row)
+
+-- org.postgresql.pljava.example.UsingProperties
+select * from javatest.propertyExample();
+          name           |                  value                  
+-------------------------+-----------------------------------------
+ first.example.property  | 1
+ third.example.property  | "Hmm, take a guess. Could it be three?"
+ second.example.property | two
+(3 rows)
+
+-- org.postgresql.pljava.example.UsingPropertiesAsResultSet
+select * from javatest.resultSetPropertyExample();
+          name           |                  value                  
+-------------------------+-----------------------------------------
+ first.example.property  | 1
+ third.example.property  | "Hmm, take a guess. Could it be three?"
+ second.example.property | two
+(3 rows)
+
+select * from javatest.scalarPropertyExample();
+                      scalarpropertyexample                       
+------------------------------------------------------------------
+ first.example.property = 1
+ third.example.property = "Hmm, take a guess. Could it be three?"
+ second.example.property = two
+(3 rows)
+
+-- org.postgresql.pljava.example.RandomInts
+select count(*) from javatest.randomInts(123);
+ count 
+-------
+   123
+(1 row)
+
+-- org.postgresql.pljava.example.LoggerTest
+-- pg_regress cannot parse Java timestamp, so we put the message that won't be
+-- displayed just to make sure the function runs well and returns no error
+select javatest.logMessage('FINE', '123');
+ logmessage 
+------------
+ 
+(1 row)
+
+-- org.postgresql.pljava.example.BinaryColumnTest
+select count(*) from javatest.binaryColumnTest();
+ count 
+-------
+   100
+(1 row)
+
+-- org.postgresql.pljava.example.MetaDataBooleans
+select * from javatest.getMetaDataBooleans() where method_name in ('isReadOnly', 'supportsColumnAliasing');
+      method_name       | result 
+------------------------+--------
+ isReadOnly             | f
+ supportsColumnAliasing | t
+(2 rows)
+
+-- org.postgresql.pljava.example.MetaDataStrings
+select * from javatest.getMetaDataStrings() where method_name in ('getDatabaseProductName', 'getDriverName');
+      method_name       |            result            
+------------------------+------------------------------
+ getDatabaseProductName | PostgreSQL
+ getDriverName          | PostgreSQL pljava SPI Driver
+(2 rows)
+
+-- org.postgresql.pljava.example.MetaDataInts
+select * from javatest.getMetaDataInts() where method_name in ('getMaxRowSize', 'getMaxColumnsInTable');
+     method_name      |   result   
+----------------------+------------
+ getMaxColumnsInTable |       1600
+ getMaxRowSize        | 1073741824
+(2 rows)
+
+-- org.postgresql.pljava.example.MetaDataTest
+select 'public;' in (select javatest.callMetaDataMethod('getSchemas()')) as q;
+ q 
+---
+ t
+(1 row)
+
+-- org.postgresql.pljava.example.ResultSetTest
+select javatest.executeSelect('select generate_series(1,10) as a');
+     executeselect     
+-----------------------
+ A(java.lang.Integer);
+ 1;
+ 2;
+ 3;
+ 4;
+ 5;
+ 6;
+ 7;
+ 8;
+ 9;
+ 10;
+(11 rows)
+
+-- org.postgresql.pljava.example.SetOfRecordTest
+select * from javatest.executeSelectToRecords('select id, ''test'' || id as id2 from generate_series(1,11) as id') t(a varchar, b varchar);
+ a  |   b    
+----+--------
+ 1  | test1
+ 2  | test2
+ 3  | test3
+ 4  | test4
+ 5  | test5
+ 6  | test6
+ 7  | test7
+ 8  | test8
+ 9  | test9
+ 10 | test10
+ 11 | test11
+(11 rows)
+
+-- org.postgresql.pljava.example.AnyTest
+select javatest.loganyelement(1::int);
+ loganyelement 
+---------------
+             1
+(1 row)
+
+select javatest.loganyelement('a'::varchar);
+ loganyelement 
+---------------
+ a
+(1 row)
+
+select encode(javatest.loganyelement('b'::bytea), 'escape');
+ encode 
+--------
+ b
+(1 row)
+
+select javatest.makearray(1::int);
+ makearray 
+-----------
+ {1}
+(1 row)
+
+select javatest.makearray('a'::varchar);
+ makearray 
+-----------
+ {a}
+(1 row)
+
+-- org.postgresql.pljava.example.SPIActions
+SELECT javatest.transferPeople(1);
+ transferpeople 
+----------------
+              4
+(1 row)
+
+SELECT * FROM employees1 order by id;
+ id | name | salary 
+----+------+--------
+(0 rows)
+
+SELECT id,name, salary FROM employees2 order by id;
+ id | name  | salary 
+----+-------+--------
+  1 | Adam  |    100
+  2 | Brian |    200
+  3 | Caleb |    300
+  4 | David |    400
+(4 rows)
+
+-- start_matchsubs
+-- m/ERROR\:.* \(SOMEFILE\:SOMEFUNC\)/
+-- s/\(SOMEFILE\:SOMEFUNC\)//
+-- end_matchsubs
+SELECT javatest.transferPeople(1) FROM javatest.test;  -- should error
+ERROR:  query plan with multiple segworker groups is not supported
+HINT:  likely caused by a function that reads or modifies data in a distributed table
+select javatest.maxFromSetReturnExample(2,10);
+ maxfromsetreturnexample 
+-------------------------
+                       2
+(1 row)
+
+select javatest.nestedStatements(5);
+ nestedstatements 
+------------------
+ 
+(1 row)
+
+select javatest.testSavepointSanity();
+ testsavepointsanity 
+---------------------
+                   1
+(1 row)
+
+select javatest.testTransactionRecovery();
+ testtransactionrecovery 
+-------------------------
+                       1
+(1 row)
+
+select javatest.getDateAsString()::date is not null;
+ ?column? 
+----------
+ t
+(1 row)
+
+select javatest.getTimeAsString()::time is not null;
+ ?column? 
+----------
+ t
+(1 row)
+

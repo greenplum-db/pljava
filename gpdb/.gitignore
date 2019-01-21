@@ -1,4 +1,4 @@
-*.out
+a.out
 *.out.diff
 *.diffs
 *.rpm
