@@ -48,10 +48,11 @@ function prep_jdk_install() {
 			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-1.8*"`
 		    ;;
 		  11)
-			wget https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz
+			pushd jdk_bin
 			[ ! -d /opt/java ] && mkdir /opt/java
 			tar xzf openjdk-11*.tar.gz -C /opt/java
 			export JAVA_HOME=`ls -d /opt/java/jdk*`
+			popd
 			;;
 		  *)
 		    echo "invalid JDK_VERSION '$JDK_VERSION'"
