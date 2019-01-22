@@ -27,13 +27,13 @@ function prep_jdk_install() {
 	    case "$JDK_VERSION" in
 		  8)
 		    apt install -y openjdk-8-jdk
-			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-8*"`
+		    export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-8*"`
 		    ;;
 		  11)
 		    add-apt-repository -y ppa:openjdk-r/ppa
 		    apt update -q
 		    apt install -y openjdk-11-jdk
-			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "jdk-11*"`
+		    export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-11*"`
 			;;
 		  *)
 		    echo "invalid JDK_VERSION '$JDK_VERSION'"
@@ -45,7 +45,7 @@ function prep_jdk_install() {
 	    case "$JDK_VERSION" in
 		  8)
 		    yum install -y java-1.8.0-openjdk-devel
-			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-1.8*"`
+		    export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-1.8*"`
 		    ;;
 		  11)
 			pushd jdk_bin
