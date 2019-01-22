@@ -30,7 +30,7 @@ function prep_jdk_install() {
 			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-8*"`
 		    ;;
 		  11)
-		    add-apt-repository ppa:openjdk-r/ppa
+		    add-apt-repository -y ppa:openjdk-r/ppa
 		    apt update -q
 		    apt install -y openjdk-11-jdk
 			export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "jdk-11*"`
