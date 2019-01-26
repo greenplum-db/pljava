@@ -1,15 +1,20 @@
 /*
- * Copyright (c) 2004, 2005, 2006 TADA AB - Taby Sweden
- * Copyright (c) 2007, 2008, 2010, 2011 PostgreSQL Global Development Group
+ * Copyright (c) 2004-2019 Tada AB and other contributors, as listed below.
  *
- * Distributed under the terms shown in the file COPYRIGHT
- * found in the root folder of this project or at
- * http://wiki.tada.se/index.php?title=PLJava_License
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the The BSD 3-Clause License
+ * which accompanies this distribution, and is available at
+ * http://opensource.org/licenses/BSD-3-Clause
  *
- * @author Thomas Hallgren
+ * Contributors:
+ *   Tada AB
+ *   Thomas Hallgren
+ *   PostgreSQL Global Development Group
+ *   Chapman Flack
  */
+#include <sys/time.h>
+
 #include <postgres.h>
-#include <utils/nabstime.h>
 #include <utils/datetime.h>
 
 #include "pljava/Backend.h"
@@ -187,7 +192,7 @@ int32 Timestamp_getTimeZone_dd(double dt)
 
 int32 Timestamp_getCurrentTimeZone(void)
 {
-	return Timestamp_getTimeZone((pg_time_t)GetCurrentAbsoluteTime());
+	return Timestamp_getTimeZone((pg_time_t)time(NULL));
 }
 
 extern void Timestamp_initialize(void);
