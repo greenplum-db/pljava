@@ -10,18 +10,26 @@ groups:
     - pljava_centos6_build
     - pljava_ubuntu16_build
     - pljava_sles11_build
-    - pljava_centos7_test
-    - pljava_centos6_test
-    - pljava_ubuntu16_test
-    - pljava_sles11_test
+    - pljava_centos7_test_jdk8
+    - pljava_centos6_test_jdk8
+    - pljava_ubuntu16_test_jdk8
+    - pljava_sles11_test_jdk8
+    - pljava_centos7_test_jdk11
+    - pljava_centos6_test_jdk11
+    - pljava_ubuntu16_test_jdk11
+    - pljava_sles11_test_jdk11
     - pljava_centos7_release
     - pljava_centos6_release
     - pljava_ubuntu16_release
     - pljava_sles11_release
-    - pljava_centos7_test_release
-    - pljava_centos6_test_release
-    - pljava_ubuntu16_test_release
-    - pljava_sles11_test_release
+    - pljava_centos7_test_release_jdk8
+    - pljava_centos6_test_release_jdk8
+    - pljava_ubuntu16_test_release_jdk8
+    - pljava_sles11_test_release_jdk8
+    - pljava_centos7_test_release_jdk11
+    - pljava_centos6_test_release_jdk11
+    - pljava_ubuntu16_test_release_jdk11
+    - pljava_sles11_test_release_jdk11
 
 - name: GPDB6
   jobs:
@@ -29,10 +37,14 @@ groups:
     - pljava_centos6_build
     - pljava_ubuntu16_build
     - pljava_sles11_build
-    - pljava_centos7_test
-    - pljava_centos6_test
-    - pljava_ubuntu16_test
-    - pljava_sles11_test
+    - pljava_centos7_test_jdk8
+    - pljava_centos6_test_jdk8
+    - pljava_ubuntu16_test_jdk8
+    - pljava_sles11_test_jdk8
+    - pljava_centos7_test_jdk11
+    - pljava_centos6_test_jdk11
+    - pljava_ubuntu16_test_jdk11
+    - pljava_sles11_test_jdk11
 
 - name: RELEASE
   jobs:
@@ -40,10 +52,14 @@ groups:
     - pljava_centos6_release
     - pljava_ubuntu16_release
     - pljava_sles11_release
-    - pljava_centos7_test_release
-    - pljava_centos6_test_release
-    - pljava_ubuntu16_test_release
-    - pljava_sles11_test_release
+    - pljava_centos7_test_release_jdk8
+    - pljava_centos6_test_release_jdk8
+    - pljava_ubuntu16_test_release_jdk8
+    - pljava_sles11_test_release_jdk8
+    - pljava_centos7_test_release_jdk11
+    - pljava_centos6_test_release_jdk11
+    - pljava_ubuntu16_test_release_jdk11
+    - pljava_sles11_test_release_jdk11
 ## ======================================================================
 ## resources
 ## ======================================================================
@@ -344,7 +360,7 @@ jobs:
       params:
         file: pljava_gppkg/pljava-*.gppkg
 
-- name: pljava_centos7_test
+- name: pljava_centos7_test_jdk8
   plan:
   - aggregate:
     - get: pljava_src
@@ -363,9 +379,93 @@ jobs:
       params:
         OSVER: centos7
         PL_GP_VERSION: "6.0"
-        JDK_VERSION: {{jdk_version}}
+        JDK_VERSION: 8
 
-- name: pljava_centos6_test
+- name: pljava_centos6_test_jdk8
+  plan:
+  - aggregate:
+    - get: pljava_src
+      passed: [pljava_centos6_build]
+    - get: pljava_bin
+      resource: pljava_gpdb_centos6_build
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb_centos6
+    - get: pljava_centos6_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_centos6_img
+      params:
+        OSVER: centos6
+        PL_GP_VERSION: "6.0"
+        JDK_VERSION: 8
+
+- name: pljava_sles11_test_jdk8
+  plan:
+  - aggregate:
+    - get: pljava_src
+      passed: [pljava_sles11_build]
+    - get: pljava_bin
+      resource: pljava_gpdb_sles11_build
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb_sles11
+    - get: pljava_sles11_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_sles11_img
+      params:
+        OSVER: suse11
+        PL_GP_VERSION: "6.0"
+        JDK_VERSION: 8
+
+- name: pljava_ubuntu16_test_jdk8
+  plan:
+  - aggregate:
+    - get: pljava_src
+      passed: [pljava_ubuntu16_build]
+    - get: pljava_bin
+      resource: pljava_gpdb_ubuntu16_build
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb_ubuntu16
+    - get: pljava_ubuntu16_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_ubuntu16_img
+      params:
+        OSVER: ubuntu16
+        PL_GP_VERSION: "6.0"
+        JDK_VERSION: 8
+
+- name: pljava_centos7_test_jdk11
+  plan:
+  - aggregate:
+    - get: pljava_src
+      passed: [pljava_centos7_build]
+    - get: pljava_bin
+      resource: pljava_gpdb_centos7_build
+      trigger: true
+    - get: bin_gpdb
+      resource: bin_gpdb_centos7
+    - get: pljava_centos7_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_centos7_img
+      params:
+        OSVER: centos7
+        PL_GP_VERSION: "6.0"
+        JDK_VERSION: 11
+
+- name: pljava_centos6_test_jdk11
   plan:
   - aggregate:
     - get: pljava_src
@@ -386,9 +486,9 @@ jobs:
       params:
         OSVER: centos6
         PL_GP_VERSION: "6.0"
-        JDK_VERSION: {{jdk_version}}
+        JDK_VERSION: 11
 
-- name: pljava_sles11_test
+- name: pljava_sles11_test_jdk11
   plan:
   - aggregate:
     - get: pljava_src
@@ -407,9 +507,9 @@ jobs:
       params:
         OSVER: suse11
         PL_GP_VERSION: "6.0"
-        JDK_VERSION: {{jdk_version}}
+        JDK_VERSION: 11
 
-- name: pljava_ubuntu16_test
+- name: pljava_ubuntu16_test_jdk11
   plan:
   - aggregate:
     - get: pljava_src
@@ -428,9 +528,9 @@ jobs:
       params:
         OSVER: ubuntu16
         PL_GP_VERSION: "6.0"
-        JDK_VERSION: {{jdk_version}}
+        JDK_VERSION: 11
 
-- name: pljava_centos7_test_release
+- name: pljava_centos7_test_release_jdk8
   plan:
   - aggregate:
     - get: pljava_src
@@ -448,9 +548,89 @@ jobs:
       params:
         OSVER: centos7
         PL_GP_VERSION: "6.0"
-        JDK_VERSION: {{jdk_version}}
+        JDK_VERSION: 8
 
-- name: pljava_centos6_test_release
+- name: pljava_centos6_test_release_jdk8
+  plan:
+  - aggregate:
+    - get: pljava_src
+    - get: pljava_bin
+      resource: pljava_gpdb_centos6_release
+    - get: bin_gpdb
+      resource: bin_gpdb_centos6
+      trigger: true
+    - get: pljava_centos6_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_centos6_img
+      params:
+        OSVER: centos6
+        PL_GP_VERSION: "6.0"
+        JDK_VERSION: 8
+
+- name: pljava_sles11_test_release_jdk8
+  plan:
+  - aggregate:
+    - get: pljava_src
+    - get: pljava_bin
+      resource: pljava_gpdb_sles11_release
+    - get: bin_gpdb
+      resource: bin_gpdb_sles11
+      trigger: true
+    - get: pljava_sles11_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_sles11_img
+      params:
+        OSVER: suse11
+        PL_GP_VERSION: "6.0"
+        JDK_VERSION: 8
+
+- name: pljava_ubuntu16_test_release_jdk8
+  plan:
+  - aggregate:
+    - get: pljava_src
+    - get: pljava_bin
+      resource: pljava_gpdb_ubuntu16_release
+    - get: bin_gpdb
+      resource: bin_gpdb_ubuntu16
+      trigger: true
+    - get: pljava_ubuntu16_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_ubuntu16_img
+      params:
+        OSVER: ubuntu16
+        PL_GP_VERSION: "6.0"
+        JDK_VERSION: 8
+
+- name: pljava_centos7_test_release_jdk11
+  plan:
+  - aggregate:
+    - get: pljava_src
+    - get: pljava_bin
+      resource: pljava_gpdb_centos7_release
+    - get: bin_gpdb
+      resource: bin_gpdb_centos7
+      trigger: true
+    - get: pljava_centos7_img
+    - get: gpdb_src
+  - aggregate:
+    - task: test_pljava
+      file: pljava_src/concourse/tasks/test_pljava.yml
+      image: pljava_centos7_img
+      params:
+        OSVER: centos7
+        PL_GP_VERSION: "6.0"
+        JDK_VERSION: 11
+
+- name: pljava_centos6_test_release_jdk11
   plan:
   - aggregate:
     - get: pljava_src
@@ -470,9 +650,9 @@ jobs:
       params:
         OSVER: centos6
         PL_GP_VERSION: "6.0"
-        JDK_VERSION: {{jdk_version}}
+        JDK_VERSION: 11
 
-- name: pljava_sles11_test_release
+- name: pljava_sles11_test_release_jdk11
   plan:
   - aggregate:
     - get: pljava_src
@@ -490,9 +670,9 @@ jobs:
       params:
         OSVER: suse11
         PL_GP_VERSION: "6.0"
-        JDK_VERSION: {{jdk_version}}
+        JDK_VERSION: 11
 
-- name: pljava_ubuntu16_test_release
+- name: pljava_ubuntu16_test_release_jdk11
   plan:
   - aggregate:
     - get: pljava_src
@@ -510,7 +690,7 @@ jobs:
       params:
         OSVER: ubuntu16
         PL_GP_VERSION: "6.0"
-        JDK_VERSION: {{jdk_version}}
+        JDK_VERSION: 11
 
 - name: pljava_centos7_release
   plan:
