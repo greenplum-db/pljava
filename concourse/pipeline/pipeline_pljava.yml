@@ -60,6 +60,13 @@ groups:
     - pljava_centos6_test_release_jdk11
     - pljava_ubuntu16_test_release_jdk11
     - pljava_sles11_test_release_jdk11
+
+resource_types:
+- name: gcs
+  type: docker-image
+  source:
+    repository: frodenas/gcs-resource
+
 ## ======================================================================
 ## resources
 ## ======================================================================
@@ -148,111 +155,99 @@ resources:
     tag_filter: 2.*
 
 - name: pljava_gpdb_centos6_build
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     versioned_file: build/gpdb6/pljava/centos6/pljava-centos.gppkg
 
 - name: pljava_gpdb_centos7_build
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     versioned_file: build/gpdb6/pljava/centos7/pljava-centos.gppkg
 
 - name: pljava_gpdb_sles11_build
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     versioned_file: build/gpdb6/pljava/sles11/pljava-sles.gppkg
 
 - name: pljava_gpdb_ubuntu16_build
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     versioned_file: build/gpdb6/pljava/ubuntu16/pljava-ubuntu.gppkg
 
 - name: pljava_gpdb_centos6_release
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     regexp: release/gpdb6/pljava/pljava-(.*)-rhel6-x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     regexp: release/gpdb6/pljava/pljava-(.*)-rhel7-x86_64.gppkg
 
 - name: pljava_gpdb_sles11_release
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     regexp: release/gpdb6/pljava/pljava-(.*)-sles11-x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu16_release
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     regexp: release/gpdb6/pljava/pljava-(.*)-ubuntu16-x86_64.gppkg
 
 - name: pljava_gpdb_centos6_release_candidate
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     regexp: release_candidate/gpdb6/pljava/pljava-(.*)-rhel6-x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release_candidate
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     regexp: release_candidate/gpdb6/pljava/pljava-(.*)-rhel7-x86_64.gppkg
 
 - name: pljava_gpdb_sles11_release_candidate
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     regexp: release_candidate/gpdb6/pljava/pljava-(.*)-sles11-x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu16_release_candidate
-  type: s3
+  type: gcs
   source:
     bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
+    region_name: us-west-1
+    json_key: {{gcs-read-write-service-account-key}}
     regexp: release_candidate/gpdb6/pljava/pljava-(.*)-ubuntu16-amd64.gppkg
 
 - name: jdk11_tgz
