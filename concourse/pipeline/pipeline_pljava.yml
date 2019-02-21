@@ -139,7 +139,7 @@ resources:
   type: git
   source:
     branch: gpdb6_release
-    uri: https://github.com/gfphoenix78/pljava.git
+    uri: https://github.com/greenplum-db/pljava.git
 
 - name: gpdb_src
   type: git
@@ -151,7 +151,7 @@ resources:
   type: git
   source:
     branch: gpdb6_release
-    uri: https://github.com/gfphoenix78/pljava.git
+    uri: https://github.com/greenplum-db/pljava.git
     tag_filter: 2.*
 
 - name: pljava_gpdb_centos6_build
