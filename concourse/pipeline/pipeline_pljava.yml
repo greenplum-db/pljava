@@ -157,98 +157,86 @@ resources:
 - name: pljava_gpdb_centos6_build
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    versioned_file: build/gpdb6/pljava/centos6/pljava-centos.gppkg
+    versioned_file: pljava/published/gpdb6/pljava-rhel6.gppkg
 
 - name: pljava_gpdb_centos7_build
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    versioned_file: build/gpdb6/pljava/centos7/pljava-centos.gppkg
+    versioned_file: pljava/published/gpdb6/pljava-rhel7.gppkg
 
 - name: pljava_gpdb_sles11_build
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    versioned_file: build/gpdb6/pljava/sles11/pljava-sles.gppkg
+    versioned_file: pljava/published/gpdb6/pljava-sles11.gppkg
 
 - name: pljava_gpdb_ubuntu16_build
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    versioned_file: build/gpdb6/pljava/ubuntu16/pljava-ubuntu.gppkg
+    versioned_file: pljava/published/gpdb6/pljava-ubuntu16.gppkg
 
 - name: pljava_gpdb_centos6_release
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket-prod}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release/gpdb6/pljava/pljava-(.*)-rhel6-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-rhel6-x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket-prod}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release/gpdb6/pljava/pljava-(.*)-rhel7-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-rhel7-x86_64.gppkg
 
 - name: pljava_gpdb_sles11_release
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket-prod}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release/gpdb6/pljava/pljava-(.*)-sles11-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-sles11-x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu16_release
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket-prod}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release/gpdb6/pljava/pljava-(.*)-ubuntu16-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-ubuntu16-x86_64.gppkg
 
 - name: pljava_gpdb_centos6_release_candidate
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket-prod}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-rhel6-x86_64.gppkg
+    regexp: pljava/published/gpdb6/pljava-(.*)-rhel6-x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release_candidate
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket-prod}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-rhel7-x86_64.gppkg
+    regexp: pljava/published/gpdb6/pljava-(.*)-rhel7-x86_64.gppkg
 
 - name: pljava_gpdb_sles11_release_candidate
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket-prod}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-sles11-x86_64.gppkg
+    regexp: pljava/published/gpdb6/pljava-(.*)-sles11-x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu16_release_candidate
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket-prod}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-ubuntu16-amd64.gppkg
+    regexp: pljava/published/gpdb6/pljava-(.*)-ubuntu16-x86_64.gppkg
 
 - name: jdk11_tgz
   type: s3
