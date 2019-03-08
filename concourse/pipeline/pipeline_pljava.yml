@@ -30,6 +30,8 @@ groups:
     - pljava_centos6_test_release_jdk11
     - pljava_ubuntu16_test_release_jdk11
     - pljava_sles11_test_release_jdk11
+    - manual_push_centos7_release
+    - manual_push_centos6_release
 
 - name: GPDB6
   jobs:
@@ -60,6 +62,8 @@ groups:
     - pljava_centos6_test_release_jdk11
     - pljava_ubuntu16_test_release_jdk11
     - pljava_sles11_test_release_jdk11
+    - manual_push_centos7_release
+    - manual_push_centos6_release
 
 resource_types:
 - name: gcs
@@ -75,40 +79,32 @@ resources:
 ## GPDB6 resource
 ##
 - name: bin_gpdb_centos6
-  type: s3
+  type: gcs
   source:
-    access_key_id: {{bucket-access-key-id}}
-    bucket: {{bucket-name}}
-    region_name: {{aws-region}}
-    secret_access_key: {{bucket-secret-access-key}}
-    versioned_file: {{bin_gpdb_centos_versioned_file}}
+    bucket: ((gcs-bucket-intermediates))
+    json_key: ((concourse-gcs-resources-service-account-key))
+    versioned_file: gpdb_master/bin_gpdb_centos6/bin_gpdb.tar.gz
 
 - name: bin_gpdb_centos7
-  type: s3
+  type: gcs
   source:
-    access_key_id: {{bucket-access-key-id}}
-    bucket: {{bucket-name}}
-    region_name: {{aws-region}}
-    secret_access_key: {{bucket-secret-access-key}}
-    versioned_file: {{bin_gpdb_centos7_versioned_file}}
+    bucket: ((gcs-bucket-intermediates))
+    json_key: ((concourse-gcs-resources-service-account-key))
+    versioned_file: gpdb_master/bin_gpdb_centos7/bin_gpdb.tar.gz
 
 - name: bin_gpdb_sles11
-  type: s3
+  type: gcs
   source:
-    access_key_id: {{bucket-access-key-id}}
-    bucket: {{bucket-name}}
-    region_name: {{aws-region}}
-    secret_access_key: {{bucket-secret-access-key}}
-    versioned_file: {{bin_gpdb_sles11_versioned_file}}
+    bucket: ((gcs-bucket-intermediates))
+    json_key: ((concourse-gcs-resources-service-account-key))
+    versioned_file: gpdb_master/bin_gpdb_sles11/bin_gpdb.tar.gz
 
 - name: bin_gpdb_ubuntu16
-  type: s3
+  type: gcs
   source:
-    access_key_id: {{bucket-access-key-id}}
-    bucket: {{bucket-name}}
-    region_name: {{aws-region}}
-    secret_access_key: {{bucket-secret-access-key}}
-    versioned_file: {{compiled_bits_ubuntu16_versioned_file}}
+    bucket: ((gcs-bucket-intermediates))
+    json_key: ((concourse-gcs-resources-service-account-key))
+    versioned_file: gpdb_master/compiled_bits_ubuntu16/compiled_bits_ubuntu16.tar.gz
 
 
 - name: pljava_centos6_img
@@ -157,107 +153,93 @@ resources:
 - name: pljava_gpdb_centos6_build
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    versioned_file: build/gpdb6/pljava/centos6/pljava-centos.gppkg
+    regexp: pljava/published/gpdb6/pljava-rhel6.gppkg
 
 - name: pljava_gpdb_centos7_build
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    versioned_file: build/gpdb6/pljava/centos7/pljava-centos.gppkg
+    regexp: pljava/published/gpdb6/pljava-rhel7.gppkg
 
 - name: pljava_gpdb_sles11_build
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    versioned_file: build/gpdb6/pljava/sles11/pljava-sles.gppkg
+    regexp: pljava/published/gpdb6/pljava-sles11.gppkg
 
 - name: pljava_gpdb_ubuntu16_build
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    versioned_file: build/gpdb6/pljava/ubuntu16/pljava-ubuntu.gppkg
+    regexp: pljava/published/gpdb6/pljava-ubuntu16.gppkg
 
 - name: pljava_gpdb_centos6_release
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release/gpdb6/pljava/pljava-(.*)-rhel6-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-rhel6-x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release/gpdb6/pljava/pljava-(.*)-rhel7-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-rhel7-x86_64.gppkg
 
 - name: pljava_gpdb_sles11_release
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release/gpdb6/pljava/pljava-(.*)-sles11-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-sles11-x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu16_release
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release/gpdb6/pljava/pljava-(.*)-ubuntu16-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-ubuntu16-amd64.gppkg
 
 - name: pljava_gpdb_centos6_release_candidate
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-rhel6-x86_64.gppkg
+    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-rhel6-x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release_candidate
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-rhel7-x86_64.gppkg
+    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-rhel7-x86_64.gppkg
 
 - name: pljava_gpdb_sles11_release_candidate
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-sles11-x86_64.gppkg
+    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-sles11-x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu16_release_candidate
   type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: us-west-1
+    bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: release_candidate/gpdb6/pljava/pljava-(.*)-ubuntu16-amd64.gppkg
+    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-ubuntu16-amd64.gppkg
 
 - name: jdk11_tgz
-  type: s3
+  type: gcs
   source:
-    bucket: {{pl-bucket-name}}
-    region_name: {{aws-region}}
-    access_key_id: {{bucket-access-key-id}}
-    secret_access_key: {{bucket-secret-access-key}}
-    versioned_file: dependancy/openjdk-11.0.1_linux-x64_bin.tar.gz
+    bucket: {{gcs-bucket}}
+    json_key: {{gcs-read-write-service-account-key}}
+    regexp: pljava/dependency/gpdb6/openjdk-11.0.1_linux-x64_bin.tar.gz
 
 
 jobs:
@@ -362,6 +344,7 @@ jobs:
       passed: [pljava_centos7_build]
     - get: pljava_bin
       resource: pljava_gpdb_centos7_build
+      passed: [pljava_centos7_build]
       trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos7
@@ -383,6 +366,7 @@ jobs:
       passed: [pljava_centos6_build]
     - get: pljava_bin
       resource: pljava_gpdb_centos6_build
+      passed: [pljava_centos6_build]
       trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos6
@@ -404,6 +388,7 @@ jobs:
       passed: [pljava_sles11_build]
     - get: pljava_bin
       resource: pljava_gpdb_sles11_build
+      passed: [pljava_sles11_build]
       trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_sles11
@@ -425,6 +410,7 @@ jobs:
       passed: [pljava_ubuntu16_build]
     - get: pljava_bin
       resource: pljava_gpdb_ubuntu16_build
+      passed: [pljava_ubuntu16_build]
       trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_ubuntu16
@@ -446,6 +432,7 @@ jobs:
       passed: [pljava_centos7_build]
     - get: pljava_bin
       resource: pljava_gpdb_centos7_build
+      passed: [pljava_centos7_build]
       trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_centos7
@@ -467,6 +454,7 @@ jobs:
       passed: [pljava_centos6_build]
     - get: pljava_bin
       resource: pljava_gpdb_centos6_build
+      passed: [pljava_centos6_build]
       trigger: true
     - get: jdk_bin
       resource: jdk11_tgz
@@ -491,6 +479,7 @@ jobs:
     - get: pljava_bin
       resource: pljava_gpdb_sles11_build
       trigger: true
+      passed: [pljava_sles11_build]
     - get: bin_gpdb
       resource: bin_gpdb_sles11
     - get: pljava_sles11_img
@@ -511,6 +500,7 @@ jobs:
       passed: [pljava_ubuntu16_build]
     - get: pljava_bin
       resource: pljava_gpdb_ubuntu16_build
+      passed: [pljava_ubuntu16_build]
       trigger: true
     - get: bin_gpdb
       resource: bin_gpdb_ubuntu16
@@ -771,3 +761,50 @@ jobs:
       params:
         file: pljava_gppkg/pljava-*.gppkg
 
+
+- name: manual_push_centos7_release
+  plan:
+  - aggregate:
+    - get: pljava_centos7_img
+    - get: pljava_gpdb_centos7_release_candidate
+  - task: Copy_GPPKG
+    image: pljava_centos7_img
+    config:
+      platform: linux
+      inputs:
+       - name: pljava_gpdb_centos7_release_candidate
+      outputs:
+       - name: pljava_gpdb_centos7_release
+      run:
+          path: "sh"
+          args:
+            - -exc
+            - |
+              cp pljava_gpdb_centos7_release_candidate/pljava-*.gppkg pljava_gpdb_centos7_release/
+  - put: pljava_gpdb_centos7_release
+    params:
+      file: pljava_gpdb_centos7_release/pljava-*.gppkg
+
+
+- name: manual_push_centos6_release
+  plan:
+  - aggregate:
+    - get: pljava_centos6_img
+    - get: pljava_gpdb_centos6_release_candidate
+  - task: Copy_GPPKG
+    image: pljava_centos6_img
+    config:
+      platform: linux
+      inputs:
+       - name: pljava_gpdb_centos6_release_candidate
+      outputs:
+       - name: pljava_gpdb_centos6_release
+      run:
+          path: "sh"
+          args:
+            - -exc
+            - |
+              cp pljava_gpdb_centos6_release_candidate/pljava-*.gppkg pljava_gpdb_centos6_release/
+  - put: pljava_gpdb_centos6_release
+    params:
+      file: pljava_gpdb_centos6_release/pljava-*.gppkg
