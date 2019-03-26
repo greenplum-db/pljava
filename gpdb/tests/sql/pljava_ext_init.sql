@@ -1,0 +1,7 @@
+CREATE EXTENSION pljava;
+
+alter database pljava_test owner to pljava_test;
+
+\c pljava_test pljava_test
+
+CREATE SCHEMA javatest;

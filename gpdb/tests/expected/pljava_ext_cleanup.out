@@ -1,0 +1,68 @@
+-- cleanup schema and functions used by `create extension pljava`
+DROP SCHEMA IF EXISTS javatest CASCADE;
+NOTICE:  drop cascades to 64 other objects
+DETAIL:  drop cascades to function javatest.java_gettimestamp()
+drop cascades to function javatest.java_gettimestamptz()
+drop cascades to function javatest.print(date)
+drop cascades to function javatest.print(time with time zone)
+drop cascades to function javatest.print(timestamp with time zone)
+drop cascades to function javatest.print(character varying)
+drop cascades to function javatest.print(bytea)
+drop cascades to function javatest.print(smallint)
+drop cascades to function javatest.print(smallint[])
+drop cascades to function javatest.print(integer)
+drop cascades to function javatest.print(integer[])
+drop cascades to function javatest.print(bigint)
+drop cascades to function javatest.print(bigint[])
+drop cascades to function javatest.print(real)
+drop cascades to function javatest.print(real[])
+drop cascades to function javatest.print(double precision)
+drop cascades to function javatest.print(double precision[])
+drop cascades to function javatest.printobj(integer[])
+drop cascades to function javatest.java_addone(integer)
+drop cascades to function javatest.nulloneven(integer)
+drop cascades to function javatest.addnumbers(smallint,integer,bigint,numeric,numeric,real,double precision)
+drop cascades to function javatest.countnulls(record)
+drop cascades to function javatest.countnulls(integer[])
+drop cascades to function javatest.java_getsystemproperty(character varying)
+drop cascades to function javatest.create_temp_file_trusted()
+drop cascades to type javatest._testsetreturn
+drop cascades to function javatest.tuplereturnexample(integer,integer)
+drop cascades to function javatest.tuplereturnexample2(integer,integer)
+drop cascades to function javatest.tuplereturntostring(javatest._testsetreturn)
+drop cascades to function javatest.setreturnexample(integer,integer)
+drop cascades to function javatest.hugeresult(integer)
+drop cascades to function javatest.hugenonimmutableresult(integer)
+drop cascades to function javatest.listsupers()
+drop cascades to function javatest.listnonsupers()
+drop cascades to type javatest._properties
+drop cascades to function javatest.propertyexample()
+drop cascades to function javatest.resultsetpropertyexample()
+drop cascades to function javatest.scalarpropertyexample()
+drop cascades to function javatest.randomints(integer)
+drop cascades to function javatest.logmessage(character varying,character varying)
+drop cascades to type javatest.binarycolumnpair
+drop cascades to function javatest.binarycolumntest()
+drop cascades to type javatest.metadatabooleans
+drop cascades to function javatest.getmetadatabooleans()
+drop cascades to type javatest.metadatastrings
+drop cascades to function javatest.getmetadatastrings()
+drop cascades to type javatest.metadataints
+drop cascades to function javatest.getmetadataints()
+drop cascades to function javatest.callmetadatamethod(character varying)
+drop cascades to function javatest.executeselect(character varying)
+drop cascades to function javatest.executeselecttorecords(character varying)
+drop cascades to function javatest.loganyelement(anyelement)
+drop cascades to function javatest.logany("any")
+drop cascades to function javatest.makearray(anyelement)
+drop cascades to table javatest.employees1
+drop cascades to table javatest.employees2
+drop cascades to function javatest.transferpeople(integer)
+drop cascades to function javatest.maxfromsetreturnexample(integer,integer)
+drop cascades to function javatest.nestedstatements(integer)
+drop cascades to function javatest.testsavepointsanity()
+drop cascades to function javatest.testtransactionrecovery()
+drop cascades to function javatest.getdateasstring()
+drop cascades to function javatest.gettimeasstring()
+drop cascades to table javatest.test
+DROP EXTENSION pljava;
