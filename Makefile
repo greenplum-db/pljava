@@ -50,6 +50,7 @@ installdirs:
 	$(MKDIR_P) '$(PLJAVALIB)'
 	$(MKDIR_P) '$(PLJAVADATA)'
 	$(MKDIR_P) '$(PLJAVADATA)/docs'
+	$(MKDIR_P) '$(PLJAVAEXT)'
 
 install: installdirs install-lib
 	$(INSTALL_DATA) '$(PROJDIR)/pljava/target/pljava-$(PLJAVA_OSS_VERSION).jar'                   '$(PLJAVALIB)/pljava.jar'
