@@ -1,0 +1,67 @@
+-- cleanup schema and functions used by `create extension pljava`
+DROP SCHEMA IF EXISTS javatest CASCADE;
+NOTICE:  drop cascades to table javatest.test
+NOTICE:  drop cascades to function javatest.gettimeasstring()
+NOTICE:  drop cascades to function javatest.getdateasstring()
+NOTICE:  drop cascades to function javatest.testtransactionrecovery()
+NOTICE:  drop cascades to function javatest.testsavepointsanity()
+NOTICE:  drop cascades to function javatest.nestedstatements(integer)
+NOTICE:  drop cascades to function javatest.maxfromsetreturnexample(integer,integer)
+NOTICE:  drop cascades to function javatest.transferpeople(integer)
+NOTICE:  drop cascades to table javatest.employees2
+NOTICE:  drop cascades to table javatest.employees1
+NOTICE:  drop cascades to function javatest.makearray(anyelement)
+NOTICE:  drop cascades to function javatest.logany("any")
+NOTICE:  drop cascades to function javatest.loganyelement(anyelement)
+NOTICE:  drop cascades to function javatest.executeselecttorecords(character varying)
+NOTICE:  drop cascades to function javatest.executeselect(character varying)
+NOTICE:  drop cascades to function javatest.callmetadatamethod(character varying)
+NOTICE:  drop cascades to function javatest.getmetadataints()
+NOTICE:  drop cascades to type javatest.metadataints
+NOTICE:  drop cascades to function javatest.getmetadatastrings()
+NOTICE:  drop cascades to type javatest.metadatastrings
+NOTICE:  drop cascades to function javatest.getmetadatabooleans()
+NOTICE:  drop cascades to type javatest.metadatabooleans
+NOTICE:  drop cascades to function javatest.binarycolumntest()
+NOTICE:  drop cascades to type javatest.binarycolumnpair
+NOTICE:  drop cascades to function javatest.logmessage(character varying,character varying)
+NOTICE:  drop cascades to function javatest.randomints(integer)
+NOTICE:  drop cascades to function javatest.scalarpropertyexample()
+NOTICE:  drop cascades to function javatest.resultsetpropertyexample()
+NOTICE:  drop cascades to function javatest.propertyexample()
+NOTICE:  drop cascades to type javatest._properties
+NOTICE:  drop cascades to function javatest.listnonsupers()
+NOTICE:  drop cascades to function javatest.listsupers()
+NOTICE:  drop cascades to function javatest.hugenonimmutableresult(integer)
+NOTICE:  drop cascades to function javatest.hugeresult(integer)
+NOTICE:  drop cascades to function javatest.setreturnexample(integer,integer)
+NOTICE:  drop cascades to function javatest.tuplereturntostring(javatest._testsetreturn)
+NOTICE:  drop cascades to function javatest.tuplereturnexample2(integer,integer)
+NOTICE:  drop cascades to function javatest.tuplereturnexample(integer,integer)
+NOTICE:  drop cascades to type javatest._testsetreturn
+NOTICE:  drop cascades to function javatest.create_temp_file_trusted()
+NOTICE:  drop cascades to function javatest.java_getsystemproperty(character varying)
+NOTICE:  drop cascades to function javatest.countnulls(integer[])
+NOTICE:  drop cascades to function javatest.countnulls(record)
+NOTICE:  drop cascades to function javatest.addnumbers(smallint,integer,bigint,numeric,numeric,real,double precision)
+NOTICE:  drop cascades to function javatest.nulloneven(integer)
+NOTICE:  drop cascades to function javatest.java_addone(integer)
+NOTICE:  drop cascades to function javatest.printobj(integer[])
+NOTICE:  drop cascades to function javatest.print(double precision[])
+NOTICE:  drop cascades to function javatest.print(double precision)
+NOTICE:  drop cascades to function javatest.print(real[])
+NOTICE:  drop cascades to function javatest.print(real)
+NOTICE:  drop cascades to function javatest.print(bigint[])
+NOTICE:  drop cascades to function javatest.print(bigint)
+NOTICE:  drop cascades to function javatest.print(integer[])
+NOTICE:  drop cascades to function javatest.print(integer)
+NOTICE:  drop cascades to function javatest.print(smallint[])
+NOTICE:  drop cascades to function javatest.print(smallint)
+NOTICE:  drop cascades to function javatest.print(bytea)
+NOTICE:  drop cascades to function javatest.print(character varying)
+NOTICE:  drop cascades to function javatest.print(timestamp with time zone)
+NOTICE:  drop cascades to function javatest.print(time with time zone)
+NOTICE:  drop cascades to function javatest.print(date)
+NOTICE:  drop cascades to function javatest.java_gettimestamptz()
+NOTICE:  drop cascades to function javatest.java_gettimestamp()
+DROP EXTENSION pljava;
