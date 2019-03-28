@@ -67,6 +67,7 @@ SELECT * FROM javatest.print('2016-02-14 08:09:10'::timestamp);
                                print                                
 --------------------------------------------------------------------
  Sunday, February 14, 2016 at 8:09:10 AM Coordinated Universal Time
+(1 row)
 
  
 SELECT javatest.print('varchar'::varchar);
@@ -87,21 +88,21 @@ SELECT * FROM javatest.print('varchar'::varchar);
  varchar
 (1 row)
 
-SELECT javatest.print('bytea'::bytea);
- print 
--------
+SELECT encode(javatest.print('bytea'::bytea), 'escape');
+ encode 
+--------
  bytea
 (1 row)
 
-SELECT javatest.print('bytea'::bytea) FROM javatest.test;
- print 
--------
+SELECT encode(javatest.print('bytea'::bytea), 'escape') FROM javatest.test;
+ encode 
+--------
  bytea
 (1 row)
 
-SELECT * FROM javatest.print('bytea'::bytea);
- print 
--------
+SELECT * FROM encode(javatest.print('bytea'::bytea), 'escape');
+ encode 
+--------
  bytea
 (1 row)
 
@@ -398,11 +399,11 @@ SELECT javatest.java_getSystemProperty('user.language');
  * prohibited when the language is trusted.
  */
 SELECT javatest.create_temp_file_trusted();
-ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:76)
+ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)
 SELECT javatest.create_temp_file_trusted() FROM javatest.test;
-ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:76)  (seg0 slice1 pljava.pivotal.io:40000 pid=14850) (cdbdisp.c:215)
+ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)
 SELECT * FROM javatest.create_temp_file_trusted();
-ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:76)
+ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)
 -- org.postgresql.pljava.example.TupleReturn
 select base, incbase from javatest.tupleReturnExample(2,4);
  base | incbase 
@@ -604,9 +605,9 @@ select javatest.loganyelement('a'::varchar);
  a
 (1 row)
 
-select javatest.loganyelement('b'::bytea);
- loganyelement 
----------------
+select encode(javatest.loganyelement('b'::bytea), 'escape');
+ encode 
+--------
  b
 (1 row)
 
@@ -648,8 +649,8 @@ SELECT id,name, salary FROM employees2 order by id;
 -- s/\(SOMEFILE\:SOMEFUNC\)//
 -- end_matchsubs
 SELECT javatest.transferPeople(1) FROM javatest.test;  -- should error
-ERROR:  function cannot execute on segment because it accesses relation "javatest.employees1"
-DETAIL:  SQL statement "SELECT id, name, salary FROM employees1 WHERE salary > $1"
+ERROR:  function cannot execute on a QE slice because it accesses relation "javatest.employees1"
+CONTEXT:  SQL statement "SELECT id, name, salary FROM employees1 WHERE salary > $1"
 select javatest.maxFromSetReturnExample(2,10);
  maxfromsetreturnexample 
 -------------------------
