@@ -83,28 +83,28 @@ resources:
   source:
     bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
-    versioned_file: gpdb_master/bin_gpdb_centos6/bin_gpdb.tar.gz
+    versioned_file: 6X_STABLE/bin_gpdb_centos6/bin_gpdb.tar.gz
 
 - name: bin_gpdb_centos7
   type: gcs
   source:
     bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
-    versioned_file: gpdb_master/bin_gpdb_centos7/bin_gpdb.tar.gz
+    versioned_file: 6X_STABLE/bin_gpdb_centos7/bin_gpdb.tar.gz
 
 - name: bin_gpdb_sles11
   type: gcs
   source:
     bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
-    versioned_file: gpdb_master/bin_gpdb_sles11/bin_gpdb.tar.gz
+    versioned_file: 6X_STABLE/bin_gpdb_sles11/bin_gpdb.tar.gz
 
 - name: bin_gpdb_ubuntu16
   type: gcs
   source:
     bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
-    versioned_file: gpdb_master/compiled_bits_ubuntu16/compiled_bits_ubuntu16.tar.gz
+    versioned_file: 6X_STABLE/compiled_bits_ubuntu16/compiled_bits_ubuntu16.tar.gz
 
 
 - name: pljava_centos6_img
@@ -239,7 +239,7 @@ resources:
   source:
     bucket: {{gcs-bucket}}
     json_key: {{gcs-read-write-service-account-key}}
-    regexp: pljava/dependency/gpdb6/openjdk-11.0.1_linux-x64_bin.tar.gz
+    regexp: pljava/dependency/gpdb6/openjdk-(.*)_linux-x64_bin.tar.gz
 
 
 jobs:
@@ -519,6 +519,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_centos7_release
     - get: bin_gpdb
@@ -539,6 +540,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_centos6_release
     - get: bin_gpdb
@@ -559,6 +561,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_sles11_release
     - get: bin_gpdb
@@ -579,6 +582,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_ubuntu16_release
     - get: bin_gpdb
@@ -599,6 +603,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_centos7_release
     - get: bin_gpdb
@@ -619,6 +624,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_centos6_release
     - get: jdk_bin
@@ -641,6 +647,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_sles11_release
     - get: bin_gpdb
@@ -661,6 +668,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_ubuntu16_release
     - get: bin_gpdb
