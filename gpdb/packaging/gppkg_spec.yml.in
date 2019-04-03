@@ -7,7 +7,7 @@ Description: Provides a procedural language implementation of Java for the Green
 PostInstall:
 - Master:  "echo 'Please SET JAVA_HOME firstly.';
             echo 'Please source your $GPHOME/greenplum_path.sh file and restart the database.';
-            echo 'You can enable pljava by running psql -d mydatabase -f $GPHOME/share/postgresql/pljava/install.sql.' ;"
+            echo 'You can enable pljava by running `CREATE EXTENSION pljava;`';"
 - All: "echo '#BEGIN EXTENSION PLJAVA' >> $GPHOME/greenplum_path.sh ;
         echo export JAVA_HOME=$JAVA_HOME >> $GPHOME/greenplum_path.sh ;
         echo '# for jdk 8' >> $GPHOME/greenplum_path.sh ;
