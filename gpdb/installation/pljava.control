@@ -1,0 +1,6 @@
+# pljava extension
+comment = 'PL/Java procedural language (https://tada.github.io/pljava/)'
+default_version = '1.5.0'
+module_pathname = '$libdir/pljava'
+encoding = UTF8
+relocatable = true
