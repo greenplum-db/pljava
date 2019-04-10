@@ -334,6 +334,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_centos7_release
     - get: bin_gpdb
@@ -353,6 +354,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_centos6_release
     - get: bin_gpdb
@@ -372,6 +374,7 @@ jobs:
   plan:
   - aggregate:
     - get: pljava_src
+      resource: release_trigger
     - get: pljava_bin
       resource: pljava_gpdb_sles11_release
     - get: bin_gpdb
