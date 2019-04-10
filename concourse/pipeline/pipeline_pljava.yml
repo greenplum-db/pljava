@@ -140,7 +140,7 @@ resources:
 - name: gpdb_src
   type: git
   source:
-    branch: {{gpdb-git-branch}}
+    branch: ((gpdb-git-branch))
     uri: https://github.com/greenplum-db/gpdb.git
 
 - name: release_trigger
@@ -181,28 +181,28 @@ resources:
 - name: pljava_gpdb_centos6_release
   type: gcs
   source:
-    bucket: {{gcs-bucket}}
+    bucket: ((gcs-bucket))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/released/gpdb6/pljava-(.*)-rhel6-x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release
   type: gcs
   source:
-    bucket: {{gcs-bucket}}
+    bucket: ((gcs-bucket))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/released/gpdb6/pljava-(.*)-rhel7-x86_64.gppkg
 
 - name: pljava_gpdb_sles11_release
   type: gcs
   source:
-    bucket: {{gcs-bucket}}
+    bucket: ((gcs-bucket))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/released/gpdb6/pljava-(.*)-sles11-x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu16_release
   type: gcs
   source:
-    bucket: {{gcs-bucket}}
+    bucket: ((gcs-bucket))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/released/gpdb6/pljava-(.*)-ubuntu16-amd64.gppkg
 
@@ -237,7 +237,7 @@ resources:
 - name: jdk11_tgz
   type: gcs
   source:
-    bucket: {{gcs-bucket}}
+    bucket: ((gcs-bucket))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/dependency/gpdb6/openjdk-(.*)_linux-x64_bin.tar.gz
 
