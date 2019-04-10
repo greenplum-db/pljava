@@ -153,28 +153,28 @@ resources:
 - name: pljava_gpdb_centos6_build
   type: gcs
   source:
-    bucket: {{gcs-bucket-intermediates}}
+    bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/published/gpdb6/pljava-rhel6.gppkg
 
 - name: pljava_gpdb_centos7_build
   type: gcs
   source:
-    bucket: {{gcs-bucket-intermediates}}
+    bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/published/gpdb6/pljava-rhel7.gppkg
 
 - name: pljava_gpdb_sles11_build
   type: gcs
   source:
-    bucket: {{gcs-bucket-intermediates}}
+    bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/published/gpdb6/pljava-sles11.gppkg
 
 - name: pljava_gpdb_ubuntu16_build
   type: gcs
   source:
-    bucket: {{gcs-bucket-intermediates}}
+    bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/published/gpdb6/pljava-ubuntu16.gppkg
 
@@ -209,28 +209,28 @@ resources:
 - name: pljava_gpdb_centos6_release_candidate
   type: gcs
   source:
-    bucket: {{gcs-bucket-intermediates}}
+    bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/release_candidate/gpdb6/pljava-(.*)-rhel6-x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release_candidate
   type: gcs
   source:
-    bucket: {{gcs-bucket-intermediates}}
+    bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/release_candidate/gpdb6/pljava-(.*)-rhel7-x86_64.gppkg
 
 - name: pljava_gpdb_sles11_release_candidate
   type: gcs
   source:
-    bucket: {{gcs-bucket-intermediates}}
+    bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/release_candidate/gpdb6/pljava-(.*)-sles11-x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu16_release_candidate
   type: gcs
   source:
-    bucket: {{gcs-bucket-intermediates}}
+    bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
     regexp: pljava/release_candidate/gpdb6/pljava-(.*)-ubuntu16-amd64.gppkg
 
