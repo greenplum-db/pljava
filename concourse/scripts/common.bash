@@ -23,7 +23,7 @@ function prep_jdk_install() {
 	case "$OSVER" in
 	  suse11)
 	  ;;
-	  ubuntu16)
+	  ubuntu*)
 	    case "$JDK_VERSION" in
 		  8)
 		    apt install -y openjdk-8-jdk
