@@ -90,6 +90,8 @@ function prep_jdk_install() {
 function prep_env() {
   [ "$OSVER" == "centos7" ] && ln -sf /usr/bin/xsubpp /usr/share/perl5/ExtUtils/xsubpp
   prep_jdk_install
-  [ -f '/opt/gcc_env.sh' ] && source /opt/gcc_env.sh
+  if [ -f '/opt/gcc_env.sh' ]; then
+    source /opt/gcc_env.sh
+  fi
 }
 
