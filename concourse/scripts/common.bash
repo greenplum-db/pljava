@@ -88,31 +88,8 @@ function prep_jdk_install() {
 }
 
 function prep_env() {
-  case "$OSVER" in
-    suse11)
-      export BLDARCH=sles11_x86_64
-      ;;
-    ubuntu16)
-      export BLDARCH=ubuntu16_amd64
-      ;;
-
-    centos6)
-      export BLDARCH=rhel6_x86_64
-      ;;
-
-    centos7)
-      export BLDARCH=rhel7_x86_64
-      ln -sf /usr/bin/xsubpp /usr/share/perl5/ExtUtils/xsubpp
-      ;;
-
-    *)
-    echo "TARGET_OS_VERSION not set or recognized for Centos/RHEL"
-    exit 1
-    ;;
-  esac
+  [ "$OSVER" == "centos7" ] && ln -sf /usr/bin/xsubpp /usr/share/perl5/ExtUtils/xsubpp
   prep_jdk_install
-  if [ -f '/opt/gcc_env.sh' ]; then
-    source /opt/gcc_env.sh
-  fi
+  [ -f '/opt/gcc_env.sh' ] && source /opt/gcc_env.sh
 }
 

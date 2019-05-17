@@ -17,7 +17,7 @@ include $(PLJAVA_DIR)/release.mk
 PLJAVA_GPPKG=pljava-$(PLJAVA_PIVOTAL_VERSION)-gp$(GP_VERSION_NUM)-$(OS)-$(ARCH).gppkg
 export PLJAVA_GPPKG
 
-ifeq ($(OS), ubuntu16)
+ifeq ($(OS), ubuntu18)
 include gppkg_deb.mk
 else
 include gppkg_rpm.mk

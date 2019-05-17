@@ -25,8 +25,8 @@ function release() {
         centos7)
         cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-rhel7-x86_64.gppkg
         ;;
-        ubuntu16)
-        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-ubuntu16-amd64.gppkg
+        ubuntu18)
+        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-ubuntu18-amd64.gppkg
         ;;
         *) echo "Unknown OS: $OSVER"; exit 1 ;;
     esac
