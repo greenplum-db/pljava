@@ -111,8 +111,8 @@ resources:
 - name: pljava_src
   type: git
   source:
-    branch: gpdb6_pipeline
-    uri: https://github.com/gfphoenix78/pljava.git
+    branch: gpdb6_release
+    uri: https://github.com/greenplum-db/pljava.git
 
 - name: gpdb_src
   type: git
