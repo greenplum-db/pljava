@@ -33,7 +33,7 @@ PLJAVALIB  = $(DESTDIR)$(pkglibdir)/java
 PLJAVAEXT  = $(DESTDIR)$(datadir)/extension
 
 REGRESS_OPTS = --dbname=pljava_test --create-role=pljava_test
-REGRESS = pljava_ext_init pljava_functions pljava_test pljava_ext_cleanup pljava_init pljava_functions pljava_test
+REGRESS = pljava_ext_init pljava_functions pljava_test pljava_ext_cleanup pljava_init pljava_functions pljava_test pljava_uninstall
 REGRESS_DIR = $(top_builddir)
 
 .DEFAULT_GOAL := build
