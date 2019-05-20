@@ -3,13 +3,13 @@ set TIMEZONE=UTC;
 set search_path = javatest, public;
 set client_min_messages = "info";
 -- org.postgresql.pljava.example.Parameters
-select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamp()))::int) <= 2;
+select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamp()))::int) <= 5;
  ?column? 
 ----------
  t
 (1 row)
 
-select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamptz()))::int) <= 2;
+select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamptz()))::int) <= 5;
  ?column? 
 ----------
  t
