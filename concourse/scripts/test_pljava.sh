@@ -94,7 +94,6 @@ function prepare_test(){
         fi
 
         make targetcheck
-        echo 'hello, regression' >> gpdb/tests/regression.diffs
         pushd gpdb/tests
         [ -s regression.diffs ] && cat regression.diffs && exit 1
         popd
