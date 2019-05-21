@@ -5,8 +5,8 @@ set client_min_messages = "info";
 
 -- org.postgresql.pljava.example.Parameters
 
-select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamp()))::int) <= 2;
-select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamptz()))::int) <= 2;
+select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamp()))::int) <= 5;
+select abs(extract('epoch' from (current_timestamp - javatest.java_getTimestamptz()))::int) <= 5;
 
 SELECT javatest.print('2016-01-01'::date);
 SELECT javatest.print('2016-01-01'::date) FROM javatest.test;

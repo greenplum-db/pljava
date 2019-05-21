@@ -80,7 +80,7 @@ function prepare_test(){
             echo "JAVA_HOME=$JAVA_HOME" >> $gphome/greenplum_path.sh
             echo "export JAVA_HOME" >> $gphome/greenplum_path.sh
         fi
-		gppkg -i pljava_bin/pljava-*.gppkg
+        gppkg -i pljava_bin/pljava-*.gppkg
         source $gphome/greenplum_path.sh
         gpstop -arf
 
@@ -94,6 +94,9 @@ function prepare_test(){
         fi
 
         make targetcheck
+        pushd gpdb/tests
+        [ -s regression.diffs ] && cat regression.diffs && exit 1
+        popd
         popd
 
 	EOF
