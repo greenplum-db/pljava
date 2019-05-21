@@ -1,0 +1,6 @@
+\! gppkg -q --all | sed -n '/^pljava-/s|.*|pljava|p'
+pljava
+-- start_ignore
+\! gppkg -r pljava
+-- end_ignore
+\! gppkg -q --all | sed -n '/^pljava-/s|.*|pljava|p'
