@@ -85,9 +85,9 @@ resources:
 - name: bin_gpdb_ubuntu18
   type: gcs
   source:
-    bucket: ((gcs-bucket-intermediates))
-    json_key: ((concourse-gcs-resources-service-account-key))
-    versioned_file: 6X_STABLE/compiled_bits_ubuntu16/compiled_bits_ubuntu16.tar.gz
+    bucket: {{gcs-bucket-intermediates}}
+    json_key: {{concourse-gcs-resources-service-account-key}}
+    versioned_file: ((gcs_gpdb_binary_folder))/bin_gpdb_ubuntu18.04/bin_gpdb.tar.gz
 
 
 - name: pljava_centos6_img
@@ -105,8 +105,14 @@ resources:
 - name: pljava_ubuntu18_img
   type: docker-image
   source:
-    repository: pivotaldata/ubuntu-gpdb-dev
-    tag: '16.04'
+    repository: pivotaldata/gpdb6-ubuntu18.04-build
+    tag: latest
+
+- name: pljava_ubuntu18_img_test
+  type: docker-image
+  source:
+    repository: pivotaldata/gpdb6-ubuntu18.04-test
+    tag: latest
 
 - name: pljava_src
   type: git
@@ -290,6 +296,7 @@ jobs:
       resource: bin_gpdb_ubuntu18
       trigger: true
     - get: pljava_ubuntu18_img
+    - get: pljava_ubuntu18_img_test
     - get: gpdb_src
   - aggregate:
     - task: pljava_gpdb_build
@@ -301,7 +308,7 @@ jobs:
   - aggregate:
     - task: test_java8
       file: pljava_src/concourse/tasks/test_pljava.yml
-      image: pljava_ubuntu18_img
+      image: pljava_ubuntu18_img_test
       input_mapping:
         pljava_bin: pljava_gppkg
       params:
@@ -309,7 +316,7 @@ jobs:
         JDK_VERSION: 8
     - task: test_java11
       file: pljava_src/concourse/tasks/test_pljava.yml
-      image: pljava_ubuntu18_img
+      image: pljava_ubuntu18_img_test
       input_mapping:
         pljava_bin: pljava_gppkg
       params:

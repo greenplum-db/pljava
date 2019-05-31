@@ -26,10 +26,13 @@ function prep_jdk_install() {
 	  ubuntu*)
 	    case "$JDK_VERSION" in
 		  8)
+		    apt update -q
 		    apt install -y openjdk-8-jdk
 		    export JAVA_HOME=`find /usr/lib/jvm/ -type d -name "java-8*"`
 		    ;;
 		  11)
+		    apt update -q
+		    apt-get install -y software-properties-common
 		    add-apt-repository -y ppa:openjdk-r/ppa
 		    apt update -q
 		    apt install -y openjdk-11-jdk
