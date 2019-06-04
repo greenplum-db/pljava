@@ -122,6 +122,7 @@ public class Parameters {
 	}
 
 	public static String print(Date time) {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		DateFormat p = DateFormat.getDateInstance(DateFormat.FULL);
 		log("Local Date is " + p.format(time));
 		log("TZ =  " + TimeZone.getDefault().getDisplayName());
@@ -256,6 +257,7 @@ public class Parameters {
 	}
 
 	public static String print(Time time) {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		DateFormat p = new SimpleDateFormat("HH:mm:ss z Z");
 		log("Local Time is " + p.format(time));
 		log("TZ =  " + TimeZone.getDefault().getDisplayName());
@@ -263,6 +265,7 @@ public class Parameters {
 	}
 
 	public static String print(Timestamp time) {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		DateFormat p = DateFormat.getDateTimeInstance(DateFormat.FULL,
 				DateFormat.FULL);
 		log("Local Timestamp is " + p.format(time));

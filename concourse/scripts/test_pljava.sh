@@ -86,13 +86,6 @@ function prepare_test(){
 
         pushd pljava_src
 
-        if [ "$OSVER" == "suse11" ]; then
-            #  suse outputs the time using GMT redhat uses UTC, added spaces to not
-            #  change TIMEZONE=UTC in the expected file
-            sed -i 's/ UTC/ GMT/g' gpdb/tests/expected/pljava_test.out
-            sed -i 's/ UTC/ GMT/g' gpdb/tests/expected/pljava_test_optimizer.out
-        fi
-
         make targetcheck
         pushd gpdb/tests
         [ -s regression.diffs ] && cat regression.diffs && exit 1
