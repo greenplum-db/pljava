@@ -24,7 +24,6 @@ local gphome=/usr/local/greenplum-db-devel
       #rpm -ivh jdk/jdk-8u181-linux-x64.rpm
       ;;
   ubuntu*)
-      gphome=/usr/local/gpdb
       apt update
       apt install -y wget
       ;;
@@ -35,7 +34,7 @@ local gphome=/usr/local/greenplum-db-devel
 
     prep_env
 
-    mkdir $gphome
+    mkdir -p $gphome
     tar zxf bin_gpdb/*.tar.gz -C $gphome
     source $gphome/greenplum_path.sh
 
