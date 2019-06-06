@@ -17,6 +17,7 @@ groups:
     - pljava_ubuntu18_test_release
     - manual_push_centos7_release
     - manual_push_centos6_release
+    - manual_push_ubuntu18_release
 
 - name: GPDB6
   jobs:
@@ -31,6 +32,7 @@ groups:
     - pljava_ubuntu18_release
     - manual_push_centos7_release
     - manual_push_centos6_release
+    - manual_push_ubuntu18_release
 
 - name: TEST_RELEASE
   jobs:
@@ -493,7 +495,6 @@ jobs:
     params:
       file: pljava_gpdb_centos7_release/pljava-*.gppkg
 
-
 - name: manual_push_centos6_release
   plan:
   - aggregate:
@@ -518,3 +519,28 @@ jobs:
   - put: pljava_gpdb_centos6_release
     params:
       file: pljava_gpdb_centos6_release/pljava-*.gppkg
+
+- name: manual_push_ubuntu18_release
+  plan:
+  - aggregate:
+    - get: pljava_ubuntu18_img_test
+      trigger: false
+    - get: pljava_gpdb_ubuntu18_release_candidate
+      trigger: false
+  - task: Copy_GPPKG
+    image: pljava_ubuntu18_img_test
+    config:
+      platform: linux
+      inputs:
+       - name: pljava_gpdb_ubuntu18_release_candidate
+      outputs:
+       - name: pljava_gpdb_ubuntu18_release
+      run:
+          path: "sh"
+          args:
+            - -exc
+            - |
+              cp pljava_gpdb_ubuntu18_release_candidate/pljava-*.gppkg pljava_gpdb_ubuntu18_release/
+  - put: pljava_gpdb_ubuntu18_release
+    params:
+      file: pljava_gpdb_ubuntu18_release/pljava-*.gppkg
