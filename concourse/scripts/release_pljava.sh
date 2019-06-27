@@ -17,16 +17,16 @@ function release() {
 
     case "$OSVER" in
         suse11)
-        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-sles11-x86_64.gppkg
+        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-sles11_x86_64.gppkg
         ;;
         centos6)
-        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-rhel6-x86_64.gppkg
+        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-rhel6_x86_64.gppkg
         ;;
         centos7)
-        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-rhel7-x86_64.gppkg
+        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-rhel7_x86_64.gppkg
         ;;
         ubuntu18)
-        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-ubuntu18-amd64.gppkg
+        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-ubuntu18.04_x86_64.gppkg
         ;;
         *) echo "Unknown OS: $OSVER"; exit 1 ;;
     esac
