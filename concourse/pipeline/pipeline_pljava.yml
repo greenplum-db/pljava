@@ -161,42 +161,42 @@ resources:
   source:
     bucket: ((gcs-bucket))
     json_key: ((concourse-gcs-resources-service-account-key))
-    regexp: pljava/released/gpdb6/pljava-(.*)-rhel6-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-rhel6_x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release
   type: gcs
   source:
     bucket: ((gcs-bucket))
     json_key: ((concourse-gcs-resources-service-account-key))
-    regexp: pljava/released/gpdb6/pljava-(.*)-rhel7-x86_64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-rhel7_x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu18_release
   type: gcs
   source:
     bucket: ((gcs-bucket))
     json_key: ((concourse-gcs-resources-service-account-key))
-    regexp: pljava/released/gpdb6/pljava-(.*)-ubuntu18-amd64.gppkg
+    regexp: pljava/released/gpdb6/pljava-(.*)-ubuntu18.04_x86_64.gppkg
 
 - name: pljava_gpdb_centos6_release_candidate
   type: gcs
   source:
     bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
-    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-rhel6-x86_64.gppkg
+    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-rhel6_x86_64.gppkg
 
 - name: pljava_gpdb_centos7_release_candidate
   type: gcs
   source:
     bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
-    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-rhel7-x86_64.gppkg
+    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-rhel7_x86_64.gppkg
 
 - name: pljava_gpdb_ubuntu18_release_candidate
   type: gcs
   source:
     bucket: ((gcs-bucket-intermediates))
     json_key: ((concourse-gcs-resources-service-account-key))
-    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-ubuntu18-amd64.gppkg
+    regexp: pljava/release_candidate/gpdb6/pljava-(.*)-ubuntu18.04_x86_64.gppkg
 
 - name: jdk11_tgz
   type: gcs
