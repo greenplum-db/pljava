@@ -203,7 +203,7 @@ jobs:
 ##
 - name: pljava_centos7_build
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       trigger: true
     - get: bin_gpdb
@@ -212,21 +212,19 @@ jobs:
     - get: pljava_centos7_img
     - get: gpdb_src
     - get: jdk
-  - aggregate:
-    - task: pljava_gpdb_build
-      file: pljava_src/concourse/tasks/build_pljava.yml
-      image: pljava_centos7_img
-      params:
-        OSVER: centos7
-        PL_GP_VERSION: "5.0"
-  - aggregate:
-    - put: pljava_gpdb_centos7_build
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - task: pljava_gpdb_build
+    file: pljava_src/concourse/tasks/build_pljava.yml
+    image: pljava_centos7_img
+    params:
+      OSVER: centos7
+      PL_GP_VERSION: "5.0"
+  - put: pljava_gpdb_centos7_build
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_centos6_build
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       trigger: true
     - get: bin_gpdb
@@ -235,21 +233,19 @@ jobs:
     - get: pljava_centos6_img
     - get: gpdb_src
     - get: jdk
-  - aggregate:
-    - task: pljava_gpdb_build
-      file: pljava_src/concourse/tasks/build_pljava.yml
-      image: pljava_centos6_img
-      params:
-        OSVER: centos6
-        PL_GP_VERSION: "5.0"
-  - aggregate:
-    - put: pljava_gpdb_centos6_build
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - task: pljava_gpdb_build
+    file: pljava_src/concourse/tasks/build_pljava.yml
+    image: pljava_centos6_img
+    params:
+      OSVER: centos6
+      PL_GP_VERSION: "5.0"
+  - put: pljava_gpdb_centos6_build
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_sles11_build
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       trigger: true
     - get: bin_gpdb
@@ -258,21 +254,19 @@ jobs:
     - get: pljava_sles11_img
     - get: gpdb_src
     - get: jdk
-  - aggregate:
-    - task: pljava_gpdb_build
-      file: pljava_src/concourse/tasks/build_pljava.yml
-      image: pljava_sles11_img
-      params:
-        OSVER: suse11
-        PL_GP_VERSION: "5.0"
-  - aggregate:
-    - put: pljava_gpdb_sles11_build
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - task: pljava_gpdb_build
+    file: pljava_src/concourse/tasks/build_pljava.yml
+    image: pljava_sles11_img
+    params:
+      OSVER: suse11
+      PL_GP_VERSION: "5.0"
+  - put: pljava_gpdb_sles11_build
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_centos7_test
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       passed: [pljava_centos7_build]
     - get: pljava_bin
@@ -282,17 +276,16 @@ jobs:
       resource: bin_gpdb_centos7
     - get: pljava_centos7_img
     - get: gpdb_src
-  - aggregate:
-    - task: test_pljava
-      file: pljava_src/concourse/tasks/test_pljava.yml
-      image: pljava_centos7_img
-      params:
-        OSVER: centos7
-        PL_GP_VERSION: "5.0"
+  - task: test_pljava
+    file: pljava_src/concourse/tasks/test_pljava.yml
+    image: pljava_centos7_img
+    params:
+      OSVER: centos7
+      PL_GP_VERSION: "5.0"
 
 - name: pljava_centos6_test
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       passed: [pljava_centos6_build]
     - get: pljava_bin
@@ -302,17 +295,16 @@ jobs:
       resource: bin_gpdb_centos6
     - get: pljava_centos6_img
     - get: gpdb_src
-  - aggregate:
-    - task: test_pljava
-      file: pljava_src/concourse/tasks/test_pljava.yml
-      image: pljava_centos6_img
-      params:
-        OSVER: centos6
-        PL_GP_VERSION: "5.0"
+  - task: test_pljava
+    file: pljava_src/concourse/tasks/test_pljava.yml
+    image: pljava_centos6_img
+    params:
+      OSVER: centos6
+      PL_GP_VERSION: "5.0"
 
 - name: pljava_sles11_test
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       passed: [pljava_sles11_build]
     - get: pljava_bin
@@ -322,17 +314,16 @@ jobs:
       resource: bin_gpdb_sles11
     - get: pljava_sles11_img
     - get: gpdb_src
-  - aggregate:
-    - task: test_pljava
-      file: pljava_src/concourse/tasks/test_pljava.yml
-      image: pljava_sles11_img
-      params:
-        OSVER: suse11
-        PL_GP_VERSION: "5.0"
+  - task: test_pljava
+    file: pljava_src/concourse/tasks/test_pljava.yml
+    image: pljava_sles11_img
+    params:
+      OSVER: suse11
+      PL_GP_VERSION: "5.0"
 
 - name: pljava_centos7_test_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       resource: release_trigger
     - get: pljava_bin
@@ -342,17 +333,16 @@ jobs:
       trigger: true
     - get: pljava_centos7_img
     - get: gpdb_src
-  - aggregate:
-    - task: test_pljava
-      file: pljava_src/concourse/tasks/test_pljava.yml
-      image: pljava_centos7_img
-      params:
-        OSVER: centos7
-        PL_GP_VERSION: "5.0"
+  - task: test_pljava
+    file: pljava_src/concourse/tasks/test_pljava.yml
+    image: pljava_centos7_img
+    params:
+      OSVER: centos7
+      PL_GP_VERSION: "5.0"
 
 - name: pljava_centos6_test_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       resource: release_trigger
     - get: pljava_bin
@@ -362,17 +352,16 @@ jobs:
       trigger: true
     - get: pljava_centos6_img
     - get: gpdb_src
-  - aggregate:
-    - task: test_pljava
-      file: pljava_src/concourse/tasks/test_pljava.yml
-      image: pljava_centos6_img
-      params:
-        OSVER: centos6
-        PL_GP_VERSION: "5.0"
+  - task: test_pljava
+    file: pljava_src/concourse/tasks/test_pljava.yml
+    image: pljava_centos6_img
+    params:
+      OSVER: centos6
+      PL_GP_VERSION: "5.0"
 
 - name: pljava_sles11_test_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       resource: release_trigger
     - get: pljava_bin
@@ -382,73 +371,66 @@ jobs:
       trigger: true
     - get: pljava_sles11_img
     - get: gpdb_src
-  - aggregate:
-    - task: test_pljava
-      file: pljava_src/concourse/tasks/test_pljava.yml
-      image: pljava_sles11_img
-      params:
-        OSVER: suse11
-        PL_GP_VERSION: "5.0"
+  - task: test_pljava
+    file: pljava_src/concourse/tasks/test_pljava.yml
+    image: pljava_sles11_img
+    params:
+      OSVER: suse11
+      PL_GP_VERSION: "5.0"
 
 - name: pljava_centos7_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
     - get: release_trigger
       trigger: true
     - get: pljava_bin
       resource: pljava_gpdb_centos7_build
     - get: pljava_centos7_img
-  - aggregate:
-    - task: release_pljava
-      file: pljava_src/concourse/tasks/release_pljava.yml
-      image: pljava_centos7_img
-      params:
-        OSVER: centos7
-        PL_GP_VERSION: "5.0"
-  - aggregate:
-    - put: pljava_gpdb_centos7_release_candidate
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - task: release_pljava
+    file: pljava_src/concourse/tasks/release_pljava.yml
+    image: pljava_centos7_img
+    params:
+      OSVER: centos7
+      PL_GP_VERSION: "5.0"
+  - put: pljava_gpdb_centos7_release_candidate
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_centos6_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
     - get: release_trigger
       trigger: true
     - get: pljava_bin
       resource: pljava_gpdb_centos6_build
     - get: pljava_centos6_img
-  - aggregate:
-    - task: release_pljava
-      file: pljava_src/concourse/tasks/release_pljava.yml
-      image: pljava_centos6_img
-      params:
-        OSVER: centos6
-        PL_GP_VERSION: "5.0"
-  - aggregate:
-    - put: pljava_gpdb_centos6_release_candidate
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - task: release_pljava
+    file: pljava_src/concourse/tasks/release_pljava.yml
+    image: pljava_centos6_img
+    params:
+      OSVER: centos6
+      PL_GP_VERSION: "5.0"
+  - put: pljava_gpdb_centos6_release_candidate
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_sles11_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
     - get: release_trigger
       trigger: true
     - get: pljava_bin
       resource: pljava_gpdb_sles11_build
     - get: pljava_sles11_img
-  - aggregate:
-    - task: release_pljava
-      file: pljava_src/concourse/tasks/release_pljava.yml
-      image: pljava_sles11_img
-      params:
-        OSVER: suse11
-        PL_GP_VERSION: "5.0"
-  - aggregate:
-    - put: pljava_gpdb_sles11_release_candidate
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - task: release_pljava
+    file: pljava_src/concourse/tasks/release_pljava.yml
+    image: pljava_sles11_img
+    params:
+      OSVER: suse11
+      PL_GP_VERSION: "5.0"
+  - put: pljava_gpdb_sles11_release_candidate
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
