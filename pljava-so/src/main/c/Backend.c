@@ -281,8 +281,6 @@ static void initsequencer(enum initstage is, bool tolerant)
 		if ( ! seenVisualVMName )
 			JVMOptList_addVisualVMName(&optList);
 		JVMOptList_add(&optList, "vfprintf", (void*)my_vfprintf, true);
-		/* add -xmx to aviod heap error */
-		JVMOptList_add(&optList, "-Xmx512m", 0, true);
 		JVMOptList_add(&optList, "-Xss2m", 0, true);
 #ifndef GCJ
 		JVMOptList_add(&optList, "-Xrs", 0, true);
