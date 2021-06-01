@@ -94,27 +94,26 @@ resources:
 - name: pljava_centos6_img
   type: docker-image
   source:
-    repository: pivotaldata/centos-gpdb-dev
-    tag: '6-gcc6.2-llvm3.7'
+    repository: gcr.io/data-gpdb-public-images/gpdb5-centos6-build-test
+    tag: latest
 
 - name: pljava_centos7_img
   type: docker-image
   source:
-    repository: pivotaldata/centos-gpdb-dev
-    tag: '7-gcc6.2-llvm3.7'
+    repository: gcr.io/data-gpdb-public-images/gpdb5-centos7-build-test
+    tag: latest
 
 - name: pljava_ubuntu18_img
   type: docker-image
   source:
-    repository: pivotaldata/gpdb6-ubuntu18.04-build
+    repository: gcr.io/data-gpdb-public-images/gpdb6-ubuntu18.04-build
     tag: latest
 
 - name: pljava_ubuntu18_img_test
   type: docker-image
   source:
-    repository: pivotaldata/gpdb6-ubuntu18.04-test
+    repository: gcr.io/data-gpdb-public-images/gpdb6-ubuntu18.04-test
     tag: latest
-
 
 - name: pljava_src
   type: git
