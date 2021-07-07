@@ -210,7 +210,7 @@ jobs:
 ##
 - name: pljava_centos7_build
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       trigger: true
     - get: bin_gpdb
@@ -218,14 +218,13 @@ jobs:
       trigger: true
     - get: pljava_centos7_img
     - get: gpdb_src
-  - aggregate:
-    - task: pljava_gpdb_build
-      file: pljava_src/concourse/tasks/build_pljava.yml
-      image: pljava_centos7_img
-      params:
-        <<: *centos7_params
-        JDK_VERSION: 8
-  - aggregate:
+  - task: pljava_gpdb_build
+    file: pljava_src/concourse/tasks/build_pljava.yml
+    image: pljava_centos7_img
+    params:
+      <<: *centos7_params
+      JDK_VERSION: 8
+  - in_parallel:
     - task: test_java8
       file: pljava_src/concourse/tasks/test_pljava.yml
       image: pljava_centos7_img
@@ -242,14 +241,13 @@ jobs:
       params:
         <<: *centos7_params
         JDK_VERSION: 11
-  - aggregate:
-    - put: pljava_gpdb_centos7_build
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - put: pljava_gpdb_centos7_build
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_centos6_build
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       trigger: true
     - get: bin_gpdb
@@ -259,14 +257,13 @@ jobs:
     - get: gpdb_src
     - get: jdk_bin
       resource: jdk11_tgz
-  - aggregate:
-    - task: pljava_gpdb_build
-      file: pljava_src/concourse/tasks/build_pljava.yml
-      image: pljava_centos6_img
-      params:
-        <<: *centos6_params
-        JDK_VERSION: 8
-  - aggregate:
+  - task: pljava_gpdb_build
+    file: pljava_src/concourse/tasks/build_pljava.yml
+    image: pljava_centos6_img
+    params:
+      <<: *centos6_params
+      JDK_VERSION: 8
+  - in_parallel:
     - task: test_java8
       file: pljava_src/concourse/tasks/test_pljava.yml
       image: pljava_centos6_img
@@ -283,14 +280,13 @@ jobs:
       params:
         <<: *centos6_params
         JDK_VERSION: 11
-  - aggregate:
-    - put: pljava_gpdb_centos6_build
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - put: pljava_gpdb_centos6_build
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_ubuntu18_build
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       trigger: true
     - get: bin_gpdb
@@ -299,14 +295,13 @@ jobs:
     - get: pljava_ubuntu18_img
     - get: pljava_ubuntu18_img_test
     - get: gpdb_src
-  - aggregate:
-    - task: pljava_gpdb_build
-      file: pljava_src/concourse/tasks/build_pljava.yml
-      image: pljava_ubuntu18_img
-      params:
-        <<: *ubuntu18_params
-        JDK_VERSION: 8
-  - aggregate:
+  - task: pljava_gpdb_build
+    file: pljava_src/concourse/tasks/build_pljava.yml
+    image: pljava_ubuntu18_img
+    params:
+      <<: *ubuntu18_params
+      JDK_VERSION: 8
+  - in_parallel:
     - task: test_java8
       file: pljava_src/concourse/tasks/test_pljava.yml
       image: pljava_ubuntu18_img_test
@@ -323,14 +318,13 @@ jobs:
       params:
         <<: *ubuntu18_params
         JDK_VERSION: 11
-  - aggregate:
-    - put: pljava_gpdb_ubuntu18_build
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - put: pljava_gpdb_ubuntu18_build
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_centos7_test_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       resource: release_trigger
     - get: pljava_bin
@@ -340,7 +334,7 @@ jobs:
       trigger: true
     - get: pljava_centos7_img
     - get: gpdb_src
-  - aggregate:
+  - in_parallel:
     - task: test_java8
       file: pljava_src/concourse/tasks/test_pljava.yml
       image: pljava_centos7_img
@@ -356,7 +350,7 @@ jobs:
 
 - name: pljava_centos6_test_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       resource: release_trigger
     - get: pljava_bin
@@ -368,7 +362,7 @@ jobs:
     - get: gpdb_src
     - get: jdk_bin
       resource: jdk11_tgz
-  - aggregate:
+  - in_parallel:
     - task: test_java8
       file: pljava_src/concourse/tasks/test_pljava.yml
       image: pljava_centos6_img
@@ -384,7 +378,7 @@ jobs:
 
 - name: pljava_ubuntu18_test_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       resource: release_trigger
     - get: pljava_bin
@@ -394,7 +388,7 @@ jobs:
       trigger: true
     - get: pljava_ubuntu18_img_test
     - get: gpdb_src
-  - aggregate:
+  - in_parallel:
     - task: test_java8
       file: pljava_src/concourse/tasks/test_pljava.yml
       image: pljava_ubuntu18_img_test
@@ -410,68 +404,62 @@ jobs:
 
 - name: pljava_centos7_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       resource: release_trigger
       trigger: true
     - get: pljava_bin
       resource: pljava_gpdb_centos7_build
     - get: pljava_centos7_img
-  - aggregate:
-    - task: release_pljava
-      file: pljava_src/concourse/tasks/release_pljava.yml
-      image: pljava_centos7_img
-      params:
-        <<: *centos7_params
-  - aggregate:
-    - put: pljava_gpdb_centos7_release_candidate
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - task: release_pljava
+    file: pljava_src/concourse/tasks/release_pljava.yml
+    image: pljava_centos7_img
+    params:
+      <<: *centos7_params
+  - put: pljava_gpdb_centos7_release_candidate
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_centos6_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       resource: release_trigger
       trigger: true
     - get: pljava_bin
       resource: pljava_gpdb_centos6_build
     - get: pljava_centos6_img
-  - aggregate:
-    - task: release_pljava
-      file: pljava_src/concourse/tasks/release_pljava.yml
-      image: pljava_centos6_img
-      params:
-        <<: *centos6_params
-  - aggregate:
-    - put: pljava_gpdb_centos6_release_candidate
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - task: release_pljava
+    file: pljava_src/concourse/tasks/release_pljava.yml
+    image: pljava_centos6_img
+    params:
+      <<: *centos6_params
+  - put: pljava_gpdb_centos6_release_candidate
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 - name: pljava_ubuntu18_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_src
       resource: release_trigger
       trigger: true
     - get: pljava_bin
       resource: pljava_gpdb_ubuntu18_build
     - get: pljava_ubuntu18_img_test
-  - aggregate:
-    - task: release_pljava
-      file: pljava_src/concourse/tasks/release_pljava.yml
-      image: pljava_ubuntu18_img_test
-      params:
-        <<: *ubuntu18_params
-  - aggregate:
-    - put: pljava_gpdb_ubuntu18_release_candidate
-      params:
-        file: pljava_gppkg/pljava-*.gppkg
+  - task: release_pljava
+    file: pljava_src/concourse/tasks/release_pljava.yml
+    image: pljava_ubuntu18_img_test
+    params:
+      <<: *ubuntu18_params
+  - put: pljava_gpdb_ubuntu18_release_candidate
+    params:
+      file: pljava_gppkg/pljava-*.gppkg
 
 
 - name: manual_push_centos7_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_centos7_img
       trigger: false
     - get: pljava_gpdb_centos7_release_candidate
@@ -496,7 +484,7 @@ jobs:
 
 - name: manual_push_centos6_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_centos6_img
       trigger: false
     - get: pljava_gpdb_centos6_release_candidate
@@ -521,7 +509,7 @@ jobs:
 
 - name: manual_push_ubuntu18_release
   plan:
-  - aggregate:
+  - in_parallel:
     - get: pljava_ubuntu18_img_test
       trigger: false
     - get: pljava_gpdb_ubuntu18_release_candidate
