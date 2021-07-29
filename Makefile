@@ -57,9 +57,13 @@ install: installdirs install-lib
 	$(INSTALL_DATA) '$(PROJDIR)/pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar' '$(PLJAVALIB)/examples.jar'
 	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/install.sql'                                    '$(PLJAVADATA)'
 	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/uninstall.sql'                                  '$(PLJAVADATA)'
+	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/install_pljavat.sql'                            '$(PLJAVADATA)'
+	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/uninstall_pljavat.sql'                          '$(PLJAVADATA)'
 	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/examples.sql'                                   '$(PLJAVADATA)'
 	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/pljava--1.5.0.sql'                              '$(PLJAVAEXT)'
 	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/pljava.control'                                 '$(PLJAVAEXT)'
+	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/pljavat--1.5.0.sql'                             '$(PLJAVAEXT)'
+	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/pljavat.control'                                '$(PLJAVAEXT)'
 	find $(PROJDIR)/docs -name "*.html" -exec $(INSTALL_DATA) {} '$(PLJAVADATA)/docs' \;
 
 uninstall: uninstall-lib 
