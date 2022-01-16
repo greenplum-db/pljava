@@ -25,6 +25,9 @@ function release() {
         centos7)
         cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-rhel7_x86_64.gppkg
         ;;
+        rhel8)
+        cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-rhel8_x86_64.gppkg
+        ;;
         ubuntu18)
         cp pljava_bin/pljava-*.gppkg pljava_gppkg/pljava-${PLJAVA_VERSION}-gp6-ubuntu18.04_x86_64.gppkg
         ;;
