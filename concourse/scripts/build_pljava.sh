@@ -27,7 +27,7 @@ local gphome=/usr/local/greenplum-db-devel
       apt update
       apt install -y wget
       ;;
-  centos*)
+  centos* | rhel*)
       yum install -y wget
       ;;
   esac

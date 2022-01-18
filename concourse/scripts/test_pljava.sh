@@ -94,7 +94,7 @@ function setup_gpadmin_user() {
         suse*)
         ${TOP_DIR}/gpdb_src/concourse/scripts/setup_gpadmin_user.bash "sles"
         ;;
-        centos*)
+        centos* | rhel*)
         ${TOP_DIR}/gpdb_src/concourse/scripts/setup_gpadmin_user.bash "centos"
         ;;
         ubuntu*)
