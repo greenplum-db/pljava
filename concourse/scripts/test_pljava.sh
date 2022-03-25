@@ -109,6 +109,11 @@ function _main() {
     time install_gpdb
     time setup_gpadmin_user
 
+    # for mirrorless test
+    export WITH_MIRRORS=false
+    export WITH_STANDBY=false
+    export BLDWRAP_POSTGRES_CONF_ADDONS=wal_level=minimal,max_wal_senders=0,gp_dispatch_keepalives_idle=30,gp_dispatch_keepalives_interval=10,gp_dispatch_keepalives_count=4
+
     time make_cluster
     time prepare_test
     time test
