@@ -1,8 +1,8 @@
 # need VARS: OS ARCH PLJAVA_DIR PLJAVA_GPPKG
-# ???: where is GP_MAJORVERSION
 PGXS := $(shell pg_config --pgxs)
 include $(PGXS)
 include $(PLJAVA_DIR)/release.mk
+# GP_MAJORVERSION is defined in lib/postgresql/pgxs/src/Makefile.global
 GP_VERSION_NUM := $(GP_MAJORVERSION)
 
 ifeq ($(ARCH), x86_64)
@@ -36,7 +36,7 @@ ifdef DEPENDENT_DEBS
 		cp $${dep_deb} gppkg/deps; \
 	done
 endif
-	gppkg --build gppkg 
+	gppkg --build gppkg --filename $(TARGET_GPPKG)
 
 clean:
 	rm -rf UBUNTU
