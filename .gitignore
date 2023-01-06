@@ -11,5 +11,4 @@ pljava-so/target/
 target/
 *.so
 *.zip
-concourse/secrets/
 compile_commands.json
