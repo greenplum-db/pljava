@@ -85,6 +85,6 @@ curl --data-raw "foo" <hook_url>
 
 ## PR pipeline is not triggered.
 
-The PR pipeline relies on the webhook to detect the new PR. However, due the the limitation of the webhook implemention of concourse, we rely on the push hook for this. It means if the PR is from a forked repo, the PR pipeline won't be triggered immediately. To manually trigger the pipeline, go to https://dev2.ci.gpdb.pivotal.io/teams/gp-extensions/pipelines/pr.pljava/resources/ip4r_pr and click ⟳ button there.
+The PR pipeline relies on the webhook to detect the new PR. However, due the the limitation of the webhook implemention of concourse, we rely on the push hook for this. It means if the PR is from a forked repo, the PR pipeline won't be triggered immediately. To manually trigger the pipeline, go to https://dev2.ci.gpdb.pivotal.io/teams/gp-extensions/pipelines/pr.pljava/resources/pljava_pr and click ⟳ button there.
 
 TIPS: Just don't fork, name your branch as `<your_id>/<branch_name>` and push it here to create PR.
