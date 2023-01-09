@@ -1,6 +1,7 @@
 /.classpath
 /.project
 /.settings
+/.ccls-cache
 target/site
 target/staging
 target/javadoc-bundle-options
@@ -10,4 +11,4 @@ pljava-so/target/
 target/
 *.so
 *.zip
-concourse/secrets/
+compile_commands.json

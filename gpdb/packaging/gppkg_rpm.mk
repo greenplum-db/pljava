@@ -1,8 +1,8 @@
 # need VARS: OS ARCH PLJAVA_DIR PLJAVA_GPPKG
-# ???: where is GP_MAJORVERSION
 PGXS := $(shell pg_config --pgxs)
 include $(PGXS)
 include $(PLJAVA_DIR)/release.mk
+# GP_MAJORVERSION is defined in lib/postgresql/pgxs/src/Makefile.global
 GP_VERSION_NUM := $(GP_MAJORVERSION)
 
 PLJAVA_RPM_FLAGS=--define 'pljava_dir $(PLJAVA_DIR)' --define 'pljava_ver $(PLJAVA_PIVOTAL_VERSION)' --define 'pljava_rel $(PLJAVA_PIVOTAL_RELEASE)'
@@ -35,7 +35,7 @@ ifdef DEPENDENT_RPMS
 		cp $${dep_rpm} gppkg/deps; \
 	done
 endif
-	gppkg --build gppkg 
+	gppkg --build gppkg --filename $(TARGET_GPPKG)
 
 clean:
 	rm -rf RPMS BUILD SPECS
