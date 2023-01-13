@@ -75,7 +75,7 @@ test:
 	echo 'host    all      pljava_test   0.0.0.0/0    trust # PLJAVA' >> $(MASTER_DATA_DIRECTORY)/pg_hba.conf
 	echo 'local   all      pljava_test                trust # PLJAVA' >> $(MASTER_DATA_DIRECTORY)/pg_hba.conf
 	gpstop -u
-	cd $(PROJDIR)/gpdb/tests && $(REGRESS_DIR)/src/test/regress/pg_regress --psqldir=$(bindir) $(REGRESS_OPTS) $(REGRESS)
+	cd $(PROJDIR)/gpdb/tests && $(REGRESS_DIR)/src/test/regress/pg_regress $(REGRESS_OPTS) $(REGRESS)
 
 localconfig:
 	gpconfig -c pljava_classpath -v \'$(PROJDIR)/target/\'
