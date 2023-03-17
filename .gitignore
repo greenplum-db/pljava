@@ -12,3 +12,5 @@ target/
 *.so
 *.zip
 compile_commands.json
+
+gpdb/packaging/gppkg_spec_v2.yml

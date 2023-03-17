@@ -17,10 +17,16 @@ include $(PLJAVA_DIR)/release.mk
 PLJAVA_GPPKG=pljava-$(PLJAVA_PIVOTAL_VERSION)-gp$(GP_VERSION_NUM)-$(OS)_$(ARCH).gppkg
 export PLJAVA_GPPKG
 
+ifeq ($(GP_MAJORVERSION), 7)
+include gppkg.mk
+else
+
 ifneq (,$(findstring ubuntu,$(OS)))
 include gppkg_deb.mk
 else
 include gppkg_rpm.mk
+endif
+
 endif
 #
 # Generic rules to build gppkgs included here

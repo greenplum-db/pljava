@@ -4,12 +4,10 @@ set -exo pipefail
 
 CWDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOP_DIR=${CWDIR}/../../../
-CURRENT_VERSION=$(cat /home/gpadmin/pljava_src/VERSION)
 
 source "${TOP_DIR}/gpdb_src/concourse/scripts/common.bash"
 function pkg() {
     [ -f /opt/gcc_env.sh ] && source /opt/gcc_env.sh
-    source /usr/local/greenplum-db-devel/greenplum_path.sh
 
     pushd pljava_src
       make

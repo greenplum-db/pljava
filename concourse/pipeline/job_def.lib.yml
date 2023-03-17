@@ -189,6 +189,9 @@ config:
     - name: bin_gpdb
     - name: pljava_src
     - name: gpdb_src
+#@   if conf['gpdb_ver'] == 7:
+    - name: bin_gppkg
+#@   end
   outputs:
     - name: bin_pljava
   run:
@@ -216,6 +219,9 @@ in_parallel:
         - name: pljava_src
         - name: bin_pljava
         - name: gpdb_src
+#@   if conf['gpdb_ver'] == 7:
+        - name: bin_gppkg
+#@   end
       run:
         path: pljava_src/concourse/scripts/entry.sh
         args:
@@ -238,6 +244,9 @@ in_parallel:
 #@   add_res_by_name(res_map, "bin_pljava_intermediates")
 #@   add_res_by_name(res_map, "bin_maven")
 #@   add_res_by_conf(res_map, conf)
+#@   if conf['gpdb_ver'] == 7:
+#@     add_res_by_name(res_map, "bin_gppkg")
+#@   end
 name: #@ build_test_job_name(conf)
 max_in_flight: 10
 on_failure: #@ trigger["on_failure"]
@@ -259,6 +268,11 @@ plan:
   - get: #@ test_image
 #@   end
   - get: #@ conf["res_gpdb_bin"]
+#@   if conf['gpdb_ver'] == 7:
+  - get: bin_gppkg
+    params:
+      unpack: true
+#@   end
 - #@ _build_task(conf)
 - #@ _test_task(conf)
 - put: #@ conf["res_intermediates_bin"]

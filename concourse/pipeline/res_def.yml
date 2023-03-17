@@ -115,6 +115,12 @@ resources:
     repository: gcr.io/data-gpdb-public-images/gpdb6-ubuntu18.04-test
     tag: latest
 # GPDB7
+- name: bin_gppkg
+  type: gcs
+  source:
+    bucket: pivotal-gpdb-concourse-resources-prod
+    json_key: ((concourse-gcs-resources-service-account-key))
+    regexp: gppkg/released/gpdb7/gppkg-(.*).tar.gz
 # build
 - name: rocky8-gpdb7-image-build
   type: registry-image

@@ -31,9 +31,10 @@ JAVA_HOME := $(PLJAVA_HOME)
 PLJAVADATA = $(DESTDIR)$(datadir)/pljava
 PLJAVALIB  = $(DESTDIR)$(pkglibdir)/java
 PLJAVAEXT  = $(DESTDIR)$(datadir)/extension
+GP_ENV_DIR = $(DESTDIR)${sysconfdir}/environment.d
 
 REGRESS_OPTS = --dbname=pljava_test --create-role=pljava_test
-REGRESS = pljava_ext_init pljava_functions pljava_test pljava_ext_cleanup pljava_init pljava_functions pljava_test pljava_uninstall
+REGRESS = pljava_ext_init pljava_functions pljava_test pljava_ext_cleanup pljava_init pljava_functions pljava_test
 REGRESS_DIR = $(top_builddir)
 
 .DEFAULT_GOAL := build
@@ -52,7 +53,15 @@ installdirs:
 	$(MKDIR_P) '$(PLJAVADATA)/docs'
 	$(MKDIR_P) '$(PLJAVAEXT)'
 
-install: installdirs install-lib
+ifeq ($(GP_MAJORVERSION), 7)
+installconfs:
+	$(MKDIR_P) '$(GP_ENV_DIR)'
+	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/10-pljava.conf' '$(GP_ENV_DIR)'
+else
+installconfs:
+endif
+
+install: installdirs install-lib installconfs
 	$(INSTALL_DATA) '$(PROJDIR)/pljava/target/pljava-$(PLJAVA_OSS_VERSION).jar'                   '$(PLJAVALIB)/pljava.jar'
 	$(INSTALL_DATA) '$(PROJDIR)/pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar' '$(PLJAVALIB)/examples.jar'
 	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/install.sql'                                    '$(PLJAVADATA)'
@@ -69,7 +78,9 @@ install: installdirs install-lib
 uninstall: uninstall-lib 
 	rm -rf '$(PLJAVALIB)'
 	rm -rf '$(PLJAVADATA)'
-	
+	rm -rf '$(GP_ENV_DIR)/10-pljava.conf'
+	find $(PLJAVAEXT) -name "pljava*" | xargs rm -rf
+
 test:
 	sed -i '/.* # PLJAVA.*/d' $(MASTER_DATA_DIRECTORY)/pg_hba.conf
 	echo 'host    all      pljava_test   0.0.0.0/0    trust # PLJAVA' >> $(MASTER_DATA_DIRECTORY)/pg_hba.conf
