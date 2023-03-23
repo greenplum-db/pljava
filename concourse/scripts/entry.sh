@@ -47,7 +47,7 @@ _determine_os() {
 }
 
 _determine_gp_major_version() {
-    grep -oP '.*GP_MAJORVERSION.*"\K[^"]+' "${GPHOME}/include/pg_config.h"
+    grep -oP '.*GP_MAJORVERSION.*"\K[^"]+' "/usr/local/greenplum-db-devel/include/pg_config.h"
 }
 
 _determine_os
