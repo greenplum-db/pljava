@@ -18,7 +18,7 @@ PLJAVA_GPPKG=pljava-$(PLJAVA_PIVOTAL_VERSION)-gp$(GP_VERSION_NUM)-$(OS)_$(ARCH).
 export PLJAVA_GPPKG
 
 ifeq ($(GP_MAJORVERSION), 7)
-include gppkg.mk
+include gppkg_v2.mk
 else
 
 ifneq (,$(findstring ubuntu,$(OS)))
