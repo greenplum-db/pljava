@@ -36,7 +36,9 @@ function _main() {
 
     # test uninstall & install again
     uninstall_pljava
+    pushd "${tmp_dir}"
     install_pljava
+    popd
 }
 
 _main

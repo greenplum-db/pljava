@@ -28,10 +28,13 @@ PLJAVA_HOME := $(JAVA_HOME)
 include $(PGXS)
 JAVA_HOME := $(PLJAVA_HOME)
 
+# sysconfdir cannot be used since it points to $GPHOME/etc/postgresql
+gpetcdir := ${GPHOME}/etc
+
 PLJAVADATA = $(DESTDIR)$(datadir)/pljava
 PLJAVALIB  = $(DESTDIR)$(pkglibdir)/java
 PLJAVAEXT  = $(DESTDIR)$(datadir)/extension
-GP_ENV_DIR = $(DESTDIR)${sysconfdir}/environment.d
+GP_ENV_DIR = $(DESTDIR)${gpetcdir}/environment.d
 
 REGRESS_OPTS = --dbname=pljava_test --create-role=pljava_test
 REGRESS = pljava_ext_init pljava_functions pljava_test pljava_ext_cleanup pljava_init pljava_functions pljava_test

@@ -21,7 +21,8 @@ gppkg_spec_v2.yml: gppkg_spec_v2.yml.in
 		DESTDIR=$(PWD)/gppkg_build/files \
 		libdir=/lib/postgresql \
 		pkglibdir=/lib/postgresql \
-		datadir=/share/postgresql
+		datadir=/share/postgresql \
+		gpetcdir=/etc
 	$(GPPKG) build \
 		--input $(PWD)/gppkg_build/files \
 		--config gppkg_spec_v2.yml \
