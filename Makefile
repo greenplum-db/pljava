@@ -59,7 +59,7 @@ installdirs:
 ifeq ($(GP_MAJORVERSION), 7)
 installconfs:
 	$(MKDIR_P) '$(GP_ENV_DIR)'
-	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/10-pljava.conf' '$(GP_ENV_DIR)'
+	$(INSTALL_DATA) '$(PROJDIR)/gpdb/installation/30-pljava.conf' '$(GP_ENV_DIR)'
 else
 installconfs:
 endif
