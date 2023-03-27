@@ -1,0 +1,7 @@
+Pkgname: pljava
+Format: V2
+Version: #gppkgver
+Architecture: #arch
+OS: #os
+GPDBVersion: #gpver
+Description: Provides a procedural language implementation of Java for the Greenplum Database.

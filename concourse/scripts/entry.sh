@@ -46,6 +46,10 @@ _determine_os() {
   BLDARCH="${OS_NAME}_x86_64"
 }
 
+_determine_gp_major_version() {
+    grep -oP '.*GP_MAJORVERSION.*"\K[^"]+' "/usr/local/greenplum-db-devel/include/pg_config.h"
+}
+
 _determine_os
 
 # Global ENV defines
@@ -100,10 +104,20 @@ function install_gpdb() {
     [ ! -d /usr/local/greenplum-db-devel ] && mkdir -p /usr/local/greenplum-db-devel
     tar -xzf "${CONCOURSE_WORK_DIR}"/bin_gpdb/*.tar.gz -C /usr/local/greenplum-db-devel
     chown -R gpadmin:gpadmin /usr/local/greenplum-db-devel
+    GP_MAJOR_VERSION=$(_determine_gp_major_version)
 }
 
 function setup_java_home() {
     JAVA_HOME=$(dirname "$(dirname "$(readlink -f "$(which javac)")")")
+}
+
+# The new gppkg is not a part of gpdb binary yet
+function setup_gppkg() {
+    if [ -f "$CONCOURSE_WORK_DIR/bin_gppkg/gppkg" ]; then
+        # Rename the old gppkg
+        mv /usr/local/greenplum-db-devel/bin/gppkg /usr/local/greenplum-db-devel/bin/gppkg.old
+        cp "$CONCOURSE_WORK_DIR/bin_gppkg/gppkg" /usr/local/greenplum-db-devel/bin
+    fi
 }
 
 function setup_gpadmin_bashrc() {
@@ -119,6 +133,7 @@ function setup_gpadmin_bashrc() {
         echo "export JAVA_HOME=${JAVA_HOME}"
         echo "export M2_HOME=${M2_HOME}"
         echo "export PATH=${M2_HOME}/bin:\$PATH"
+        echo "export GP_MAJOR_VERSION=${GP_MAJOR_VERSION}"
     } >> /home/gpadmin/.bashrc
 }
 
@@ -127,6 +142,11 @@ setup_gpadmin
 install_gpdb
 setup_java_home
 setup_gpadmin_bashrc
+setup_gppkg
+
+# FIXME: Remove this when https://github.com/greenplum-db/gpdb/pull/15254 is released
+sed -i "s|for env.*do|for env in \$(find \"\${GPHOME}/etc/environment.d\" -regextype sed -regex '.*\\\/[0-9][0-9]-.*\\\.conf\$' -type f \| sort -n); do|g" \
+    /usr/local/greenplum-db-devel/greenplum_path.sh
 
 # Do the special setup with root permission for the each task, then run the real task script with
 # gpadmin. bashrc won't be read by 'su', it needs to be sourced explicitly.
