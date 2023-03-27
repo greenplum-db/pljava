@@ -62,7 +62,7 @@ build_type: #@ "Release" if release_build else "Debug"
 #@ def rhel8_gpdb7_conf(release_build=False):
 res_build_image: rocky8-gpdb7-image-build
 res_test_images: [rocky8-gpdb7-image-test, rhel8-gpdb7-image-test]
-res_gpdb_bin: #@ "bin_gpdb7_rhel8" + ("" if release_build else "_debug")
+res_gpdb_bin: #@ "bin_gpdb7_el8" + ("" if release_build else "_debug")
 res_intermediates_bin: #@ inter_bin_name("bin_pljava_gpdb7_rhel8_intermediates", release_build)
 release_bin: bin_pljava_gpdb7_rhel8_release
 os: rhel8
