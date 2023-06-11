@@ -39,9 +39,9 @@ REGRESS_DIR = $(top_builddir)
 .DEFAULT_GOAL := build
 
 .PHONY: build installdirs install uninstall test localconfig targetconfig installcheck targetcheck release
-	
+
 build:
-	mvn clean install
+	mvn -X -e clean install
 	cp $(PROJDIR)/pljava-so/target/nar/pljava-so-$(PLJAVA_OSS_VERSION)-amd64-Linux-gpp-plugin/lib/amd64-Linux-gpp/plugin/libpljava-so-$(PLJAVA_OSS_VERSION).so $(PROJDIR)/$(MODULE_big).so
 	cp $(PROJDIR)/pljava/target/pljava-$(PLJAVA_OSS_VERSION).jar $(PROJDIR)/target/pljava.jar
 	cp $(PROJDIR)/pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar $(PROJDIR)/target/examples.jar

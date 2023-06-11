@@ -151,6 +151,8 @@ void Exception_throwSPI(const char* function, int errCode)
 
 void Exception_throw_ERROR(const char* funcName)
 {
+	ereport(INFO, (errmsg("Enter Exception_throw_ERROR")));
+
 	jobject ex;
 	PG_TRY();
 	{

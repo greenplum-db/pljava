@@ -20,7 +20,18 @@ import java.util.logging.Logger;
  * level name.
  */
 public class LoggerTest {
-	public static void logMessage(String logLevel, String message) {
-		Logger.getAnonymousLogger().log(Level.parse(logLevel), message);
+	// public static void logMessage(String logLevel, String message) {
+	// Logger.getAnonymousLogger().log(Level.parse(logLevel), message);
+	// }
+
+	public static void logMessage(final String logLevel, final String message) {
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Logger.getAnonymousLogger().log(Level.parse(logLevel), message);
+			}
+		}, "TestThread");
+
+		thread.start();
 	}
 }

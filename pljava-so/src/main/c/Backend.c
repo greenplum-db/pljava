@@ -215,6 +215,10 @@ static void initsequencer(enum initstage is, bool tolerant);
  */
 static void initsequencer(enum initstage is, bool tolerant)
 {
+	static int _created_vm = 0;
+	/* static bool _flag = true; */
+	/* while (_flag) ; */
+
 	JVMOptList optList;
 	Invocation ctx;
 	jint JNIresult;
@@ -282,6 +286,7 @@ static void initsequencer(enum initstage is, bool tolerant)
 			JVMOptList_addVisualVMName(&optList);
 		JVMOptList_add(&optList, "vfprintf", (void*)my_vfprintf, true);
 		JVMOptList_add(&optList, "-Xss2m", 0, true);
+		JVMOptList_add(&optList, "-XX:ThreadStackSize=2048", 0, true);
 #ifndef GCJ
 		JVMOptList_add(&optList, "-Xrs", 0, true);
 #endif
@@ -314,6 +319,7 @@ static void initsequencer(enum initstage is, bool tolerant)
 		jvmStartedAtLeastOnce = true;
 		elog(DEBUG2, "successfully created Java virtual machine");
 		initstage = IS_JAVAVM_STARTED;
+		_created_vm++;
 
 	case IS_JAVAVM_STARTED:
 #ifdef USE_PLJAVA_SIGHANDLERS
@@ -333,11 +339,33 @@ static void initsequencer(enum initstage is, bool tolerant)
 			initJavaSession();
 			Invocation_popBootContext();
 			initstage = IS_PLJAVA_FOUND;
+
+			/* if (_created_vm) */
+			/* { */
+			/* 	ereport(INFO, (errmsg("Enter 2rd in PG_TRY. PG_TRY InterruptHoldoffCount = %d", InterruptHoldoffCount))); */
+			/* } */
+
+			ereport(INFO, (errmsg("_created_vm=%d", _created_vm)));
+			_created_vm++;
+			/* ereport(INFO, (errmsg("PG_TRY InterruptHoldoffCount = %d", InterruptHoldoffCount))); */
+
+			/* if (!_flag) */
+			/* { */
+			/* 	ereport(ERROR, (errmsg("Report ERROR in PG_TRY"))); */
+			/* } */
+			// InterruptHoldoffCount
+
+			/* ereport(ERROR, (errmsg("Report ERROR in PG_TRY"))); */
 		}
 		PG_CATCH();
 		{
+			/* ereport(INFO, (errmsg("PG_CATCH 1 InterruptHoldoffCount = %d", InterruptHoldoffCount))); */
+
 			MemoryContextSwitchTo(ctx.upperContext); /* leave ErrorContext */
 			Invocation_popBootContext();
+
+			/* ereport(INFO, (errmsg("PG_CATCH 2 InterruptHoldoffCount = %d", InterruptHoldoffCount))); */
+
 			initstage = IS_MISC_ONCE_DONE;
 			/* We can't stay here...
 			 */
@@ -355,6 +383,8 @@ static void initsequencer(enum initstage is, bool tolerant)
 				 */
 				FlushErrorState();
 			}
+
+			/* ereport(INFO, (errmsg("PG_CATCH 3 InterruptHoldoffCount = %d", InterruptHoldoffCount))); */
 		}
 		PG_END_TRY();
 		if ( IS_PLJAVA_FOUND != initstage )

@@ -324,6 +324,7 @@
 				<!-- uncomment the next line if you need to configure your compiler (e.g. clang)
 						<name>${CPP_COMPILER}</name>
 				-->
+						<debug>true</debug>
 						<defines>
 							<define>PLJAVA_SO_VERSION=${project.version}</define>
 						</defines>
@@ -335,6 +336,9 @@
 							<includePath>${basedir}/src/main/include/</includePath>
 							<includePath>${basedir}/target/nar/javah-include/</includePath>
 						</includePaths>
+						<options>
+						  <option>-g3</option>
+						</options>
 					</c>
 
 					<!-- Options/extra libs/etc. for the linker go here. -->

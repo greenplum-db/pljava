@@ -15,6 +15,9 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.lang.InterruptedException;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Provides a {@link #createIterator function} producing as many rows as
@@ -34,6 +37,30 @@ public class RandomInts implements Iterator<Integer> {
 	public RandomInts(int rowCount) throws SQLException {
 		m_rowCount = rowCount;
 		m_random = new Random(System.currentTimeMillis());
+		// throw new NoSuchElementException();
+
+		Thread th = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// how to ereport(ERROR) ?
+				Logger.getAnonymousLogger().log(Level.parse("CONFIG"), "Log from created thread");
+				// throw new RuntimeException("This is a test exception");
+			}
+		}, "MyThreadException");
+
+		Logger.getAnonymousLogger().log(Level.parse("CONFIG"), "Log from main thread 1");
+
+		th.start();
+
+		// try {
+		// 	th.join();
+		// 	throw new RuntimeException("This is a test exception in MainThread");
+		// } catch (InterruptedException e) {
+		// }
+
+		// Logger.getAnonymousLogger().log(Level.parse("CONFIG"), "Log from main thread 2");
+
+		// throw new SQLException("This is SQLException");
 	}
 
 	@Override
