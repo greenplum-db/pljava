@@ -305,7 +305,7 @@ public class Backend
 	/**
 	 * Returns <code>true</code> if the backend is awaiting a return from a
 	 * call into the JVM. This method will only return <code>false</code>
-	 * when called from a thread other then the main thread and the main
+	 * when called from a thread other than the main thread and the main
 	 * thread has returned from the call into the JVM.
 	 */
 	public native static boolean isCallingJava();

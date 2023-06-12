@@ -80,10 +80,15 @@ void Exception_throw(int errCode, const char* errMessage, ...)
 	jstring sqlState;
 	jobject ex;
 	int idx;
+	volatile int savedInterruptHoldoffCount;
+	volatile int savedQueryCancelHoldoffCount;
 
 	va_start(args, errMessage);
 	vsnprintf(buf, sizeof(buf), errMessage, args);
 	ereport(DEBUG3, (errcode(errCode), errmsg("%s", buf)));
+
+	savedInterruptHoldoffCount = InterruptHoldoffCount;
+	savedQueryCancelHoldoffCount = QueryCancelHoldoffCount;
 
 	PG_TRY();
 	{
@@ -108,6 +113,9 @@ void Exception_throw(int errCode, const char* errMessage, ...)
 	}
 	PG_CATCH();
 	{
+		InterruptHoldoffCount = savedInterruptHoldoffCount;
+		QueryCancelHoldoffCount = savedQueryCancelHoldoffCount;
+
 		ereport(WARNING, (errcode(errCode), errmsg("Exception while generating exception: %s", buf)));
 	}
 	PG_END_TRY();
