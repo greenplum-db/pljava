@@ -14,3 +14,4 @@ target/
 compile_commands.json
 
 gpdb/packaging/gppkg_spec_v2.yml
+gpdb/tests/results
