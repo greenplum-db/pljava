@@ -158,6 +158,19 @@ case "$1" in
             /home/gpadmin/pljava_src/concourse/scripts/build_pljava.sh"
         ;;
     test)
+        echo jdk_ver, $2
+        jdk_ver=$2
+        if [ $jdk_ver = "11" ]; then
+            echo using java $jdk_ver
+            sudo yum install -y java-11-openjdk-devel
+
+            sudo update-alternatives --set java  $(alternatives --list | grep java-11 | grep -E "java$" | cut -f 3)
+            sudo update-alternatives --set javac  $(alternatives --list | grep java-11 | grep -E "javac$" | cut -f 3)
+            export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+            echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk' >> /home/gpadmin/.bashrc
+        else
+            echo using java $jdk_ver
+        fi
         # Create GPDB cluster
         source "/home/gpadmin/gpdb_src/concourse/scripts/common.bash"
         make_cluster

@@ -85,6 +85,9 @@ uninstall: uninstall-lib
 	find $(PLJAVAEXT) -name "pljava*" | xargs rm -rf
 
 test:
+	javac -version
+	java -version
+	echo $(JAVA_HOME)
 	sed -i '/.* # PLJAVA.*/d' $(MASTER_DATA_DIRECTORY)/pg_hba.conf
 	echo 'host    all      pljava_test   0.0.0.0/0    trust # PLJAVA' >> $(MASTER_DATA_DIRECTORY)/pg_hba.conf
 	echo 'local   all      pljava_test                trust # PLJAVA' >> $(MASTER_DATA_DIRECTORY)/pg_hba.conf
