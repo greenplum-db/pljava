@@ -162,10 +162,13 @@ case "$1" in
         jdk_ver=$2
         if [ $jdk_ver = "11" ]; then
             echo using java $jdk_ver
-            sudo yum install -y java-11-openjdk-devel
+            yum install -y java-11-openjdk-devel
 
-            sudo update-alternatives --set java  $(alternatives --list | grep java-11 | grep -E "java$" | cut -f 3)
-            sudo update-alternatives --set javac  $(alternatives --list | grep java-11 | grep -E "javac$" | cut -f 3)
+            java_path=$(alternatives --list | grep java-11 | grep -E "java$" | cut -f 3)
+            update-alternatives --set java $java_path
+            javac_path=$(alternatives --list | grep java-11 | grep -E "javac$" | cut -f 3)
+            update-alternatives --set javac $javac_path
+
             export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
             echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk' >> /home/gpadmin/.bashrc
         else
