@@ -149,6 +149,9 @@ function install_java11() {
         apt install -y openjdk-11-jdk
         export JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
         ;;
+    *)
+        return 0
+    ;;
     esac
 
     echo "export JAVA_HOME=$JAVA_HOME" >> /home/gpadmin/.bashrc
