@@ -20,6 +20,7 @@ release_bin: bin_pljava_gpdb6_rhel6_release
 os: rhel6
 gpdb_ver: 6
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8]
 #@ end
 
 #! Job config for centos7
@@ -32,6 +33,7 @@ release_bin: bin_pljava_gpdb6_rhel7_release
 os: rhel7
 gpdb_ver: 6
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8, 11]
 #@ end
 
 #! Job config for rhel8
@@ -44,6 +46,7 @@ release_bin: bin_pljava_gpdb6_rhel8_release
 os: rhel8
 gpdb_ver: 6
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8, 11]
 #@ end
 
 #! Job config for ubuntu18
@@ -56,6 +59,7 @@ release_bin: bin_pljava_gpdb6_ubuntu18_release
 os: ubuntu18.04
 gpdb_ver: 6
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8, 11]
 #@ end
 
 #! Job config for GPDB7, rhel8
@@ -68,6 +72,7 @@ release_bin: bin_pljava_gpdb7_rhel8_release
 os: rhel8
 gpdb_ver: 7
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8, 11]
 #@ end
 
 #! The entry point of a pipeline. The job name must be 'entrance'.
@@ -275,8 +280,9 @@ plan:
       unpack: true
 #@   end
 - #@ _build_task(conf)
-- #@ _test_task(conf)
-- #@ _test_task(conf, 11)
+#@ for jdk_ver in conf["jdk_vers"]:
+- #@ _test_task(conf, jdk_ver)
+#@ end
 - put: #@ conf["res_intermediates_bin"]
   params:
     file: bin_pljava/pljava.tar.gz
