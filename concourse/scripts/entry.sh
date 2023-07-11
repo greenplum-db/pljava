@@ -137,6 +137,25 @@ function setup_gpadmin_bashrc() {
     } >> /home/gpadmin/.bashrc
 }
 
+function install_java11() {
+    echo OS_NAME, $OS_NAME
+    case "$OS_NAME" in
+    rhel7|rhel8)
+        yum install -y java-11-openjdk-devel
+        export JAVA_HOME=$(alternatives --list | grep java-11 | grep java_sdk_11_openjdk | cut -f 3)
+        ;;
+    ubuntu18.04)
+        apt update
+        apt install -y openjdk-11-jdk
+        export JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
+        ;;
+    esac
+
+    echo "export JAVA_HOME=$JAVA_HOME" >> /home/gpadmin/.bashrc
+    update-alternatives --set java $JAVA_HOME/bin/java
+    update-alternatives --set javac $JAVA_HOME/bin/javac
+}
+
 # Setup common environment
 setup_gpadmin
 install_gpdb
@@ -162,15 +181,7 @@ case "$1" in
         jdk_ver=$2
         if [ $jdk_ver = "11" ]; then
             echo using java $jdk_ver
-            yum install -y java-11-openjdk-devel
-
-            java_path=$(alternatives --list | grep java-11 | grep -E "java$" | cut -f 3)
-            update-alternatives --set java $java_path
-            javac_path=$(alternatives --list | grep java-11 | grep -E "javac$" | cut -f 3)
-            update-alternatives --set javac $javac_path
-
-            export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
-            echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk' >> /home/gpadmin/.bashrc
+            install_java11
         else
             echo using java $jdk_ver
         fi
