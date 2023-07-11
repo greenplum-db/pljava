@@ -115,7 +115,10 @@ function setup_java_home() {
 function setup_gppkg() {
     if [ -f "$CONCOURSE_WORK_DIR/bin_gppkg/gppkg" ]; then
         # Rename the old gppkg
-        mv /usr/local/greenplum-db-devel/bin/gppkg /usr/local/greenplum-db-devel/bin/gppkg.old
+        if [ -f /usr/local/greenplum-db-devel/bin/gppkg ]; then
+            mv /usr/local/greenplum-db-devel/bin/gppkg /usr/local/greenplum-db-devel/bin/gppkg.old
+        fi
+
         cp "$CONCOURSE_WORK_DIR/bin_gppkg/gppkg" /usr/local/greenplum-db-devel/bin
     fi
 }
