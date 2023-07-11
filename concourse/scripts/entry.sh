@@ -153,6 +153,7 @@ function install_java11() {
         export JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
         ;;
     *)
+        # No java-11 on centos6, skip
         return 0
     ;;
     esac
