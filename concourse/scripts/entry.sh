@@ -141,26 +141,32 @@ function setup_gpadmin_bashrc() {
 }
 
 function install_java11() {
-    echo OS_NAME, $OS_NAME
+    echo OS_NAME, "$OS_NAME"
     case "$OS_NAME" in
     rhel7|rhel8)
         yum install -y java-11-openjdk-devel
-        export JAVA_HOME=$(alternatives --list | grep java-11 | grep java_sdk_11_openjdk | cut -f 3)
+        JAVA_HOME=$(alternatives --list | grep java-11 | grep java_sdk_11_openjdk | cut -f 3)
+        export JAVA_HOME
         ;;
     ubuntu18.04)
         apt update
         apt install -y openjdk-11-jdk
-        export JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
+        JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
+        export JAVA_HOME
         ;;
     *)
         # No java-11 on centos6, skip
-        return 0
+        echo "Can not install java-11 on $OS_NAME"
+        return 1
     ;;
     esac
 
     echo "export JAVA_HOME=$JAVA_HOME" >> /home/gpadmin/.bashrc
     update-alternatives --set java $JAVA_HOME/bin/java
     update-alternatives --set javac $JAVA_HOME/bin/javac
+
+    # Verify java version
+    java -version 2>&1 | grep 11
 }
 
 # Setup common environment
@@ -184,13 +190,13 @@ case "$1" in
             /home/gpadmin/pljava_src/concourse/scripts/build_pljava.sh"
         ;;
     test)
-        echo jdk_ver, $2
+        echo jdk_ver, "$2"
         jdk_ver=$2
-        if [ $jdk_ver = "11" ]; then
-            echo using java $jdk_ver
+        if [ "$jdk_ver" = "11" ]; then
+            echo using java "$jdk_ver"
             install_java11
         else
-            echo using java $jdk_ver
+            echo using java "$jdk_ver"
         fi
         # Create GPDB cluster
         source "/home/gpadmin/gpdb_src/concourse/scripts/common.bash"
