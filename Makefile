@@ -97,6 +97,9 @@ test: show_java_version
 	cd $(PROJDIR)/gpdb/tests && $(REGRESS_DIR)/src/test/regress/pg_regress $(REGRESS_OPTS) $(REGRESS)
 
 examples: show_java_version
+	# compile dependencies for pljava-examples such as pljava-api, but do not install them
+	mvn clean install
+	# compile pljava-examples and install it
 	cd $(PROJDIR)/pljava-examples/ && mvn clean package
 	cp pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar $(PROJDIR)/target/examples.jar
 	$(INSTALL_DATA) '$(PROJDIR)/pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar' '$(PLJAVALIB)/examples.jar'
