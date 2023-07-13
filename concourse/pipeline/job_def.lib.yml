@@ -220,6 +220,7 @@ in_parallel:
     config:
       platform: linux
       inputs:
+        - name: bin_maven
         - name: bin_gpdb
         - name: pljava_src
         - name: bin_pljava
