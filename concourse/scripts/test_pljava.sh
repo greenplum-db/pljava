@@ -34,6 +34,8 @@ function _main() {
     # compile examples using current JDK version and run tests
     make examples
     time make targetcheck || cat gpdb/tests/regression.diffs
+    # restore examples to original state Or gppkg will failed to checksum
+    make restore_examples
     popd
 
     # test uninstall & install again

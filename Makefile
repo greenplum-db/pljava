@@ -103,7 +103,13 @@ examples: show_java_version
 	cd $(PROJDIR)/pljava-examples/ && mvn clean package
 	mkdir -p $(PROJDIR)/target
 	cp pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar $(PROJDIR)/target/examples.jar
+	# backup the original examples.jar
+	cp $(PLJAVALIB)/examples.jar /tmp/examples.bak.jar
 	$(INSTALL_DATA) '$(PROJDIR)/pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar' '$(PLJAVALIB)/examples.jar'
+
+restore_examples:
+	# restore the original examples.jar
+	cp /tmp/examples.bak.jar $(PLJAVALIB)/examples.jar
 
 localconfig:
 	gpconfig -c pljava_classpath -v \'$(PROJDIR)/target/\'
