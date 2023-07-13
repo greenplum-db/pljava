@@ -97,8 +97,8 @@ test: show_java_version
 	cd $(PROJDIR)/gpdb/tests && $(REGRESS_DIR)/src/test/regress/pg_regress $(REGRESS_OPTS) $(REGRESS)
 
 examples: show_java_version
-	# compile dependencies for pljava-examples such as pljava-api, but do not install them
-	cd $(PROJDIR)/pljava-api/ && mvn clean install
+	# compile dependencies for pljava-examples such as pljava-api
+	cd $(PROJDIR)/pljava-api/ && mvn install:install-file -Dfile=$(PLJAVALIB)/pljava.jar -DgroupId=org.postgresql -DartifactId=pljava-api -Dversion=$(PLJAVA_OSS_VERSION) -Dpackaging=jar -DgeneratePom=true
 	# compile pljava-examples and install it
 	cd $(PROJDIR)/pljava-examples/ && mvn clean package
 	cp pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar $(PROJDIR)/target/examples.jar
