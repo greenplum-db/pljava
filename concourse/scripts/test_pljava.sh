@@ -31,6 +31,8 @@ function _main() {
     gpstop -arf
 
     pushd /home/gpadmin/pljava_src
+    # compile examples using current JDK version and run tests
+    make examples
     time make targetcheck || cat gpdb/tests/regression.diffs
     popd
 
