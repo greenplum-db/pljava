@@ -98,7 +98,7 @@ test: show_java_version
 
 examples: show_java_version
 	# compile dependencies for pljava-examples such as pljava-api, but do not install them
-	mvn clean install
+	cd $(PROJDIR)/pljava-api/ && mvn clean install
 	# compile pljava-examples and install it
 	cd $(PROJDIR)/pljava-examples/ && mvn clean package
 	cp pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar $(PROJDIR)/target/examples.jar
