@@ -101,6 +101,7 @@ examples: show_java_version
 	cd $(PROJDIR)/pljava-api/ && mvn install:install-file -Dfile=$(PLJAVALIB)/pljava.jar -DgroupId=org.postgresql -DartifactId=pljava-api -Dversion=$(PLJAVA_OSS_VERSION) -Dpackaging=jar -DgeneratePom=true
 	# compile pljava-examples and install it
 	cd $(PROJDIR)/pljava-examples/ && mvn clean package
+	mkdir -p $(PROJDIR)/target
 	cp pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar $(PROJDIR)/target/examples.jar
 	$(INSTALL_DATA) '$(PROJDIR)/pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar' '$(PLJAVALIB)/examples.jar'
 
