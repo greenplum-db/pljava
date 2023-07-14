@@ -190,13 +190,10 @@ case "$1" in
             /home/gpadmin/pljava_src/concourse/scripts/build_pljava.sh"
         ;;
     test)
-        echo jdk_ver, "$2"
         jdk_ver=$2
+        echo using java "$jdk_ver"
         if [ "$jdk_ver" = "11" ]; then
-            echo using java "$jdk_ver"
             install_java11
-        else
-            echo using java "$jdk_ver"
         fi
         # Create GPDB cluster
         source "/home/gpadmin/gpdb_src/concourse/scripts/common.bash"
