@@ -205,3 +205,12 @@ select javatest.testSavepointSanity();
 select javatest.testTransactionRecovery();
 select javatest.getDateAsString()::date is not null;
 select javatest.getTimeAsString()::time is not null;
+
+CREATE OR REPLACE FUNCTION getProperty(VARCHAR)
+RETURNS VARCHAR
+AS 'java.lang.System.getProperty'
+LANGUAGE java;
+
+select getProperty('java.version');
+
+DROP FUNCTION getProperty(VARCHAR);
