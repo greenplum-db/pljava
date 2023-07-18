@@ -20,6 +20,7 @@ release_bin: bin_pljava_gpdb6_rhel6_release
 os: rhel6
 gpdb_ver: 6
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8]
 #@ end
 
 #! Job config for centos7
@@ -32,6 +33,7 @@ release_bin: bin_pljava_gpdb6_rhel7_release
 os: rhel7
 gpdb_ver: 6
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8, 11]
 #@ end
 
 #! Job config for rhel8
@@ -44,6 +46,7 @@ release_bin: bin_pljava_gpdb6_rhel8_release
 os: rhel8
 gpdb_ver: 6
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8, 11]
 #@ end
 
 #! Job config for ubuntu18
@@ -56,6 +59,7 @@ release_bin: bin_pljava_gpdb6_ubuntu18_release
 os: ubuntu18.04
 gpdb_ver: 6
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8, 11]
 #@ end
 
 #! Job config for GPDB7, rhel8
@@ -68,6 +72,7 @@ release_bin: bin_pljava_gpdb7_rhel8_release
 os: rhel8
 gpdb_ver: 7
 build_type: #@ "Release" if release_build else "Debug"
+jdk_vers: [8, 11]
 #@ end
 
 #! The entry point of a pipeline. The job name must be 'entrance'.
@@ -205,16 +210,17 @@ params:
   BUILD_TYPE: #@ conf["build_type"]
 #@ end
 
-#@ def _test_task(conf):
+#@ def _test_task(conf, jdk_ver=8):
 #@   images = conf['res_test_images']
 in_parallel:
 #@   for image in images:
 #@     test_os = image.split("-")[0]
-  - task: #@ "test_" + test_os
+  - task: #@ "test_" + test_os + "_java" + str(jdk_ver)
     timeout: 2h
     config:
       platform: linux
       inputs:
+        - name: bin_maven
         - name: bin_gpdb
         - name: pljava_src
         - name: bin_pljava
@@ -226,6 +232,7 @@ in_parallel:
         path: pljava_src/concourse/scripts/entry.sh
         args:
           - test
+          - #@ str(jdk_ver)
     image: #@ image
     input_mapping:
       bin_gpdb: #@ conf["res_gpdb_bin"]
@@ -274,7 +281,9 @@ plan:
       unpack: true
 #@   end
 - #@ _build_task(conf)
-- #@ _test_task(conf)
+#@ for jdk_ver in conf["jdk_vers"]:
+- #@ _test_task(conf, jdk_ver)
+#@ end
 - put: #@ conf["res_intermediates_bin"]
   params:
     file: bin_pljava/pljava.tar.gz

@@ -115,7 +115,10 @@ function setup_java_home() {
 function setup_gppkg() {
     if [ -f "$CONCOURSE_WORK_DIR/bin_gppkg/gppkg" ]; then
         # Rename the old gppkg
-        mv /usr/local/greenplum-db-devel/bin/gppkg /usr/local/greenplum-db-devel/bin/gppkg.old
+        if [ -f /usr/local/greenplum-db-devel/bin/gppkg ]; then
+            mv /usr/local/greenplum-db-devel/bin/gppkg /usr/local/greenplum-db-devel/bin/gppkg.old
+        fi
+
         cp "$CONCOURSE_WORK_DIR/bin_gppkg/gppkg" /usr/local/greenplum-db-devel/bin
     fi
 }
@@ -135,6 +138,35 @@ function setup_gpadmin_bashrc() {
         echo "export PATH=${M2_HOME}/bin:\$PATH"
         echo "export GP_MAJOR_VERSION=${GP_MAJOR_VERSION}"
     } >> /home/gpadmin/.bashrc
+}
+
+function install_java11() {
+    echo OS_NAME, "$OS_NAME"
+    case "$OS_NAME" in
+    rhel7|rhel8)
+        yum install -y java-11-openjdk-devel
+        JAVA_HOME=$(alternatives --list | grep java-11 | grep java_sdk_11_openjdk | cut -f 3)
+        export JAVA_HOME
+        ;;
+    ubuntu18.04)
+        apt update
+        apt install -y openjdk-11-jdk
+        JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
+        export JAVA_HOME
+        ;;
+    *)
+        # No java-11 on centos6, skip
+        echo "Can not install java-11 on $OS_NAME"
+        return 1
+    ;;
+    esac
+
+    echo "export JAVA_HOME=$JAVA_HOME" >> /home/gpadmin/.bashrc
+    update-alternatives --set java $JAVA_HOME/bin/java
+    update-alternatives --set javac $JAVA_HOME/bin/javac
+
+    # Verify java version
+    java -version 2>&1 | grep 11
 }
 
 # Setup common environment
@@ -158,6 +190,11 @@ case "$1" in
             /home/gpadmin/pljava_src/concourse/scripts/build_pljava.sh"
         ;;
     test)
+        jdk_ver=$2
+        echo using java "$jdk_ver"
+        if [ "$jdk_ver" = "11" ]; then
+            install_java11
+        fi
         # Create GPDB cluster
         source "/home/gpadmin/gpdb_src/concourse/scripts/common.bash"
         make_cluster

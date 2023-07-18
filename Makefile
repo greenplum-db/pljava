@@ -84,12 +84,32 @@ uninstall: uninstall-lib
 	rm -rf '$(GP_ENV_DIR)/10-pljava.conf'
 	find $(PLJAVAEXT) -name "pljava*" | xargs rm -rf
 
-test:
+show_java_version:
+	javac -version
+	java -version
+	echo $(JAVA_HOME)
+
+test: show_java_version
 	sed -i '/.* # PLJAVA.*/d' $(MASTER_DATA_DIRECTORY)/pg_hba.conf
 	echo 'host    all      pljava_test   0.0.0.0/0    trust # PLJAVA' >> $(MASTER_DATA_DIRECTORY)/pg_hba.conf
 	echo 'local   all      pljava_test                trust # PLJAVA' >> $(MASTER_DATA_DIRECTORY)/pg_hba.conf
 	gpstop -u
 	cd $(PROJDIR)/gpdb/tests && $(REGRESS_DIR)/src/test/regress/pg_regress $(REGRESS_OPTS) $(REGRESS)
+
+examples: show_java_version
+	# compile dependencies for pljava-examples such as pljava-api
+	cd $(PROJDIR)/pljava-api/ && mvn install:install-file -Dfile=$(PLJAVALIB)/pljava.jar -DgroupId=org.postgresql -DartifactId=pljava-api -Dversion=$(PLJAVA_OSS_VERSION) -Dpackaging=jar -DgeneratePom=true
+	# compile pljava-examples and install it
+	cd $(PROJDIR)/pljava-examples/ && mvn clean package
+	mkdir -p $(PROJDIR)/target
+	cp pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar $(PROJDIR)/target/examples.jar
+	# backup the original examples.jar
+	cp $(PLJAVALIB)/examples.jar /tmp/examples.bak.jar
+	$(INSTALL_DATA) '$(PROJDIR)/pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar' '$(PLJAVALIB)/examples.jar'
+
+restore_examples:
+	# restore the original examples.jar
+	cp /tmp/examples.bak.jar $(PLJAVALIB)/examples.jar
 
 localconfig:
 	gpconfig -c pljava_classpath -v \'$(PROJDIR)/target/\'

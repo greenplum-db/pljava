@@ -31,7 +31,11 @@ function _main() {
     gpstop -arf
 
     pushd /home/gpadmin/pljava_src
+    # compile examples using current JDK version and run tests
+    make examples
     time make targetcheck || cat gpdb/tests/regression.diffs
+    # restore examples to original state or gppkg will failed to checksum
+    make restore_examples
     popd
 
     # test uninstall & install again
