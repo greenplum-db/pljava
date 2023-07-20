@@ -199,7 +199,7 @@ function install_java() {
     update-alternatives --set javac $JAVA_HOME/bin/javac
 
     # Verify java version
-    java -version 2>&1 | grep 11
+    java -version 2>&1 | grep "$jdk_ver"
 }
 
 # Setup common environment
