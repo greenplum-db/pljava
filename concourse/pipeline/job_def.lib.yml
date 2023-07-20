@@ -59,7 +59,7 @@ release_bin: bin_pljava_gpdb6_ubuntu18_release
 os: ubuntu18.04
 gpdb_ver: 6
 build_type: #@ "Release" if release_build else "Debug"
-jdk_vers: [8, 11]
+jdk_vers: [8, 11, 17]
 #@ end
 
 #! Job config for GPDB7, rhel8

@@ -167,18 +167,26 @@ function install_java() {
             # No java-11 on centos6, skip
             echo "Can not install java-11 on $OS_NAME"
             return 1
-        ;;
+            ;;
         esac
     elif [ "$jdk_ver" = "17" ]; then
-        # Only test java17 on rhel8
-        if [ "$OS_NAME" = "rhel8" ]; then
+        case "$OS_NAME" in
+        rhel8)
             yum install -y java-17-openjdk-devel
             JAVA_HOME=$(alternatives --list | grep java-17 | grep java_sdk_17_openjdk | cut -f 3)
             export JAVA_HOME
-        else
+            ;;
+        ubuntu18.04)
+            apt update
+            apt install -y openjdk-17-jdk
+            JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
+            export JAVA_HOME
+            ;;
+        *)
             echo "Can not install java-17 on $OS_NAME"
             return 1
-        fi
+            ;;
+        esac
     fi
 
     if [ -z "$JAVA_HOME" ]; then
