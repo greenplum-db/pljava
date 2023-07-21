@@ -23,6 +23,7 @@ function _main() {
         echo "JAVA_VERSION must be specified"
         return 1
     fi
+    JAVA_VERSION="$1"
     echo "JAVA_VERSION=$JAVA_VERSION"
 
     local tmp_dir
@@ -38,7 +39,7 @@ function _main() {
 
     pushd /home/gpadmin/pljava_src
     # compile examples using current JDK version and run tests
-    JAVA_VERSION=$1 make examples
+    JAVA_VERSION="$JAVA_VERSION" make examples
     time make targetcheck || cat gpdb/tests/regression.diffs
     # restore examples to original state or gppkg will failed to checksum
     make restore_examples
