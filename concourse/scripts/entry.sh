@@ -141,16 +141,16 @@ function setup_gpadmin_bashrc() {
 }
 
 function install_java() {
-    local jdk_ver
-    jdk_ver=$1
-    if [ -z "$jdk_ver" ]; then
+    local JAVA_VERSION
+    JAVA_VERSION=$1
+    if [ -z "$JAVA_VERSION" ]; then
         echo "JDK version should be specified: install_java VER_NUM"
         return 1
     fi
 
     echo OS_NAME, "$OS_NAME"
 
-    if [ "$jdk_ver" = "11" ]; then
+    if [ "$JAVA_VERSION" = "11" ]; then
         case "$OS_NAME" in
         rhel7|rhel8)
             yum install -y java-11-openjdk-devel
@@ -169,7 +169,7 @@ function install_java() {
             return 1
             ;;
         esac
-    elif [ "$jdk_ver" = "17" ]; then
+    elif [ "$JAVA_VERSION" = "17" ]; then
         case "$OS_NAME" in
         rhel8)
             yum install -y java-17-openjdk-devel
@@ -199,7 +199,7 @@ function install_java() {
     update-alternatives --set javac $JAVA_HOME/bin/javac
 
     # Verify java version
-    java -version 2>&1 | grep "$jdk_ver"
+    java -version 2>&1 | grep "$JAVA_VERSION"
 }
 
 # Setup common environment
@@ -223,10 +223,10 @@ case "$1" in
             /home/gpadmin/pljava_src/concourse/scripts/build_pljava.sh"
         ;;
     test)
-        jdk_ver=$2
-        echo using java "$jdk_ver"
-        if [ "$jdk_ver" = "11" -o "$jdk_ver" = "17" ]; then
-            install_java "$jdk_ver"
+        JAVA_VERSION=$2
+        echo using java "$JAVA_VERSION"
+        if [ "$JAVA_VERSION" = "11" -o "$JAVA_VERSION" = "17" ]; then
+            install_java "$JAVA_VERSION"
         fi
         # Create GPDB cluster
         source "/home/gpadmin/gpdb_src/concourse/scripts/common.bash"
@@ -235,7 +235,7 @@ case "$1" in
         echo "source /home/gpadmin/gpdb_src/gpAux/gpdemo/gpdemo-env.sh" >> /home/gpadmin/.bashrc
         su gpadmin -c \
             "source /home/gpadmin/.bashrc &&\
-            /home/gpadmin/pljava_src/concourse/scripts/test_pljava.sh"
+            /home/gpadmin/pljava_src/concourse/scripts/test_pljava.sh $JAVA_VERSION"
         ;;
     *)
         echo "Unknown target task $1"
