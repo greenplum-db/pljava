@@ -211,6 +211,14 @@ RETURNS VARCHAR
 AS 'java.lang.System.getProperty'
 LANGUAGE java;
 
-select substring(getProperty('java.version') from '#"[0-9]+.[0-9]+#".%' for '#');
+WITH parse_version AS (
+    SELECT string_to_array(getProperty('java.version'), '.') AS version_array
+)
+SELECT
+    CASE
+        WHEN version_array[1] = '1' THEN version_array[2]
+        ELSE version_array[1]
+    END AS major_version
+FROM parse_version;
 
 DROP FUNCTION getProperty(VARCHAR);

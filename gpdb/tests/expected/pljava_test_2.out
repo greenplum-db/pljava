@@ -401,7 +401,7 @@ SELECT javatest.java_getSystemProperty('user.language');
 SELECT javatest.create_temp_file_trusted();
 ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)
 SELECT javatest.create_temp_file_trusted() FROM javatest.test;
-ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)  (seg0 slice1 10.117.190.141:6002 pid=88523) (JNICalls.c:78)
+ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)  (seg0 slice1 10.117.190.141:6002 pid=2279214) (JNICalls.c:78)
 SELECT * FROM javatest.create_temp_file_trusted();
 ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)
 -- org.postgresql.pljava.example.TupleReturn
@@ -649,7 +649,7 @@ SELECT id,name, salary FROM employees2 order by id;
 -- s/\(SOMEFILE\:SOMEFUNC\)//
 -- end_matchsubs
 SELECT javatest.transferPeople(1) FROM javatest.test;  -- should error
-ERROR:  function cannot execute on a QE slice because it accesses relation "javatest.employees1"  (seg0 slice1 10.117.190.141:6002 pid=88523)
+ERROR:  function cannot execute on a QE slice because it accesses relation "javatest.employees1"  (seg0 slice1 10.117.190.141:6002 pid=2279214)
 CONTEXT:  SQL statement "SELECT id, name, salary FROM employees1 WHERE salary > $1"
 select javatest.maxFromSetReturnExample(2,10);
  maxfromsetreturnexample 
@@ -691,10 +691,18 @@ CREATE OR REPLACE FUNCTION getProperty(VARCHAR)
 RETURNS VARCHAR
 AS 'java.lang.System.getProperty'
 LANGUAGE java;
-select substring(getProperty('java.version') from '#"[0-9]+.[0-9]+#".%' for '#');
- substring 
------------
- 17.0
+WITH parse_version AS (
+    SELECT string_to_array(getProperty('java.version'), '.') AS version_array
+)
+SELECT
+    CASE
+        WHEN version_array[1] = '1' THEN version_array[2]
+        ELSE version_array[1]
+    END AS major_version
+FROM parse_version;
+ major_version 
+---------------
+ 17
 (1 row)
 
 DROP FUNCTION getProperty(VARCHAR);
