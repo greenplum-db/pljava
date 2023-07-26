@@ -33,8 +33,10 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>${env.TEST_JAVA_VERSION}</source>
+					<target>${env.TEST_JAVA_VERSION}</target>
+					<!-- It's recommended to use release option from Java 9 and beyond -->
+					<release>${env.TEST_JAVA_VERSION}</release>
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<compilerArguments combine.self="override">
 					</compilerArguments>

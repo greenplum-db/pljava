@@ -140,33 +140,66 @@ function setup_gpadmin_bashrc() {
     } >> /home/gpadmin/.bashrc
 }
 
-function install_java11() {
-    echo OS_NAME, "$OS_NAME"
-    case "$OS_NAME" in
-    rhel7|rhel8)
-        yum install -y java-11-openjdk-devel
-        JAVA_HOME=$(alternatives --list | grep java-11 | grep java_sdk_11_openjdk | cut -f 3)
-        export JAVA_HOME
-        ;;
-    ubuntu18.04)
-        apt update
-        apt install -y openjdk-11-jdk
-        JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
-        export JAVA_HOME
-        ;;
-    *)
-        # No java-11 on centos6, skip
-        echo "Can not install java-11 on $OS_NAME"
+function install_java() {
+    local TEST_JAVA_VERSION
+    TEST_JAVA_VERSION=$1
+    if [ -z "$TEST_JAVA_VERSION" ]; then
+        echo "JDK version should be specified: install_java VER_NUM"
         return 1
-    ;;
-    esac
+    fi
+
+    echo OS_NAME, "$OS_NAME"
+
+    if [ "$TEST_JAVA_VERSION" = "11" ]; then
+        case "$OS_NAME" in
+        rhel7|rhel8)
+            yum install -y java-11-openjdk-devel
+            JAVA_HOME=$(alternatives --list | grep java-11 | grep java_sdk_11_openjdk | cut -f 3)
+            export JAVA_HOME
+            ;;
+        ubuntu18.04)
+            apt update
+            apt install -y openjdk-11-jdk
+            JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
+            export JAVA_HOME
+            ;;
+        *)
+            # No java-11 on centos6, skip
+            echo "Can not install java-11 on $OS_NAME"
+            return 1
+            ;;
+        esac
+    elif [ "$TEST_JAVA_VERSION" = "17" ]; then
+        case "$OS_NAME" in
+        rhel8)
+            yum install -y java-17-openjdk-devel
+            JAVA_HOME=$(alternatives --list | grep java-17 | grep java_sdk_17_openjdk | cut -f 3)
+            export JAVA_HOME
+            ;;
+        ubuntu18.04)
+            apt update
+            apt install -y openjdk-17-jdk
+            JAVA_HOME=$(java -XshowSettings:properties -version 2>&1  | grep java.home | xargs | cut -d '=' -f 2 | xargs)
+            export JAVA_HOME
+            ;;
+        *)
+            echo "Can not install java-17 on $OS_NAME"
+            return 1
+            ;;
+        esac
+    fi
+
+    if [ -z "$JAVA_HOME" ]; then
+        echo "JAVA_HOME is empty"
+        return 1
+    fi
 
     echo "export JAVA_HOME=$JAVA_HOME" >> /home/gpadmin/.bashrc
     update-alternatives --set java $JAVA_HOME/bin/java
     update-alternatives --set javac $JAVA_HOME/bin/javac
 
     # Verify java version
-    java -version 2>&1 | grep 11
+    java -version 2>&1 | grep "$TEST_JAVA_VERSION"
 }
 
 # Setup common environment
@@ -190,10 +223,10 @@ case "$1" in
             /home/gpadmin/pljava_src/concourse/scripts/build_pljava.sh"
         ;;
     test)
-        jdk_ver=$2
-        echo using java "$jdk_ver"
-        if [ "$jdk_ver" = "11" ]; then
-            install_java11
+        TEST_JAVA_VERSION=$2
+        echo using java "$TEST_JAVA_VERSION"
+        if [ "$TEST_JAVA_VERSION" = "11" -o "$TEST_JAVA_VERSION" = "17" ]; then
+            install_java "$TEST_JAVA_VERSION"
         fi
         # Create GPDB cluster
         source "/home/gpadmin/gpdb_src/concourse/scripts/common.bash"
@@ -202,7 +235,7 @@ case "$1" in
         echo "source /home/gpadmin/gpdb_src/gpAux/gpdemo/gpdemo-env.sh" >> /home/gpadmin/.bashrc
         su gpadmin -c \
             "source /home/gpadmin/.bashrc &&\
-            /home/gpadmin/pljava_src/concourse/scripts/test_pljava.sh"
+            /home/gpadmin/pljava_src/concourse/scripts/test_pljava.sh $TEST_JAVA_VERSION"
         ;;
     *)
         echo "Unknown target task $1"

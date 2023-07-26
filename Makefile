@@ -88,6 +88,7 @@ show_java_version:
 	javac -version
 	java -version
 	echo $(JAVA_HOME)
+	echo TEST_JAVA_VERSION=$(TEST_JAVA_VERSION)
 
 test: show_java_version
 	sed -i '/.* # PLJAVA.*/d' $(MASTER_DATA_DIRECTORY)/pg_hba.conf
@@ -100,7 +101,7 @@ examples: show_java_version
 	# compile dependencies for pljava-examples such as pljava-api
 	cd $(PROJDIR)/pljava-api/ && mvn install:install-file -Dfile=$(PLJAVALIB)/pljava.jar -DgroupId=org.postgresql -DartifactId=pljava-api -Dversion=$(PLJAVA_OSS_VERSION) -Dpackaging=jar -DgeneratePom=true
 	# compile pljava-examples and install it
-	cd $(PROJDIR)/pljava-examples/ && mvn clean package
+	TEST_JAVA_VERSION=$(TEST_JAVA_VERSION) cd $(PROJDIR)/pljava-examples/ && mvn clean package
 	mkdir -p $(PROJDIR)/target
 	cp pljava-examples/target/pljava-examples-$(PLJAVA_OSS_VERSION).jar $(PROJDIR)/target/examples.jar
 	# backup the original examples.jar

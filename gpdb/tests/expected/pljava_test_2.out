@@ -52,21 +52,21 @@ SELECT * FROM javatest.print('12:34:56-00'::time);
 (1 row)
 
 SELECT javatest.print('2016-02-14 08:09:10'::timestamp);
-                  print                   
-------------------------------------------
- Sunday, February 14, 2016 8:09:10 AM UTC
+                               print                                
+--------------------------------------------------------------------
+ Sunday, February 14, 2016 at 8:09:10 AM Coordinated Universal Time
 (1 row)
 
 SELECT javatest.print('2016-02-14 08:09:10'::timestamp) FROM javatest.test;
-                  print                   
-------------------------------------------
- Sunday, February 14, 2016 8:09:10 AM UTC
+                               print                                
+--------------------------------------------------------------------
+ Sunday, February 14, 2016 at 8:09:10 AM Coordinated Universal Time
 (1 row)
 
 SELECT * FROM javatest.print('2016-02-14 08:09:10'::timestamp);
-                  print                   
-------------------------------------------
- Sunday, February 14, 2016 8:09:10 AM UTC
+                               print                                
+--------------------------------------------------------------------
+ Sunday, February 14, 2016 at 8:09:10 AM Coordinated Universal Time
 (1 row)
 
  
@@ -401,7 +401,7 @@ SELECT javatest.java_getSystemProperty('user.language');
 SELECT javatest.create_temp_file_trusted();
 ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)
 SELECT javatest.create_temp_file_trusted() FROM javatest.test;
-ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)  (seg0 slice1 10.117.190.141:6002 pid=2262371) (JNICalls.c:78)
+ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)  (seg0 slice1 10.117.190.141:6002 pid=2279214) (JNICalls.c:78)
 SELECT * FROM javatest.create_temp_file_trusted();
 ERROR:  java.lang.SecurityException: read on /tmp/pljava_temp.txt (JNICalls.c:78)
 -- org.postgresql.pljava.example.TupleReturn
@@ -649,7 +649,7 @@ SELECT id,name, salary FROM employees2 order by id;
 -- s/\(SOMEFILE\:SOMEFUNC\)//
 -- end_matchsubs
 SELECT javatest.transferPeople(1) FROM javatest.test;  -- should error
-ERROR:  function cannot execute on a QE slice because it accesses relation "javatest.employees1"  (seg0 slice1 10.117.190.141:6002 pid=2262371)
+ERROR:  function cannot execute on a QE slice because it accesses relation "javatest.employees1"  (seg0 slice1 10.117.190.141:6002 pid=2279214)
 CONTEXT:  SQL statement "SELECT id, name, salary FROM employees1 WHERE salary > $1"
 select javatest.maxFromSetReturnExample(2,10);
  maxfromsetreturnexample 
@@ -702,7 +702,7 @@ SELECT
 FROM parse_version;
  major_version 
 ---------------
- 8
+ 17
 (1 row)
 
 DROP FUNCTION getProperty(VARCHAR);

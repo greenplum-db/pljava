@@ -19,6 +19,13 @@ function uninstall_pljava() {
 }
 
 function _main() {
+    if [ -z "$1" ]; then
+        echo "TEST_JAVA_VERSION must be specified"
+        return 1
+    fi
+    TEST_JAVA_VERSION="$1"
+    echo "TEST_JAVA_VERSION=$TEST_JAVA_VERSION"
+
     local tmp_dir
     tmp_dir=$(mktemp -d)
     pushd "${tmp_dir}"
@@ -32,7 +39,7 @@ function _main() {
 
     pushd /home/gpadmin/pljava_src
     # compile examples using current JDK version and run tests
-    make examples
+    TEST_JAVA_VERSION="$TEST_JAVA_VERSION" make examples
     time make targetcheck || cat gpdb/tests/regression.diffs
     # restore examples to original state or gppkg will failed to checksum
     make restore_examples
@@ -45,4 +52,4 @@ function _main() {
     popd
 }
 
-_main
+_main $1
