@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-set -exo pipefail
+set -exo pipefail -u
 
 function install_pljava() {
     if [ "$GP_MAJOR_VERSION" = "6" ]; then
