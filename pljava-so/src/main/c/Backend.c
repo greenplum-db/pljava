@@ -345,7 +345,7 @@ static void initsequencer(enum initstage is, bool tolerant)
 			/* 	ereport(INFO, (errmsg("Enter 2rd in PG_TRY. PG_TRY InterruptHoldoffCount = %d", InterruptHoldoffCount))); */
 			/* } */
 
-			ereport(INFO, (errmsg("_created_vm=%d", _created_vm)));
+			// ereport(INFO, (errmsg("_created_vm=%d", _created_vm)));
 			_created_vm++;
 			/* ereport(INFO, (errmsg("PG_TRY InterruptHoldoffCount = %d", InterruptHoldoffCount))); */
 
