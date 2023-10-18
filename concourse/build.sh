@@ -2,10 +2,9 @@
 
 set -exo pipefail
 
-CWDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-TOP_DIR=${CWDIR}/../../../
+TOP_DIR=/home/gpadmin
+GPPKG="${TOP_DIR}/bin_gppkg_v2/gppkg"
 
-source "${TOP_DIR}/gpdb_src/concourse/scripts/common.bash"
 function pkg() {
     [ -f /opt/gcc_env.sh ] && source /opt/gcc_env.sh
 
