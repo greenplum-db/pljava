@@ -3,7 +3,7 @@
 set -exo pipefail
 
 TOP_DIR=/home/gpadmin
-GPPKG="${TOP_DIR}/bin_gppkg_v2/gppkg"
+[ -f "${TOP_DIR}/bin_gppkg_v2/gppkg" ] && export GPPKG="${TOP_DIR}/bin_gppkg_v2/gppkg"
 
 function pkg() {
     [ -f /opt/gcc_env.sh ] && source /opt/gcc_env.sh
