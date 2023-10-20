@@ -2,6 +2,9 @@
 
 set -exo pipefail -u
 
+TOP_DIR=/home/gpadmin
+[ -f "${TOP_DIR}/bin_gppkg_v2/gppkg" ] && export PATH="${TOP_DIR}/bin_gppkg_v2":$PATH
+
 function install_pljava() {
     if [ "$GP_MAJOR_VERSION" = "6" ]; then
         gppkg -i ./*.gppkg
@@ -52,4 +55,4 @@ function _main() {
     popd
 }
 
-_main $1
+_main "$1"
