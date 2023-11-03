@@ -8,14 +8,26 @@ PostInstall:
 - Master:  "echo 'Please SET JAVA_HOME firstly.';
             echo 'Please source your $GPHOME/greenplum_path.sh file and restart the database.';
             echo 'You can enable pljava by running `CREATE EXTENSION pljava;`';"
-- All: "echo '#BEGIN EXTENSION PLJAVA' >> $GPHOME/greenplum_path.sh ;
-        echo export JAVA_HOME=$JAVA_HOME >> $GPHOME/greenplum_path.sh ;
-        echo '# for jdk 8' >> $GPHOME/greenplum_path.sh ;
-        echo 'LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64/server:$LD_LIBRARY_PATH' >> $GPHOME/greenplum_path.sh ;
-        echo '# for jdk 11' >> $GPHOME/greenplum_path.sh ;
-        echo 'LD_LIBRARY_PATH=$JAVA_HOME/lib/server:$LD_LIBRARY_PATH' >> $GPHOME/greenplum_path.sh ;
-        echo 'export LD_LIBRARY_PATH' >> $GPHOME/greenplum_path.sh ;
-        echo 'export PATH=$JAVA_HOME/bin:$PATH' >> $GPHOME/greenplum_path.sh ;
-        echo '#END EXTENSION PLJAVA' >> $GPHOME/greenplum_path.sh ;"
+- All: |
+        {
+        cat << EOF
+
+        #BEGIN EXTENSION PLJAVA
+        export JAVA_HOME=$JAVA_HOME
+        if [ -z "\$JAVA_HOME" ]; then
+            echo "Warning: 'JAVA_HOME' is not set. pljava won't work without it." 1>&2
+        else
+            # for jdk 8
+            LD_LIBRARY_PATH=\$JAVA_HOME/jre/lib/amd64/server:\$LD_LIBRARY_PATH
+            # for jdk 11
+            LD_LIBRARY_PATH=\$JAVA_HOME/lib/server:\$LD_LIBRARY_PATH
+            export LD_LIBRARY_PATH
+            export PATH=\$JAVA_HOME/bin:\$PATH
+        fi
+        #END EXTENSION PLJAVA
+        EOF
+        } >>"$GPHOME/greenplum_path.sh"
+
+
 PostUninstall:
 - All: "sed -i '/#BEGIN EXTENSION PLJAVA/,/#END EXTENSION PLJAVA/d' $GPHOME/greenplum_path.sh ; "
