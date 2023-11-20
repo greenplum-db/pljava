@@ -14,7 +14,7 @@ PLJAVA_DIR=$(shell cd ../.. && pwd)
 export PLJAVA_DIR
 include $(PLJAVA_DIR)/release.mk
 
-PLJAVA_GPPKG=pljava-$(PLJAVA_PIVOTAL_VERSION)-gp$(GP_VERSION_NUM)-$(OS)_$(ARCH).gppkg
+PLJAVA_GPPKG:=pljava-$(PLJAVA_PIVOTAL_VERSION)-gp$(GP_VERSION_NUM)-$(OS)_$(ARCH).gppkg
 export PLJAVA_GPPKG
 
 ifeq ($(GP_MAJORVERSION), 7)
