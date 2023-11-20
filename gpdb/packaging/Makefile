@@ -6,7 +6,7 @@ PGXS := $(shell pg_config --pgxs)
 include $(PGXS)
 
 OS=$(word 1,$(subst _, ,$(BLDARCH)))
-ARCH=$(shell uname -p)
+ARCH=x86_64
 export OS
 export ARCH
 
