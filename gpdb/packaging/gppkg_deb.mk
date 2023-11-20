@@ -2,8 +2,6 @@
 PGXS := $(shell pg_config --pgxs)
 include $(PGXS)
 include $(PLJAVA_DIR)/release.mk
-# GP_MAJORVERSION is defined in lib/postgresql/pgxs/src/Makefile.global
-GP_VERSION_NUM := $(GP_MAJORVERSION)
 
 ifeq ($(ARCH), x86_64)
 ARCH=amd64

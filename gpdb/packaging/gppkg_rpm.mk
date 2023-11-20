@@ -2,8 +2,6 @@
 PGXS := $(shell pg_config --pgxs)
 include $(PGXS)
 include $(PLJAVA_DIR)/release.mk
-# GP_MAJORVERSION is defined in lib/postgresql/pgxs/src/Makefile.global
-GP_VERSION_NUM := $(GP_MAJORVERSION)
 
 PLJAVA_RPM_FLAGS=--define 'pljava_dir $(PLJAVA_DIR)' --define 'pljava_ver $(PLJAVA_PIVOTAL_VERSION)' --define 'pljava_rel $(PLJAVA_PIVOTAL_RELEASE)'
 PLJAVA_RPM=pljava-$(PLJAVA_PIVOTAL_VERSION)-$(PLJAVA_PIVOTAL_RELEASE).$(ARCH).rpm

@@ -5,6 +5,10 @@ SHELL=/bin/bash
 PGXS := $(shell pg_config --pgxs)
 include $(PGXS)
 
+# GP_MAJORVERSION is defined in lib/postgresql/pgxs/src/Makefile.global
+GP_VERSION_NUM := $(GP_MAJORVERSION)
+export GP_VERSION_NUM 
+
 OS=$(word 1,$(subst _, ,$(BLDARCH)))
 ARCH=x86_64
 export OS
