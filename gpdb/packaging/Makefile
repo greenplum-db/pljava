@@ -5,8 +5,12 @@ SHELL=/bin/bash
 PGXS := $(shell pg_config --pgxs)
 include $(PGXS)
 
+# GP_MAJORVERSION is defined in lib/postgresql/pgxs/src/Makefile.global
+GP_VERSION_NUM := $(GP_MAJORVERSION)
+export GP_VERSION_NUM 
+
 OS=$(word 1,$(subst _, ,$(BLDARCH)))
-ARCH=$(shell uname -p)
+ARCH=x86_64
 export OS
 export ARCH
 
@@ -14,7 +18,7 @@ PLJAVA_DIR=$(shell cd ../.. && pwd)
 export PLJAVA_DIR
 include $(PLJAVA_DIR)/release.mk
 
-PLJAVA_GPPKG=pljava-$(PLJAVA_PIVOTAL_VERSION)-gp$(GP_VERSION_NUM)-$(OS)_$(ARCH).gppkg
+PLJAVA_GPPKG:=pljava-$(PLJAVA_PIVOTAL_VERSION)-gp$(GP_VERSION_NUM)-$(OS)_$(ARCH).gppkg
 export PLJAVA_GPPKG
 
 ifeq ($(GP_MAJORVERSION), 7)
